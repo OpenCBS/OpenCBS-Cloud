@@ -1,0 +1,76 @@
+<ngl-modal [header]="headerTitle" [(open)]="isOpen">
+    <div body>
+        <form novalidate #f="ngForm" class="slds-form--stacked" #formFocus>
+            <div class="slds-form-element" [class.slds-has-error]="name.errors?.required && name.touched">
+                <label class="slds-form-element__label" for="text-input-01">{{'NAME' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="text-input-01" class="slds-input" name="name" minlength="3" #name="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+            <div class="slds-form-element"
+                 [class.slds-has-error]="minValue.errors?.required && minValue.touched || fieldTouched">
+                <label class="slds-form-element__label" for="text-input-02">{{'MINVALUE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input [onlyNumber]="true" (keyup)="limitPercentage()" type="number" id="text-input-02"
+                           class="slds-input" name="minValue" #minValue="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+            <div class="slds-form-element" [class.slds-has-error]="maxValue.errors?.required && maxValue.touched">
+                <label class="slds-form-element__label" for="text-input-03">{{'MAXVALUE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input [onlyNumber]="true" (keyup)="limitPercentage()" type="number" id="text-input-03"
+                           class="slds-input" name="maxValue" #maxValue="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                        <span class="slds-checkbox">
+                          <input type="checkbox" id="checkbox-146" checked="" name="percentage" #percentage="ngModel"
+                                 ngModel (click)="check()"/>
+                          <label class="slds-checkbox__label" for="checkbox-146">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{'PERCENTAGE' | translate}}</span>
+                          </label>
+                        </span>
+                </div>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="text-input-04">{{'MINIMUM_LIMIT' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="text-input-20" [disabled]="!isChecked" class="slds-input" name="minLimit"
+                           #minLimit="ngModel" ngModel/>
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="text-input-04">{{'MAXIMUM_LIMIT' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="text-input-04" [disabled]="!isChecked" class="slds-input" name="maxLimit"
+                           #maxLimit="ngModel" ngModel/>
+                </div>
+            </div>
+
+            <cbs-form-lookup-control
+                #lookupAccount
+                #accountId="ngModel" ngModel
+                [requiredField]="true"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [code]="true"
+                name="accountId"
+                [fieldLabel]="'ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success" #submitButton
+                [disabled]="f.invalid || !formChanged || fieldTouched" (click)="submit(f)">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

@@ -1,0 +1,114 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'ENTRY_FEES' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="openCreateModal()">
+                <span class="slds-text-not-selected">
+                <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                </svg>{{ 'CREATE' | translate }}
+                </span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Min Value">{{ 'MINVALUE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Max Value">{{ 'MAXVALUE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Minimum Limit">{{ 'MINIMUM_LIMIT' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Maximum Limit">{{ 'MAXIMUM_LIMIT' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Percentage">{{ 'PERCENTAGE_LABEL' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Accounts">{{ 'ACCOUNT' | translate }}</div>
+            </th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entryFee of (entryFees | async)?.entryFees; let i = index;">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Name" scope="row">
+                <div class="slds-truncate" title="">
+                    <a href="javascript:void(0)">{{ entryFee?.name }}</a>
+                </div>
+            </th>
+            <th data-label="Min Value" scope="row">
+                {{ entryFee?.minValue }}<span *ngIf="entryFee?.percentage">%</span>
+            </th>
+            <th data-label="Max Value" scope="row">
+                {{ entryFee?.maxValue }}<span *ngIf="entryFee?.percentage">%</span>
+            </th>
+            <th data-label="Minimum Limit" scope="row">
+                <span *ngIf="entryFee?.minLimit">{{ entryFee?.minLimit | cbsNumberFormat }}</span>
+                <span *ngIf="!entryFee?.minLimit">-</span>
+            </th>
+            <th data-label="Maximum Limit" scope="row">
+                <span *ngIf="entryFee?.maxLimit">{{ entryFee?.maxLimit | cbsNumberFormat }}</span>
+                <span *ngIf="!entryFee?.maxLimit">-</span>
+            </th>
+            <th data-label="Percentage" scope="row">
+                <ngl-badge type="info" *ngIf="entryFee?.percentage">{{ 'PERCENTAGE' | translate }}</ngl-badge>
+                <ngl-badge type="warning" *ngIf="!entryFee?.percentage">{{ 'AMOUNT' | translate }}</ngl-badge>
+            </th>
+            <th data-label="Accounts" scope="row">
+                {{entryFee['account']['number'] + ' | ' + entryFee['account']['name']}}
+            </th>
+            <th class="slds-text-align--right">
+                <button class="slds-button slds-button--neutral" (click)="openEditModal(entryFee)">
+                    <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(entryFees | async)?.loading"></cbs-loading-indicator>
+
+</main>
+<!-- ./cbs-main -->
+
+
+<cbs-entry-fees-form-modal (submitForm)="submitEntryFee($event)"
+                           [headerTitle]="isNew ? ('ENTRY_FEE_NEW_TITLE' | translate) :  ('EDIT' | translate)">
+
+</cbs-entry-fees-form-modal>
+
+
+
+

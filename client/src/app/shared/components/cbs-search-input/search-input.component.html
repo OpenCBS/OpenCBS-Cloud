@@ -1,0 +1,24 @@
+<div class="slds-form-element cbs-profiles-search">
+    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--left-right">
+        <svg class="slds-input__icon slds-input__icon--left" aria-hidden="true">
+            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+        </svg>
+        <input
+            type="search"
+            id="cbs-search"
+            class="slds-input slds-lookup__search-input"
+            [placeholder]="placeholder"
+            role="combobox"
+            (keyup.enter)="search(searchQuery)"
+            (keyup.esc)="clear()"
+            [ngModel]="searchQuery"
+            (ngModelChange)="changed($event)"/>
+        <button class="slds-input__icon slds-input__icon--right slds-button slds-button--icon"
+                *ngIf="searchQuery !== ''" (click)="clear()">
+            <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+            </svg>
+            <span class="slds-assistive-text">Clear the current search term</span>
+        </button>
+    </div>
+</div>

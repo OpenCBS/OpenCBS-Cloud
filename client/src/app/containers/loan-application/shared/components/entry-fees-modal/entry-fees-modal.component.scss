@@ -1,0 +1,45 @@
+:host ::ng-deep {
+  .cbs-field--edited {
+    .slds-input {
+      border-color: #ffb75d;
+    }
+  }
+
+  .slds-form--stacked .slds-form-element {
+    margin-bottom: 0;
+  }
+
+  cbs-form-input {
+    margin-top: .5rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .form-control-range {
+    color: #bbb;
+    font-size: 10px;
+    text-align: right;
+    text-transform: uppercase;
+
+    span {
+      color: #54698d;
+      font-weight: bold;
+      margin-right: .85rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .span-limit {
+      color: #bbb;
+    }
+  }
+
+  cbs-form-input-control {
+    display: block;
+    margin-top: .5rem;
+  }
+}
+

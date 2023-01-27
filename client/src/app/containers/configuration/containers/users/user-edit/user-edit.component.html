@@ -1,0 +1,134 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ user?.firstName }} {{ user?.lastName }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="goToViewUser()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'CANCEL' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" aria-live="assertive"
+                    (click)="submitForm()" [disabled]="!formChanged || userEditForm.invalid">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-form-element__label slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <form novalidate [formGroup]="userEditForm">
+            <cbs-form-select-control
+                [formControlName]="'statusType'"
+                [selectData]="statusTypeData"
+                [requiredField]="true"
+                [hasError]="userEditForm.get('statusType').errors && userEditForm.get('statusType').touched"
+                fieldLabel="{{ 'ACTIVE_USER' | translate }}"
+            ></cbs-form-select-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'FIRSTNAME' | translate"
+                [hasError]="userEditForm.get('firstName').errors && userEditForm.get('firstName').touched"
+                [formControlName]="'firstName'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'LASTNAME' | translate"
+                [hasError]="userEditForm.get('lastName').errors && userEditForm.get('lastName').touched"
+                [formControlName]="'lastName'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'USERNAME' | translate"
+                [hasError]="userEditForm.get('username').errors && userEditForm.get('username').touched"
+                [formControlName]="'username'">
+            </cbs-form-input-control>
+
+            <cbs-form-lookup-control
+                [requiredField]="true"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'BRANCH' | translate"
+                [formControlName]="'branchId'"
+                [picklistDataUrl]="formConfig">
+            </cbs-form-lookup-control>
+
+            <cbs-form-select-control
+                [formControlName]="'roleId'"
+                [selectData]="roles"
+                [requiredField]="true"
+                [selectValue]="'id'"
+                [hasError]="userEditForm.get('roleId').errors && userEditForm.get('roleId').touched"
+                fieldLabel="{{ 'ROLE' | translate }}"
+            ></cbs-form-select-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'EMAIL' | translate"
+                [hasError]="userEditForm.get('email').errors && userEditForm.get('email').touched"
+                [formControlName]="'email'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'PHONE_NUMBER' | translate"
+                [hasError]="userEditForm.get('phoneNumber').errors && userEditForm.get('phoneNumber').touched"
+                [formControlName]="'phoneNumber'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'ADDRESS' | translate"
+                [hasError]="userEditForm.get('address').errors && userEditForm.get('address').touched"
+                [formControlName]="'address'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'ID_NUMBER' | translate"
+                [hasError]="userEditForm.get('idNumber').errors && userEditForm.get('idNumber').touched"
+                [formControlName]="'idNumber'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'POSITION' | translate"
+                [hasError]="userEditForm.get('position').errors && userEditForm.get('position').touched"
+                [formControlName]="'position'">
+            </cbs-form-input-control>
+
+        </form>
+    </cbs-form-layout>
+</main>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'UNSAVED_CHANGES' | translate"></cbs-confirm-popup>
+
+
+<cbs-loading-indicator [showLoader]="user?.loading || userUpdateState?.loading"></cbs-loading-indicator>

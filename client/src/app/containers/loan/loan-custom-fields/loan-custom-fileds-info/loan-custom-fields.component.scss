@@ -1,0 +1,13 @@
+:host {
+  .slds-button {
+    &[disabled] {
+      color: white;
+      background-color: #e0e5ee;
+      cursor: not-allowed;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  }
+}

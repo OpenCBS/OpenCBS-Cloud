@@ -1,0 +1,17 @@
+:host ::ng-deep {
+  .slds-dropdown {
+    max-height: 11rem !important;
+    overflow: hidden;
+  }
+
+  .form-expanded {
+    .slds-modal__content {
+      height: 17rem;
+    }
+  }
+
+  .isDeleted {
+    background: #e0e0e2;
+    height: 3rem;
+  }
+}

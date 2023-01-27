@@ -1,0 +1,35 @@
+:host {
+  .slds-container--small {
+    width: 100%;
+  }
+
+  .cbs-collateral-type {
+    &__head {
+      margin-bottom: 1rem;
+    }
+
+    &__save-btn {
+      svg {
+        fill: #0070d2;
+      }
+
+      &[disabled] {
+        svg {
+          fill: #d8dde6;
+        }
+      }
+    }
+
+    &__cancel-btn {
+      svg {
+        fill: #c23934;
+      }
+
+      &[disabled] {
+        svg {
+          fill: #d8dde6;
+        }
+      }
+    }
+  }
+}

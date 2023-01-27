@@ -1,0 +1,2 @@
+alter table loans_penalties_events
+    drop constraint if exists loans_penalties_events_loan_aplication_penalty_id_fkey;

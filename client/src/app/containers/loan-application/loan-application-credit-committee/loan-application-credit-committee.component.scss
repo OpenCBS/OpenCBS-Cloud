@@ -1,0 +1,58 @@
+:host ::ng-deep {
+  .cbs-cc-page {
+    height: 100%;
+
+    .cbs-cc-table {
+      table-layout: fixed;
+
+      .cbs-cc-member-note {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 40px;
+
+        .cbs-cc-notes-link {
+          color: #16325c;
+
+          &:hover {
+            color: #16325c;
+            text-decoration: none;
+
+          }
+        }
+      }
+    }
+
+    .cbs-cc-activity-list {
+      padding: 20px;
+
+      ul {
+        margin-top: 20px;
+      }
+    }
+  }
+
+  .cbs-comment-modal {
+
+    .slds-form-element__control {
+      width: 100%;
+
+      textarea {
+        min-height: 6rem;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1640px) {
+    .cbs-cc-options {
+      width: 18%;
+    }
+  }
+
+  .slds-progress {
+    margin-top: 18px
+  }
+}
+
+

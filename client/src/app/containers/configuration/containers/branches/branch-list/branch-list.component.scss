@@ -1,0 +1,18 @@
+:host ::ng-deep {
+  table {
+    table-layout: fixed
+  }
+
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

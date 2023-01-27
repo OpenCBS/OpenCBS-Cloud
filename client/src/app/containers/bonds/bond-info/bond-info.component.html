@@ -1,0 +1,83 @@
+<cbs-form-layout *ngIf="bondLoaded?.loaded">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PROFILE' | translate }}"
+        [value]="bonds?.profile?.name">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'ISIN' | translate }}"
+        [value]="bonds?.isin">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'EQUIVALENT_CURRENCY' | translate }}"
+        [value]="bonds?.equivalentCurrency?.name">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'NUMBER_OF_BONDS' | translate }}"
+        [value]="bonds?.number">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'START_DATE' | translate }}"
+        [value]="bonds?.sellDate | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AMOUNT' | translate }}(EUR)"
+        [value]="bonds?.bondAmount?.amount">
+    </cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'EQUIVALENT_AMOUNT' | translate }}"
+        [value]="bonds?.bondAmount?.equivalentAmount">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'BANK_ACCOUNT' | translate }}"
+        [value]="bonds?.bankAccount?.name">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        [value]="bonds?.interestRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PENALTY_RATE' | translate }}"
+        [value]="bonds?.penaltyRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_SCHEME' | translate }}"
+        [value]="bonds?.interestScheme">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'COUPON_FREQUENCY' | translate }}"
+        [value]="bonds?.frequency">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MATURITY' | translate }}"
+        [value]="bonds?.maturity">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'COUPON_DATE' | translate }}"
+        [value]="bonds?.couponDate | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'EXPIRE_DATE' | translate }}"
+        [value]="bonds?.expireDate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_TO_REFUND' | translate }}"
+        [value]="bonds?.interestToRefund">
+    </cbs-form-readonly-control>
+</cbs-form-layout>

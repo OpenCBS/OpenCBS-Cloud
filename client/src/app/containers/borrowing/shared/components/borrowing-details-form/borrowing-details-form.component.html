@@ -1,0 +1,89 @@
+<div class="cbs-loan-details-form__form">
+    <form novalidate [formGroup]="form" class="slds-form--stacked" *ngIf="!isLoading">
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'PROFILE' | translate }}"
+            [value]="profileName"
+            [disabled]="true">
+        </cbs-form-readonly-control>
+
+        <cbs-form-lookup-control
+            formControlName="borrowingProductId"
+            fieldLabel="{{ 'BORROWING_PRODUCT' | translate }}"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [hasError]="form.get('borrowingProductId').errors && form.get('borrowingProductId').touched"
+            [picklistDataUrl]="formConfig.loanProductLookupUrl"
+            [requiredField]="true"
+            (onSelect)="onLPSelect($event)"
+        ></cbs-form-lookup-control>
+
+        <cbs-form-input-control
+            formControlName="amount"
+            fieldLabel="{{ 'NET_AMOUNT' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="(form.get('amount').errors && form.get('amount').touched) || form.get('amount').value < amountRange[0] || form.get('amount').value > amountRange[1]">
+            <div class="cbs-loan-details-form__range" *ngIf="amountRange.length">
+                Min: <span>{{ amountRange[0] | cbsNumberFormat }}</span> Max: <span>{{ amountRange[1] | cbsNumberFormat }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            formControlName="interestRate"
+            fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="form.get('interestRate').errors && form.get('interestRate').touched">
+            <div class="cbs-loan-details-form__range" *ngIf="interestRateRange.length">
+                Min: <span>{{ interestRateRange[0] }}</span> Max: <span>{{ interestRateRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            formControlName="gracePeriod"
+            fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="form.get('gracePeriod').errors && form.get('gracePeriod').touched">
+            <div class="cbs-loan-details-form__range" *ngIf="gracePeriodRange.length">
+                Min: <span>{{ gracePeriodRange[0] }}</span> Max: <span>{{ gracePeriodRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            formControlName="maturity"
+            fieldLabel="{{ 'MATURITY' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="form.get('maturity').errors && form.get('maturity').touched">
+            <div class="cbs-loan-details-form__range" *ngIf="maturityRange.length">
+                Min: <span>{{ maturityRange[0] }}</span> Max: <span>{{ maturityRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-date-control
+            formControlName="disbursementDate"
+            fieldLabel="{{ 'DISBURSEMENT_DATE' | translate }}"
+            [hasError]="form.get('disbursementDate').errors && form.get('disbursementDate').touched"
+            [requiredField]="true"></cbs-form-date-control>
+
+        <cbs-form-date-control
+            formControlName="preferredRepaymentDate"
+            fieldLabel="{{ 'PREFERRED_REPAYMENT_DATE' | translate }}"
+            [hasError]="form.get('preferredRepaymentDate').errors && form.get('preferredRepaymentDate').touched"
+            [requiredField]="true"></cbs-form-date-control>
+
+        <cbs-form-lookup-control
+            [hasError]="form.get('correspondenceAccountId').errors && form.get('correspondenceAccountId').touched"
+            [requiredField]="true"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [code]="true"
+            [formControlName]="'correspondenceAccountId'"
+            [fieldLabel]="'CORRESPONDENCE_ACCOUNT' | translate"
+            [picklistDataUrl]="accountConfig">
+        </cbs-form-lookup-control>
+    </form>
+</div>
+
+<cbs-loading-indicator [showLoader]="isLoading" [isFixed]="false"></cbs-loading-indicator>

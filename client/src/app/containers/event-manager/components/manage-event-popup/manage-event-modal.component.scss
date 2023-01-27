@@ -1,0 +1,73 @@
+:host ::ng-deep {
+  .cbs-schedule {
+    &__modal {
+      position: relative;
+    }
+
+    &__wrap {
+      padding: 4rem 2rem 1rem;
+    }
+
+    &__readonly {
+      .slds-form-element {
+        &__control,
+        &__control-textarea {
+          border: 1px solid #e4e4e4;
+          border-radius: 0.25rem;
+          padding: 0 1rem 0 0.75rem;
+          height: 2rem;
+          line-height: 1.9rem;
+        }
+
+        &__control-textarea {
+          height: auto;
+
+          p {
+            line-height: 2rem;
+          }
+        }
+      }
+    }
+  }
+
+  .cbs-schedule__list {
+    margin-top: 23px;
+    border: 1px solid #e4e4e4;
+    border-radius: 0.25rem;
+    padding: 0 1rem 0 0.75rem;
+    line-height: 1.9rem;
+    min-height: 10rem;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+
+      .slds-icon {
+        position: relative;
+        top: -2px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .slds-form--compound cbs-form-date + cbs-form-time {
+    padding-left: .5rem;
+  }
+
+  .cbs__response-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    &__item {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+}

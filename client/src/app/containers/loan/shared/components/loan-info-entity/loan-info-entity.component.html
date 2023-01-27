@@ -1,0 +1,33 @@
+<div class="loan-info-entity"
+     *ngIf="(loan | async)?.loan?.loanAdditionalInfoEntity?.unAllocatedAmount === null">
+    <div class="balance-info">{{'SETTLEMENT_BALANCE' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.settlementBalance | cbsNumberFormat}}
+    </div>
+    <div class="balance-info">{{'ARREARS' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.lateAmount | cbsNumberFormat}}
+    </div>
+    <div class="balance-info">{{'OLB' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.olb | cbsNumberFormat}}
+    </div>
+    <div class="balance-info">{{'PENALTY' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.penalty | cbsNumberFormat}}
+    </div>
+</div>
+<div class="loan-info-entity-unallocated"
+     *ngIf="(loan | async)?.loan?.loanAdditionalInfoEntity?.unAllocatedAmount !== null">
+    <div class="balance-info-unallocated">{{'SETTLEMENT_BALANCE' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.settlementBalance | cbsNumberFormat}}
+    </div>
+    <div class="balance-info-unallocated">{{'ARREARS' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.lateAmount | cbsNumberFormat}}
+    </div>
+    <div class="balance-info-unallocated">{{'OLB' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.olb | cbsNumberFormat}}
+    </div>
+    <div class="balance-info-unallocated">{{'UNALLOCATED_AMOUNT' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.unAllocatedAmount | cbsNumberFormat}}
+    </div>
+    <div class="balance-info-unallocated">{{'PENALTY' | translate}}:
+        {{(loan | async)?.loan?.loanAdditionalInfoEntity?.penalty | cbsNumberFormat}}
+    </div>
+</div>

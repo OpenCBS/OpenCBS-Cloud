@@ -1,0 +1,103 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'TERM_DEPOSIT_PRODUCTS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <a class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-checkbox">
+                    <input type="checkbox" id="show-all" (click)="showAllProducts()"/>
+                    <label class="slds-checkbox__label" for="show-all">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-box--x-small">{{'SHOW_ALL' | translate}}</span>
+                    </label>
+                </span>
+            </a>
+            <a *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_TERM_DEPOSIT_PRODUCT'] }"
+               routerLink="/configuration/term-deposit-products/create" class="slds-button slds-button--neutral"
+               aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'CREATE' | translate }}
+                </span>
+            </a>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<main class="cbs-main cbs-main--pt-sm">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="Term Deposit Product Id">#</div>
+            </th>
+            <th scope="col" width="30%">
+                <div class="slds-truncate" title="Term Deposit Product Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col" width="20%">
+                <div class="slds-truncate" title="Code">{{ 'CODE' | translate }}</div>
+            </th>
+            <th scope="col" width="20%">
+                <div class="slds-truncate" title="Amount">{{ 'AMOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="20%">
+                <div class="slds-truncate" title="Interest rate">{{ 'INTEREST_RATE' | translate }}</div>
+            </th>
+            <th scope="col" width="20%">
+                <div class="slds-truncate" title="Maturity">{{ 'DURATION_MONTH' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let term_deposit_product of (termDepositProducts | async)?.term_deposit_products; let i = index;"
+            (click)="goToTermDepositProduct(term_deposit_product)" [ngClass]="rowStyleClass(term_deposit_product)">
+            <td data-label="Label" scope="row" class="slds-truncate">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </td>
+            <td data-label="Term Deposit Product Name" scope="row" class="slds-truncate">
+                {{term_deposit_product.name | uppercase}}
+            </td>
+            <td data-label="Schedule type" scope="row" class="slds-truncate">
+                {{term_deposit_product.code}}
+            </td>
+            <td data-label="Interest rate" scope="row" class="slds-truncate">
+                <div>{{ (term_deposit_product.amountMin | cbsNumberFormat) + ' - ' + (term_deposit_product.amountMax | cbsNumberFormat) }}</div>
+            </td>
+            <td data-label="Interest rate" scope="row" class="slds-truncate">
+                <div>{{ term_deposit_product.interestRateMin + '% - ' + term_deposit_product.interestRateMax + '%' }}</div>
+            </td>
+            <td data-label="Interest rate" scope="row" class="slds-truncate">
+                <div>{{ term_deposit_product.termAgreementMin + ' - ' + term_deposit_product.termAgreementMax }}</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(termDepositProducts | async)?.totalElements > (termDepositProducts | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(termDepositProducts | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(termDepositProducts | async)?.totalElements"
+            limit="5"
+            [perPage]="(termDepositProducts | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="(termDepositProducts | async)?.loading"></cbs-loading-indicator>

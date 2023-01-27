@@ -1,0 +1,40 @@
+:host ::ng-deep {
+  .slds-has-error {
+    .slds-input {
+      background-color: white;
+      background-clip: padding-box;
+      border-color: #1589ee;
+      box-shadow: 0 0 3px #0070D2;
+    }
+
+    .slds-input__icon {
+      fill: #9faab5;
+      color: #9faab5;
+    }
+
+    .slds-button {
+      border-color: #c23934 !important;
+      box-shadow: #c23934 0 0 0 1px inset;
+      background-clip: padding-box;
+    }
+  }
+
+  .slds-button {
+    &[disabled] {
+      background-color: #e0e5ee;
+      border-color: #a8b7c7;
+      cursor: not-allowed;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      color: #16325c;
+    }
+  }
+
+  .slds-form-element__control {
+    @media (min-width: 48em) {
+      vertical-align: top;
+    }
+  }
+}

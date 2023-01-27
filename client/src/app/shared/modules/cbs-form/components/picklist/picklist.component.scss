@@ -1,0 +1,15 @@
+:host {
+  .slds-dropdown-trigger {
+    display: block;
+
+    .slds-button {
+      width: 100%;
+      padding-left: 12px;
+      font-size: 13px;
+
+      .slds-truncate {
+        max-width: 90%;
+      }
+    }
+  }
+}

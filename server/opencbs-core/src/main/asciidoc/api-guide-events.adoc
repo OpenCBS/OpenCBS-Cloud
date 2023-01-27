@@ -1,0 +1,19 @@
+== EVENTS
+
+The Event resource is used to list events and transactions.
+
+=== Retrieve an event
+
+A `GET` request will retrieve the details of an event.
+
+==== Response fields
+
+include::{snippets}/events-get-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/events-get-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/events-get-example/http-response.adoc[]

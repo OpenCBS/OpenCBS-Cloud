@@ -1,0 +1,50 @@
+<div class="slds-grid slds-grid--align-center">
+    <div class="slds-container--medium">
+        <div class="slds-align--absolute-center slds-text-title--caps">
+            <strong>{{ 'CURRENT_DATE_FORMAT' | translate }}</strong>
+        </div>
+        <div class="slds-form-element slds-accordion__section">
+            <div class="slds-form-element__control slds-app-launcher__header">
+                            <span class="slds-form-element__static">
+                                {{ currentDateFormat }}
+                            </span>
+            </div>
+        </div>
+
+        <div class="slds-align--absolute-center slds-text-title--caps">
+            <strong>{{ 'SELECTED_DATE_FORMAT' | translate }}</strong>
+        </div>
+        <div class="slds-form-element slds-accordion__section">
+            <div class="slds-form-element__control slds-app-launcher__header">
+                            <span class="slds-form-element__static">
+                                {{ selectedDateFormat }}
+                            </span>
+            </div>
+        </div>
+
+        <div class="slds-align--absolute-center slds-text-title--caps">
+            <strong>{{ 'REGIONAL_DATE_FORMATS' | translate }}</strong>
+        </div>
+        <form novalidate [formGroup]="dateFormatSettingForm">
+            <div *ngFor="let format of dateFormats; let i = index;"
+                 class="slds-form-element slds-accordion__section">
+                <div class="slds-form-element__control"
+                     (click)="selectedFormatValue(format.value)">
+                                    <span class="slds-form-element__static">
+                                        {{ {value: currentDate, format: format['value']} | cbsSettingDateFormat }}
+                                    </span>
+                    <svg *ngIf="selectedFormat !== format['value']"
+                         class="icon slds-avatar--x-small slds-button--small slds-button__icon--hint slds-float--right">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#record"></use>
+                    </svg>
+                    <svg *ngIf="selectedFormat === format['value']"
+                         class="slds-avatar--x-small slds-button--small slds-button__icon icon slds-float--right">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                    </svg>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

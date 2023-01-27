@@ -1,0 +1,30 @@
+<cbs-form-layout *ngIf="payee?.loaded">
+
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'NAME' | translate }}"
+        [value]="payee?.payee?.payeeName"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AMOUNT' | translate }}"
+        [value]="payee?.payee?.amount"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PLANNED_DISBURSEMENT_DATE' | translate }}"
+        [value]="payee?.payee?.plannedDisbursementDate | cbsDateFormat"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DESCRIPTION' | translate }}"
+        [value]="payee?.payee?.description"
+    ></cbs-form-readonly-control>
+
+</cbs-form-layout>
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!payee?.loaded || isLoading">
+</cbs-loading-indicator>

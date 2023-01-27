@@ -1,0 +1,35 @@
+:host ::ng-deep {
+  .cbs-pull-negative {
+    @media screen and (min-width: 994px) {
+      margin-left: -50%;
+    }
+  }
+
+  .slds-form-element__label {
+    top: 0.4rem !important;
+  }
+
+  .slds-text-title--caps {
+    width: 65%;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .slds-form-element {
+    margin-top: .8rem !important;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .cbs-datepicker {
+    width: 100%;
+  }
+
+  .slds-dropdown {
+    .slds-form-element__control {
+      padding-bottom: 0;
+    }
+  }
+}

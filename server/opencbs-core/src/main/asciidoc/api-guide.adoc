@@ -1,0 +1,65 @@
+= OpenCBS Kit API Guide
+by OpenCBS Kit Team
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= OVERVIEW
+
+OpenCBS Kit provides a simple and powerful REST API to integrate the platform into your business or application.
+
+include::api-guide-http-verbs.adoc[]
+
+include::api-guide-status-codes.adoc[]
+
+include::api-guide-paging.adoc[]
+
+include::api-guide-authentication.adoc[]
+
+include::api-guide-locations.adoc[]
+
+include::api-guide-loan-purposes.adoc[]
+
+include::api-guide-payees.adoc[]
+
+include::api-guide-payment-methods.adoc[]
+
+include::api-guide-profile.adoc[]
+
+include::api-guide-business-sector.adoc[]
+
+include::api-guide-professions.adoc[]
+
+include::api-guide-holidays.adoc[]
+
+include::api-guide-entry-fees.adoc[]
+
+include::api-guide-people-custom-field-sections.adoc[]
+
+include::api-guide-people-custom-fields.adoc[]
+
+include::api-guide-people.adoc[]
+
+include::api-guide-companies-custom-field-sections.adoc[]
+
+include::api-guide-companies-custom-fields.adoc[]
+
+include::api-guide-companies.adoc[]
+
+include::api-guide-loan-applications.adoc[]
+
+include::api-guide-loan-products.adoc[]
+
+//include::api-guide-loan-application-attachments.adoc[]
+
+include::api-guide-types-of-collateral.adoc[]
+
+include::api-guide-type-of-collateral-custom-fields.adoc[]
+
+include::api-guide-collaterals.adoc[]
+
+include::api-guide-events.adoc[]

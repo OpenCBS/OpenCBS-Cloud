@@ -1,0 +1,59 @@
+== PAYMENT METHODS
+
+The Payee resource is used to list, create, and update payment method.
+
+=== Retrieve a payment method
+
+A `GET` request will retrieve the details of a payment method.
+
+==== Response fields
+
+include::{snippets}/payment-method-get-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/payment-method-get-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/payment-method-get-example/http-response.adoc[]
+
+=== Create a payment method
+
+A `POST` request will create a new payment method.
+
+==== Request fields
+
+include::{snippets}/payment-method-create-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/payment-method-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/payment-method-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/payment-method-create-example/http-response.adoc[]
+
+=== Update a payment method
+
+A `PUT` request will update the details of a payment method.
+
+==== Request fields
+
+include::{snippets}/payment-method-update-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/payment-method-update-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/payment-method-update-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/payment-method-update-example/http-response.adoc[]

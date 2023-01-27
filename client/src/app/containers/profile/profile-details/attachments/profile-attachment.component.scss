@@ -1,0 +1,178 @@
+:host {
+
+  table {
+    table-layout: fixed;
+  }
+
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cbs-profile {
+    &__nodata {
+      min-height: 40%;
+    }
+    &__actionbtns {
+      .slds-dropdown-trigger {
+        .slds-dropdown {
+          width: 100%;
+        }
+      }
+    }
+    &__caption {
+      margin-top: 6px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    &__left {
+      padding: 1rem 0;
+      position: relative;
+      flex: 0 1 auto;
+      height: 100%;
+      overflow: auto;
+      width: 200px;
+      background: #fff;
+    }
+    &__right {
+      position: relative;
+      flex: 1 0 auto;
+      height: 100%;
+      overflow: auto;
+      border-left: 1px solid rgb(216, 221, 230);
+      width: 80%;
+
+      .slds-item {
+        width: calc(100% - 44px);
+      }
+
+      .slds-container--medium {
+        width: 100%;
+      }
+    }
+    &__header {
+      height: 66px;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgb(216, 221, 230);
+      background: rgb(244, 246, 249);
+
+      .slds-avatar {
+        position: relative;
+        width: 3rem;
+        height: 3rem;
+        z-index: 10;
+
+        img {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate3d(-50%, -50%, 0);
+          max-width: 125%;
+          z-index: 0;
+        }
+      }
+    }
+
+    &__avatar {
+      display: flex;
+      margin-right: 1rem;
+
+      .cbs-profile__avatar-item {
+        margin-right: .5rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .slds-avatar {
+        cursor: pointer;
+      }
+
+      &__file {
+        display: block;
+        height: 100%;
+        background: #e4e4e4;
+
+        .slds-icon_container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+  }
+
+  .cbs-profile-wrap {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+    position: relative;
+  }
+
+  .cbs-icon-pin {
+    width: 1rem;
+    height: 1rem;
+    stroke: rgb(84, 105, 141);
+  }
+
+  .cbs-icon--focus {
+    display: none;
+  }
+
+  .cbs-icon-pin-is-selected {
+    .cbs-icon-pin {
+      display: none;
+    }
+
+    .cbs-icon-pinned {
+      display: inline-block;
+    }
+
+    &:hover {
+      .cbs-icon-pinned {
+        display: none;
+      }
+
+      .cbs-icon--focus {
+        display: inline-block;
+      }
+    }
+  }
+
+  .slds-container--medium {
+    @media screen and (min-width: 994px) {
+      max-width: 35rem;
+    }
+
+    .cbs-pull-negative {
+      @media screen and (min-width: 994px) {
+        margin-left: -50%;
+      }
+    }
+  }
+
+  .slds-text-heading--large {
+    font-size: 1.5rem;
+  }
+
+  .cbs-icon-pin-not-selected {
+    .cbs-icon-pin {
+      display: inline-block;
+    }
+
+    .cbs-icon-pinned,
+    .cbs-icon--focus {
+      display: none;
+    }
+  }
+}

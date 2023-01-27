@@ -1,0 +1,22 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'OPERATION_DETAILS' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <a routerLink="edit" class="slds-button slds-button--brand" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>{{ 'EDIT' | translate }}</span>
+            </a>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->

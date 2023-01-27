@@ -1,0 +1,117 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ (profile |
+                            async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'BORROWINGS' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                      *ngIf="attachment?.pinned"
+                      (click)="openAttachment(attachment)">
+                    <span>
+                        <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                             [attr.title]="attachment?.originalFilename" *ngIf="testIfImage(attachment?.contentType)"/>
+                        <span class="cbs-profile__avatar__file">
+                            <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                              [fileType]="getFileExtension(attachment?.originalFilename)"
+                                              [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                        </span>
+                    </span>
+                </span>
+                    </div>
+                </div>
+                <button (click)="goToCreateBorrowing(profile)" class="slds-button slds-button--neutral">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>{{ 'CREATE_BORROWING' | translate }}
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <ng-container>
+                <p-dataTable
+                    emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                    [value]="(borrowings | async)?.content"
+                    [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+                    [selectionMode]="'single'" (onRowSelect)="goToBorrowingInfo($event)">
+                    <p-column field="profile" header="{{ 'CODE' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['code'] }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="amount" header="{{ 'AMOUNT' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['amount'] | cbsNumberFormat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="interestRate" header="{{ 'INTEREST_RATE' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['interestRate'] + '%'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="scheduleType" header="{{ 'SCHEDULE_TYPE' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['scheduleType'] | translate }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="createdBy" header="{{ 'CREATED_BY' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['createdBy']['firstName'] + ' ' + row['createdBy']['lastName'] }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="createdAt" header="{{ 'CREATED_AT' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['createdAt'] | cbsDateFormat }} {{ row['createdAt'] | cbsTimeFormat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="status" header="{{ 'STATUS' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <ngl-badge [type]="(row['status'] | statusBadge)">
+                                {{ row['status'] === 'IN_PROGRESS' ? 'IN PROGRESS' : row['status'] }}
+                            </ngl-badge>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </ng-container>
+        </div>
+    </div>
+</main>
+<ngl-modal [(open)]="opened" (openChange)="resetModal()">
+    <div body>
+        <img [src]="imageUrl" alt="">
+    </div>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="(borrowings | async)?.loading"></cbs-loading-indicator>

@@ -1,0 +1,108 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'IMPORT' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right" class="slds-accordion__summary-action">
+            <form novalidate class="slds-form--stacked">
+                <div class="cbs-controls-container slds-accordion__summary">
+
+                    <button class="slds-button slds-button--success"
+                            (click)="openUploadModal()">
+                        {{ 'IMPORT' | translate }}
+                    </button>
+
+                    <button class="slds-button slds-button--success"
+                            (click)="repayModal()"
+                            [disabled]="!integrationWithBankImportFile['data']?.data?.length">
+                        {{ 'REPAY' | translate }}
+                    </button>
+
+                </div>
+            </form>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right">
+            <p-table [value]="integrationWithBankImportFile['data']?.data"
+                     dataKey="code" styleClass="p-datatable-customers" [rowHover]="true"
+                     [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'">
+                <ng-template pTemplate="header">
+                    <tr class="slds-text-heading--label">
+                        <th pSortableColumn="code">{{ 'CONTRACT_CODE' | translate }}</th>
+                        <th pSortableColumn="date">{{ 'DATE' | translate }}</th>
+                        <th pSortableColumn="date">{{ 'AMOUNT' | translate }}</th>
+                        <th pSortableColumn="principal">{{'STATUS' | translate}}</th>
+                        <th pSortableColumn="iban">{{'IBAN' | translate}}
+                        <th pSortableColumn="profileName">{{ 'CLIENT_NAME' | translate }}</th>
+                        <th pSortableColumn="principal">{{'DESCRIPTION' | translate}}</th>
+                        <th pSortableColumn="principal">{{'MESSAGE' | translate}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-loan>
+                    <tr class="p-selectable-row" [ngClass]="{'row-accessories': loan['isValid'] === false }">
+                        <td>{{loan['code']}}</td>
+                        <td>{{loan['date']}}</td>
+                        <td>{{loan['amount']}}</td>
+                        <td>{{loan['status']}}</td>
+                        <td>{{loan['iban']}}</td>
+                        <td>{{loan['profileName']}}</td>
+                        <td>{{loan['description']}}</td>
+                        <td>{{loan['message']}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">{{ 'NO_RECORDS_FOUND' | translate}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</main>
+
+<ngl-modal header="{{ 'IMPORT_FILE' | translate }}" [(open)]="isOpenUploadModal">
+    <div body>
+        <cbs-file-upload
+            name="file"
+            [url]="url"
+            (onUpload)="onUpload($event)"
+            (onError)="onError($event)"
+            (onClear)="onClear()"
+            [hasComments]="false"
+            includeToken="true"
+            multiple="false"
+            accept="*/*"
+            chooseLabel="{{ 'CHOOSE_FILE' | translate }}"
+            uploadLabel="{{ 'UPLOAD' | translate }}"
+            cancelLabel="{{ 'CANCEL' | translate }}"
+            dropLabel="{{ 'DROP_LABEL' | translate }}"
+            maxFileSize="100000000">
+        </cbs-file-upload>
+    </div>
+</ngl-modal>
+
+<cbs-confirm-popup [confirmText]="'ARE_YOU_SURE_WANT_TO_REPAY' | translate"
+                   [opened]="opened"
+                   (openedChange)="closeModal()"
+                   (onSubmitClick)="repay()"
+                   [leftButtonLabel]="'CANCEL' | translate"
+                   [rightButtonLabel]="'CONFIRM' | translate"
+                   [popupLabel]="'CONFIRMATION' | translate">
+</cbs-confirm-popup>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="isLoading"></cbs-loading-indicator>

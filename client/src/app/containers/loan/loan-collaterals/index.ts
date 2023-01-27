@@ -1,0 +1,5 @@
+export * from './loan-collateral-create/loan-collateral-create.component'
+export * from './loan-collateral-edit/loan-collateral-edit.component'
+export * from './loan-collateral-info/loan-collateral-info.component'
+export * from './loan-collateral-list/loan-collateral.component'
+export * from '../shared/components/collateral-form/loan-collateral-form.component'

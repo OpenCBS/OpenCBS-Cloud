@@ -1,0 +1,535 @@
+<cbs-form-layout>
+
+    <div class="slds-text-title--caps slds-m-bottom_small">
+        <strong>{{ 'GENERAL_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'ACTIVE_PRODUCT' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ savingProduct?.statusType | translate }}</span>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'NAME' | translate }}"
+        [value]="savingProduct?.name">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CODE' | translate }}"
+        [value]="savingProduct?.code">
+    </cbs-form-readonly-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'AVAILABILITY' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <span class="slds-checkbox">
+                    <input
+                        type="checkbox"
+                        [checked]="checkAvailability('PERSON')"/>
+                    <label class="slds-checkbox__label">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-form-element__label">{{ 'PROFILE_PERSON' | translate }}</span>
+                    </label>
+                </span>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <span class="slds-checkbox">
+                    <input
+                        type="checkbox"
+                        [checked]="checkAvailability('COMPANY')"/>
+                    <label class="slds-checkbox__label">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-form-element__label">
+                            {{ (currentInstance === 'rwanda' ? 'COMPANY_GROUP' : 'PROFILE_COMPANY') | translate }}
+                        </span>
+                    </label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MIN_BALANCE' | translate }}"
+        [value]="savingProduct?.minBalance">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CURRENCY' | translate }}"
+        [value]="savingProduct?.currency?.name">
+    </cbs-form-readonly-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'INITIAL_AMOUNT_RANGE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.initialAmountMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.initialAmountMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'INTEREST_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.interestRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.interestRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_ACCRUAL_FREQUENCY' | translate }}"
+        [value]="savingProduct?.interestAccrualFrequency | translate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'POSTING_FREQUENCY' | translate }}"
+        [value]="savingProduct?.postingFrequency | translate">
+    </cbs-form-readonly-control>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'CAPITALIZE_INTEREST' | translate }}
+        </label>
+        <div class="cbs-compound-form__checkbox-wrap">
+            <span class="slds-checkbox">
+                <input
+                    type="checkbox"
+                    [checked]="savingProduct?.capitalized"/>
+                <label class="slds-checkbox__label">
+                    <span class="slds-checkbox--faux"></span>
+                </label>
+            </span>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'SAVING_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.SAVING['number'] + ' | ' + savingProduct?.accounts?.SAVING['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.INTEREST['number'] + ' | ' + savingProduct?.accounts?.INTEREST['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_EXPENSE_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.INTEREST_EXPENSE['number'] + ' | ' + savingProduct?.accounts?.INTEREST_EXPENSE['name']">
+    </cbs-form-readonly-control>
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'CASH_DEPOSIT_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'DEPOSITS_AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.depositAmountMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.depositAmountMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'DEPOSIT_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.depositFeeRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.depositFeeRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'DEPOSIT_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.depositFeeFlatMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.depositFeeFlatMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DEPOSIT_FEE_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.DEPOSIT_FEE['number'] + ' | ' + savingProduct?.accounts?.DEPOSIT_FEE['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DEPOSIT_FEE_INCOME_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.DEPOSIT_FEE_INCOME['number'] + ' | ' + savingProduct?.accounts?.DEPOSIT_FEE_INCOME['name']">
+    </cbs-form-readonly-control>
+
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'CASH_WITHDRAWAL_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'WITHDRAWAL_AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.withdrawalAmountMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.withdrawalAmountMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'WITHDRAWAL_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.withdrawalFeeRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.withdrawalFeeRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'WITHDRAWAL_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.withdrawalFeeFlatMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.withdrawalFeeFlatMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'WITHDRAWAL_FEE_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.WITHDRAWAL_FEE['number'] + ' | ' + savingProduct?.accounts?.WITHDRAWAL_FEE['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'WITHDRAWAL_FEE_INCOME_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.WITHDRAWAL_FEE_INCOME['number'] + ' | ' + savingProduct?.accounts?.WITHDRAWAL_FEE_INCOME['name']">
+    </cbs-form-readonly-control>
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'MANAGEMENT_FEES' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'MANAGEMENT_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.managementFeeRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.managementFeeRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'MANAGEMENT_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.managementFeeFlatMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.managementFeeFlatMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MANAGEMENT_FEE_FREQUENCY' | translate }}"
+        [value]="savingProduct?.managementFeeFrequency | translate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MANAGEMENT_FEE_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.MANAGEMENT_FEE['number'] + ' | ' + savingProduct?.accounts?.MANAGEMENT_FEE['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MANAGEMENT_FEE_INCOME_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.MANAGEMENT_FEE_INCOME['number'] + ' | ' + savingProduct?.accounts?.MANAGEMENT_FEE_INCOME['name']">
+    </cbs-form-readonly-control>
+
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'ENTRY_FEES' | translate }}</strong>
+    </div>
+
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'ENTRY_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.entryFeeRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.entryFeeRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'ENTRY_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.entryFeeFlatMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.entryFeeFlatMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'ENTRY_FEE_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.ENTRY_FEE['number'] + ' | ' + savingProduct?.accounts?.ENTRY_FEE['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'ENTRY_FEE_INCOME_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.ENTRY_FEE_INCOME['number'] + ' | ' + savingProduct?.accounts?.ENTRY_FEE_INCOME['name']">
+    </cbs-form-readonly-control>
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'CLOSE_FEES' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'CLOSE_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.closeFeeRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.closeFeeRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'CLOSE_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.closeFeeFlatMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ savingProduct?.closeFeeFlatMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CLOSE_FEE_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.CLOSE_FEE['number'] + ' | ' + savingProduct?.accounts?.CLOSE_FEE['name']">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CLOSE_FEE_INCOME_ACCOUNT' | translate }}"
+        [value]="savingProduct?.accounts?.CLOSE_FEE_INCOME['number'] + ' | ' + savingProduct?.accounts?.CLOSE_FEE_INCOME['name']">
+    </cbs-form-readonly-control>
+</cbs-form-layout>
+<cbs-loading-indicator [isFixed]="true" [showLoader]="savingProductMakerCheckerState?.loading"></cbs-loading-indicator>

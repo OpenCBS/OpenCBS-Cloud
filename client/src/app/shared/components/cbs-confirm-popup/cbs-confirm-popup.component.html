@@ -1,0 +1,34 @@
+<div class="cbs__application-wrap">
+    <div class="cbs__application__note">
+        <form novalidate #f="ngForm" (ngSubmit)="submitAction(f); f.reset()">
+            <div class="slds-text-heading--large">
+                {{popupLabel | uppercase}}
+            </div>
+            <p class="cbs__application__note-text">
+                {{confirmText }}
+                <ng-content></ng-content>
+            </p>
+            <div class="slds-form-element" *ngIf="showTextarea">
+                <label class="slds-form-element__label" for="note" *ngIf="textareaLabel">{{textareaLabel}}</label>
+                <div class="slds-form-element__control">
+                    <textarea id="note" name="note" class="slds-textarea" #note="ngModel" [ngModel]="textareaVal"
+                              [placeholder]="textareaHolderText ? textareaHolderText : ''" required></textarea>
+                </div>
+            </div>
+            <div class="slds-grid">
+                <div class="slds-col cbs__application__note-left">
+                    <a (click)="cancelConfirm(); f.reset()"
+                       class="slds-button slds-button--neutral">{{leftButtonLabel}}</a>
+                </div>
+                <div class="slds-col cbs__application__note-right">
+                    <button [disabled]="f.invalid" type="submit" class="slds-button slds-button--success">
+                        {{rightButtonLabel}}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

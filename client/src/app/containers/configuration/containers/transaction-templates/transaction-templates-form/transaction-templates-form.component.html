@@ -1,0 +1,45 @@
+<div>
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <div class="slds-form--horizontal">
+
+        <form novalidate [formGroup]="form">
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'NAME' | translate"
+                [hasError]="form.get('name').errors && form.get('name').touched"
+                [formControlName]="'name'">
+            </cbs-form-input-control>
+
+            <div class="slds-text-title--caps slds-m-bottom--medium">
+                {{ 'DEBIT_ACCOUNT' | translate }}
+            </div>
+
+            <div class="slds-form-element" formArrayName="debitAccounts">
+                <div *ngFor="let account of transactionTemplateDebitAccounts; let ind=index;">
+                    <ng-container
+                        cbsDynamicField
+                        [config]="account"
+                        [group]="form.controls['debitAccounts']['controls'][ind]">
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="slds-text-title--caps slds-m-bottom--medium">
+                {{ 'CREDIT_ACCOUNT' | translate }}
+            </div>
+
+            <div class="slds-form-element" formArrayName="creditAccounts">
+                <div *ngFor="let account of transactionTemplateCreditAccounts; let ind=index;">
+                    <ng-container
+                        cbsDynamicField
+                        [config]="account"
+                        [group]="form.controls['creditAccounts']['controls'][ind]">
+                    </ng-container>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

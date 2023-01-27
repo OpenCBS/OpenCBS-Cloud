@@ -1,0 +1,46 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ guarantor?.profile?.name | uppercase }} - {{ 'EDIT' | translate }}"
+                [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="cbs-new-profile__submit-btn">
+                <a [routerLink]="'/loan-applications/' + loanAppId + '/guarantors/' + guarantorId"
+                   class="slds-button slds-button--neutral slds-not-selected" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>{{ 'CANCEL' | translate }}</span>
+                </a>
+                <button (click)="submit()" [disabled]="guarantorForm?.form.invalid || !formChanged" #submitButton
+                        class="slds-button slds-button--success slds-not-selected"
+                        aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>{{ 'SAVE' | translate}}</span>
+                </button>
+            </div>
+        </div>
+
+    </cbs-page-header>
+</cbs-header>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="isOpen = false;"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'UNSAVED_CHANGES' | translate"></cbs-confirm-popup>
+
+<div class="slds-grid slds-grid--align-center">
+    <div class="slds-container--medium">
+        <cbs-guarantor-form [loanAppId]="loanAppId"></cbs-guarantor-form>
+    </div>
+</div>

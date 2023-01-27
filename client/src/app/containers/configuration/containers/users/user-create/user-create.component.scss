@@ -1,0 +1,17 @@
+:host {
+  .cbs-user-create {
+    padding: 20px 15px;
+
+    .slds-button {
+      margin-top: 1rem;
+    }
+
+    &__preview {
+      cursor: pointer;
+    }
+  }
+
+  .slds-form-element__control {
+    vertical-align: top;
+  }
+}

@@ -1,0 +1,89 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ saving?.id ? saving?.code : '' }}"
+                               [svgData]="svgData"
+                               [badgeLabel]="savingStatus === 'IN_PROGRESS' ? 'IN PROGRESS' : savingStatus"
+                               [badgeTheme]="(savingStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+
+            <div class="loan-info-entity" *ngIf="savingStatus === 'OPEN'">
+                <div class="balance-info">
+                    {{ 'BALANCE' | translate | uppercase }} : {{ saving?.savingBalance | cbsNumberFormat }}
+                </div>
+                <div class="balance-info">
+                    {{ 'ACCRUED_INTEREST' | translate | uppercase }} : {{ saving?.accruedInterest | cbsNumberFormat }}
+                </div>
+            </div>
+
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <ng-container *ngIf="savingStatus === 'IN_PROGRESS'">
+                    <button (click)="openModal()" class="slds-button slds-button--success" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>
+                        {{ 'OPEN' | translate }}
+                    </span>
+                    </button>
+
+                    <a [routerLink]="'/savings/'+ saving?.id + '/edit' "
+                       class="slds-button slds-button--brand"
+                       aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                        {{ 'EDIT' | translate }}</span>
+                    </a>
+                </ng-container>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<!-- ./cbs-main -->
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="true" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="savingNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right">
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<ngl-modal [header]="'OPEN_SAVING' | translate" [(open)]="opened" (openChange)="closeModal()">
+    <div body>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'INITIAL_AMOUNT' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <div class="slds-input-has-icon slds-input-has-icon--right">
+                    <input class="slds-input" [onlyNumber]="true" type="number" (keyup)="checkField()" [(ngModel)]="initialAmount">
+
+                    <div class="cbs-loan-details-form__range">
+                        Min: <span>{{ savingProductInitialAmountMin | cbsNumberFormat }}</span> Max:
+                        <span>{{ savingProductInitialAmountMax | cbsNumberFormat }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="closeModal()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="fieldEmpty" class="slds-button slds-button--success" (click)="sendSaving()">{{ 'OPEN' |
+            translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+

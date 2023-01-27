@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+
+  .cbs-icon-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #d8dde6;
+    border-radius: 3px;
+    padding: 1.4rem;
+    text-decoration: none;
+    transition: all .2s ease;
+    background-color: #fff;
+  
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: none;
+    }
+  
+    &:hover {
+      border-color: darken(#d8dde6, 5%);
+      background: #fafafa;
+    }
+
+    &__title {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.25;
+      text-transform: uppercase;
+      margin-bottom: .3rem;
+    }
+
+    &__desc {
+      display: block;
+      color: rgba(84, 105, 141, 0.45);
+    }
+
+    &__icon {
+      display: block;
+      margin-bottom: .5rem;
+    }
+
+    .slds-icon_container {
+      margin-bottom: 1rem;
+    }
+
+    .slds-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+}

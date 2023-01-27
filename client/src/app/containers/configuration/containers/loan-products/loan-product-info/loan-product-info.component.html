@@ -1,0 +1,384 @@
+<cbs-form-layout *ngIf="loanProductState?.loaded && loanProductState?.success">
+
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'ACTIVE_PRODUCT' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ loanProduct?.statusType | translate }}</span>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'NAME' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ loanProduct?.name }}</span>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CODE' | translate }}"
+        [value]="loanProduct?.code"></cbs-form-readonly-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'AVAILABILITY' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-3">
+                    <span class="slds-checkbox">
+                        <input
+                            type="checkbox"
+                            [checked]="checkAvailability('PERSON')"/>
+                        <label class="slds-checkbox__label">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{ 'PROFILE_PERSON' | translate }}</span>
+                        </label>
+                    </span>
+            </div>
+            <div class="cbs-compound-form__1-of-3">
+                    <span class="slds-checkbox">
+                        <input
+                            type="checkbox"
+                            [checked]="checkAvailability('COMPANY')"/>
+                        <label class="slds-checkbox__label">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">
+                                {{ (currentInstance === 'rwanda' ? 'COMPANY_GROUP' : 'PROFILE_COMPANY') | translate }}</span>
+                        </label>
+                    </span>
+            </div>
+            <div class="cbs-compound-form__1-of-3" *ngIf="currentInstance != 'rwanda'">
+                    <span class="slds-checkbox">
+                        <input
+                            type="checkbox"
+                            [checked]="checkAvailability('GROUP')"/>
+                        <label class="slds-checkbox__label">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{ 'PROFILE_GROUP' | translate }}</span>
+                        </label>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'SCHEDULE_TYPE' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ loanProduct?.scheduleType |translate }}</span>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'SCHEDULE_BASED_TYPE' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ loanProduct?.scheduleBasedType |translate }}</span>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'CURRENCY' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+                <span class="slds-form-element__static"
+                      *ngIf="loanProduct?.currency">{{loanProduct?.currency?.name}}</span>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'INTEREST_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.interestRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.interestRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.amountMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.amountMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        *ngIf="loanProduct?.scheduleBasedType !== 'BY_INSTALLMENT'"
+        fieldLabel="{{ 'MAX_MATURITY_DATE' | translate }}"
+        [value]="loanProduct?.maturityDateMax | cbsDateFormat"></cbs-form-readonly-control>
+
+    <div class="slds-form-element cbs-compound-form__row" *ngIf="loanProduct?.scheduleBasedType === 'BY_INSTALLMENT'">
+        <label class="slds-form-element__label">
+            {{ 'NUMBER_OF_INSTALMENTS' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.maturityMin }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.maturityMax }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'GRACE_PERIOD' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.gracePeriodMin }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ loanProduct?.gracePeriodMax }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'LOAN_PRODUCT_HAS_PAYEES' | translate }}
+        </label>
+        <div class="cbs-compound-form__checkbox-wrap">
+            <span class="slds-checkbox">
+                <input
+                    type="checkbox"
+                    [checked]="loanProduct?.hasPayees"/>
+                <label class="slds-checkbox__label">
+                    <span class="slds-checkbox--faux"></span>
+                </label>
+            </span>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <cbs-penalties-selected [displayButton]="false" [selectedPenalties]="penalties"
+                                [label]="'NONE'"></cbs-penalties-selected>
+    </div>
+
+    <div class="slds-form-element">
+        <cbs-entry-fees-selected [displayButton]="false" [selectedEntryFees]="entryFees"
+                                 [label]="'NONE'"></cbs-entry-fees-selected>
+    </div>
+    <div class="early-partial-repayment-fee">
+        <div class="slds-text-title--caps account-title">
+            <strong>{{ 'EARLY_PARTIAL_REPAYMENT_FEES' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row">
+            <label class="slds-form-element__label slds-cell-fixed">
+                {{ 'VALUE' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="slds-form-element__control">
+                    <span
+                        class="slds-form-element__static slds-align-middle">{{ loanProduct?.earlyPartialRepaymentFeeValue }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label slds-cell-fixed">
+                {{ 'TYPE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span
+                    class="slds-form-element__static">{{ loanProduct?.earlyPartialRepaymentFeeType | translate }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="early-total-repayment-fee">
+        <div class="slds-text-title--caps account-title">
+            <strong>{{ 'EARLY_TOTAL_REPAYMENT_FEES' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row">
+            <label class="slds-form-element__label slds-cell-fixed">
+                {{ 'VALUE' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="slds-form-element__control">
+                    <span
+                        class="slds-form-element__static slds-align-middle">{{ loanProduct?.earlyTotalRepaymentFeeValue }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label slds-cell-fixed">
+                {{ 'TYPE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ loanProduct?.earlyTotalRepaymentFeeType | translate }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'PROVISIONING' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'PROVISION_ON_OUTSTANDING_LOAN_PORTFOLIO' | translate }}
+        </label>
+        <div class="slds-form-element__control cbs-provisioning">
+            <div class="slds-text-align--center"
+                 *ngIf="!provisioning">{{ 'NONE' | translate}}</div>
+            <ul class="slds-scrollable" *ngIf="provisioning">
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                    <thead>
+                    <tr class="slds-text-title--caps">
+                        <th scope="col" width="25%">
+                            <div class="slds-truncate"
+                                 title="Number of late days">{{ 'NUMBER_OF_LATE_DAYS' | translate }}</div>
+                        </th>
+                        <th scope="col" width="25%">
+                            <div class="slds-truncate" title="Rate Principal">{{ 'RATE_PRINCIPAL' | translate }}</div>
+                        </th>
+                        <th scope="col" width="25%">
+                            <div class="slds-truncate" title="Rate Interest">{{ 'RATE_INTEREST' | translate }}</div>
+                        </th>
+                        <th scope="col" width="25%">
+                            <div class="slds-truncate" title="Rate Penalty">{{ 'RATE_PENALTY' | translate }}</div>
+                        </th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let prov of provisioning">
+                        <td class="provisioning" data-label="Late days" scope="row">
+                            {{ prov?.lateDays}}
+                        </td>
+                        <td class="provisioning" data-label="Rate Principal" scope="row">
+                            {{ prov?.ratePrincipal}}
+                        </td>
+                        <td class="provisioning" data-label="Rate Ineterest" scope="row">
+                            {{ prov?.rateInterest}}
+                        </td>
+                        <td class="provisioning" data-label="Rate Penalty" scope="row">
+                            {{ prov?.ratePenalty}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </ul>
+        </div>
+    </div>
+
+    <div *ngIf="loanProduct?.topUpAllow">
+        <div class="slds-text-title--caps">
+            <strong>{{ 'TOP_UP' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                {{ 'TOP_UP_ALLOW' | translate }}
+            </label>
+            <div class="cbs-compound-form__checkbox-wrap">
+                <span class="slds-checkbox">
+                    <input
+                        type="checkbox"
+                        [checked]="loanProduct?.topUpAllow"/>
+                    <label class="slds-checkbox__label">
+                        <span class="slds-checkbox--faux"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'TOP_UP_MAX_LIMIT' | translate }}"
+            [value]="loanProduct?.topUpMaxLimit">
+        </cbs-form-readonly-control>
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'TOP_UP_MAX_OLB' | translate }}"
+            [value]="loanProduct?.topUpMaxOlb">
+        </cbs-form-readonly-control>
+    </div>
+
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'ACCOUNTS' | translate }}</strong>
+    </div>
+
+    <div *ngFor="let account of loanProduct?.accounts">
+        <cbs-form-readonly-control
+            fieldLabel="{{ account?.accountRuleType | translate }}"
+            [value]="account?.accountDto?.number + ' | ' + account?.accountDto?.name">
+        </cbs-form-readonly-control>
+    </div>
+
+</cbs-form-layout>
+
+<p *ngIf="loanProductState?.loaded && !loanProductState?.error"
+   class="slds-text-align--center slds-m-top--large">{{ loanProductState?.errorMessage }}</p>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="loanProductState?.loading"></cbs-loading-indicator>

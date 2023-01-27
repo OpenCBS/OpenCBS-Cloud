@@ -1,0 +1,233 @@
+<form novalidate [formGroup]="form" [hidden]="isHidden" class="slds-form--horizontal slds-m-top--medium" cbsFormFocus>
+    <cbs-form-select-control
+        [formControlName]="'statusType'"
+        [selectData]="statusTypeData"
+        [requiredField]="false"
+        [hasError]="form.get('statusType').errors && form.get('statusType').touched"
+        fieldLabel="{{ 'ACTIVE_PRODUCT' | translate }}"
+    ></cbs-form-select-control>
+
+    <cbs-form-input-control
+        [requiredField]="true"
+        [fieldLabel]="'NAME' | translate"
+        [hasError]="hasError('name')"
+        [formControlName]="'name'">
+    </cbs-form-input-control>
+
+    <cbs-form-input-control
+        [requiredField]="true"
+        [fieldLabel]="'CODE' | translate"
+        [hasError]="hasError('code')"
+        [formControlName]="'code'">
+    </cbs-form-input-control>
+
+    <div class="slds-form-element cbs-compound-form__row" formArrayName="availability">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'AVAILABILITY' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" formGroupName="0">
+                <label class="slds-checkbox" for="person-profile">
+                    <input type="checkbox" name="availability" id="person-profile" formControlName="person_profile"/>
+                    <span class="slds-checkbox--faux"></span>
+                    <span class="slds-form-element__label">{{ 'PROFILE_PERSON' | translate }}</span>
+                </label>
+            </div>
+            <div class="cbs-compound-form__1-of-2" formGroupName="1">
+                <label class="slds-checkbox" for="company-profile">
+                    <input type="checkbox" name="availability" id="company-profile" formControlName="company_profile"/>
+                    <span class="slds-checkbox--faux"></span>
+                    <span class="slds-form-element__label">
+                        {{ (currentInstance === 'rwanda' ? 'COMPANY_GROUP' : 'PROFILE_COMPANY') | translate }}
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="hasError('currencyId')"
+        [requiredField]="true"
+        [formControlName]="'currencyId'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'CURRENCY' | translate"
+        [picklistDataUrl]="currencyConfig">
+    </cbs-form-lookup-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+          hasError('amountMin') || isValid('amountMin')">
+                <label class="cbs-compound-form__label" for="amount-min">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" id="amount-min" [onlyNumber]="true" class="slds-input" formControlName="amountMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            hasError('amountMax') || isValid('amountMax')">
+                <label class="cbs-compound-form__label" for="amount-max">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" id="amount-max" [onlyNumber]="true" class="slds-input" formControlName="amountMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'INTEREST_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+           hasError('interestRateMin') || isValid('interestRateMin')">
+                <label class="cbs-compound-form__label" for="interest-rate-minimum">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="interest-rate-minimum" class="slds-input"
+                           formControlName="interestRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            hasError('interestRateMax') || isValid('interestRateMax')">
+                <label class="cbs-compound-form__label" for="interest-rate-maximum">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="interest-rate-maximum" class="slds-input"
+                           formControlName="interestRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'DURATION_MONTH' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+           hasError('termAgreementMin') || isValid('termAgreementMin')">
+                <label class="cbs-compound-form__label" for="maturity-min">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="maturity-min" class="slds-input" formControlName="termAgreementMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+           hasError('termAgreementMax') || isValid('termAgreementMax')">
+                <label class="cbs-compound-form__label" for="maturity-max">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="maturity-max" class="slds-input" formControlName="termAgreementMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-select-control
+        [formControlName]="'interestAccrualFrequency'"
+        [selectData]="frequency"
+        [requiredField]="true"
+        [hasError]="hasError('interestAccrualFrequency')"
+        fieldLabel="{{ 'INTEREST_ACCRUAL_FREQUENCY' | translate }}"
+    ></cbs-form-select-control>
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'EARLY_CLOSE_FEE_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'EARLY_CLOSE_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2"
+                 [class.slds-has-error]="hasError('earlyCloseFeeRateMin') || isValid('earlyCloseFeeRateMin')">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" class="slds-input" formControlName="earlyCloseFeeRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2"
+                 [class.slds-has-error]="hasError('earlyCloseFeeRateMax') ||isValid('earlyCloseFeeRateMax')">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" class="slds-input" formControlName="earlyCloseFeeRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'EARLY_CLOSE_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2"
+                 [class.slds-has-error]="hasError('earlyCloseFeeFlatMin')||isValid('earlyCloseFeeFlatMin')">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" class="slds-input" formControlName="earlyCloseFeeFlatMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2"
+                 [class.slds-has-error]="hasError('earlyCloseFeeFlatMax')||isValid('earlyCloseFeeFlatMax')">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" class="slds-input" formControlName="earlyCloseFeeFlatMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-text-title--caps account-title">
+        <strong>{{ 'ACCOUNTS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element" formArrayName="accountList">
+        <ng-container
+            *ngFor="let field of fields; let ind=index;"
+            cbsDynamicField
+            [config]="field"
+            [group]="form.controls['accountList'].controls[ind]">
+        </ng-container>
+    </div>
+</form>

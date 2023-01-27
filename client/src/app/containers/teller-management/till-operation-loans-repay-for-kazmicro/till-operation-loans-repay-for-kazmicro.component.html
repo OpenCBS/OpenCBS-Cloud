@@ -1,0 +1,137 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'REPAYMENT' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <div cbs-page-header-layout="right">
+            <div class="loan-info-entity">
+                <div class="balance-info">{{'SETTLEMENT_BALANCE' | translate}}: {{ loanEntityInfo?.settlementBalance
+                    }}
+                </div>
+                <div class="balance-info">{{'ARREARS' | translate}}: {{ loanEntityInfo?.lateAmount }}</div>
+                <div class="balance-info">{{'OLB' | translate}}: {{ loanEntityInfo?.olb }}</div>
+            </div>
+
+            <button (click)="repay()" [disabled]="repayForm.invalid || enteredAmount == 0"
+                    class="slds-button slds-button--success">{{ 'REPAY' | translate }}
+            </button>
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'REPAYMENT' | translate }}</strong>
+        </div>
+
+        <div class="cbs-loan-details-form__form">
+            <form novalidate [formGroup]="repayForm" class="slds-form--stacked">
+
+                <cbs-form-date-control
+                    (onChange)="getSplitDataWithTotal()"
+                    [formControlName]="'timestamp'"
+                    [validateDate]="true"
+                    [requiredField]="true"
+                    [hasError]="repayForm.get('timestamp').errors && repayForm.get('timestamp').touched"
+                    fieldLabel="{{ 'DATE' | translate }}"
+                ></cbs-form-date-control>
+
+                <cbs-form-lookup-control
+                    formControlName="paidBy"
+                    fieldLabel="{{ 'PAID_BY' | translate }}"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [hasError]="repayForm.get('paidBy').errors && repayForm.get('paidBy').touched"
+                    [picklistDataUrl]="formConfig.profileLookupUrl"
+                    [requiredField]="true"
+                    (onSelect)="setLookupValue($event)"
+                ></cbs-form-lookup-control>
+
+                <cbs-form-lookup-control
+                    [hasError]="repayForm.get('paymentMethod').errors && repayForm.get('paymentMethod').touched"
+                    [requiredField]="true"
+                    [formControlName]="'paymentMethod'"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [fieldLabel]="'PAYMENT_METHOD' | translate"
+                    [picklistDataUrl]="formConfig.paymentMethod">
+                </cbs-form-lookup-control>
+
+                <cbs-form-input-control
+                    (focusout)="getSplitDataWithTotal($event.target['value'])"
+                    [formControlName]="'enteredAmount'"
+                    fieldLabel="{{ 'ENTERED_AMOUNT' | translate }}"
+                    [inputType]="'number'"
+                    [requiredField]="true"
+                    [hasError]="(repayForm.get('enteredAmount').errors && repayForm.get('enteredAmount').touched)">
+                </cbs-form-input-control>
+
+                <cbs-form-input-control
+                    [formControlName]="'amountToPay'"
+                    fieldLabel="{{ 'AMOUNT_TO_PAY' | translate }}"
+                    [inputType]="'number'"
+                    [requiredField]="true"
+                    [hasError]="(repayForm.get('amountToPay').errors && repayForm.get('amountToPay').touched)">
+                </cbs-form-input-control>
+
+                <cbs-form-input-control
+                    [formControlName]="'total'"
+                    fieldLabel="{{ 'TOTAL' | translate }}"
+                    [inputType]="'number'"
+                    [requiredField]="true"
+                    [hasError]="(repayForm.get('total').errors && repayForm.get('total').touched)">
+                </cbs-form-input-control>
+
+                <cbs-form-input-control
+                    [formControlName]="'principal'"
+                    [requiredField]="true"
+                    [inputType]="'number'"
+                    [hasError]="repayForm.get('principal').errors && repayForm.get('principal').touched"
+                    fieldLabel="{{ 'PRINCIPAL' | translate }}"
+                ></cbs-form-input-control>
+
+                <cbs-form-input-control
+                    [formControlName]="'interest'"
+                    [requiredField]="true"
+                    [inputType]="'number'"
+                    [hasError]="repayForm.get('interest').errors && repayForm.get('interest').touched"
+                    fieldLabel="{{ 'INTEREST' | translate }}"
+                ></cbs-form-input-control>
+
+                <cbs-form-input-control
+                    [formControlName]="'penalty'"
+                    [requiredField]="true"
+                    [inputType]="'number'"
+                    [hasError]="repayForm.get('penalty').errors && repayForm.get('penalty').touched"
+                    fieldLabel="{{ 'PENALTY' | translate }}"
+                ></cbs-form-input-control>
+
+                <cbs-form-textarea-control
+                    [formControlName]="'description'"
+                    [requiredField]="true"
+                    [hasError]="repayForm.get('description').errors && repayForm.get('description').touched"
+                    [fieldLabel]="'DESCRIPTION' | translate"
+                ></cbs-form-textarea-control>
+
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'AUTO_PRINT' | translate }}
+
+                    </label>
+                    <div class="slds-form-element__control">
+                        <label class="slds-checkbox" for="auto-print">
+                            <input type="checkbox" name="autoPrint" id="auto-print" formControlName="autoPrint"/>
+                            <span class="slds-checkbox--faux"></span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </cbs-form-layout>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

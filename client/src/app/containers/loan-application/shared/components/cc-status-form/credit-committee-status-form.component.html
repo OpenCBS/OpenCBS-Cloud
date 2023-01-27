@@ -1,0 +1,8 @@
+<div class="slds-button-group">
+    <button *ngFor="let status of statuses; let i = index;"
+            class="slds-button slds-button_neutral"
+            [ngClass]="status.value == ccMember.status ? status.color : ''"
+            (click)="onStatusClick(ccMember, status.value)">
+        {{status.caption | translate}}
+    </button>
+</div>

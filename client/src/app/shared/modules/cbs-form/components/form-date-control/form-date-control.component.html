@@ -1,0 +1,35 @@
+<div class="slds-form-element"
+     [class.slds-has-error]="showError && hasError"
+     [ngClass]="styleClass"
+     [ngStyle]="style">
+    <label class="slds-form-element__label" *ngIf="!!fieldLabel.length">
+        <abbr class="slds-required" title="required" *ngIf="requiredField">*</abbr>
+        {{ fieldLabel }}
+    </label>
+    <div class="slds-form-element__control">
+        <div class="cbs-datepicker">
+            <input
+                matInput
+                [value]="value"
+                [matDatepickerFilter]="weekendDisabled ? isNotWeekend : isWeekend"
+                [matDatepicker]="picker"
+                [placeholder]="dateFormat"
+                class="slds-input"
+                (dateChange)="value = $event"
+                (dateInput)="checkValidation($event)"
+                [disabled]="disabled"
+                [onlyNumber]="true"
+                [min]="minDate"
+                [max]="maxDate">
+            <span *ngIf="showAge && yearsFromNow" class="cbs-datepicker__age">
+                {{'AGE' | translate}}: {{ yearsFromNow }}
+            </span>
+            <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="disabled" *ngIf="enableDropdownPicker"></mat-datepicker-toggle>
+            <mat-datepicker #picker [disabled]="disabled"></mat-datepicker>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>
+<mat-error *ngIf="hasError">
+    {{errorOutputMessage}}
+</mat-error>

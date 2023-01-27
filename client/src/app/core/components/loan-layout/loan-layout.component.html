@@ -1,0 +1,15 @@
+<div class="cbs-loan-layout__sidebar" *ngIf="sidebar">
+    <ng-content select="[cbs-loan-layout=sidebar]"></ng-content>
+</div>
+
+<div class="cbs-loan-layout__l" *ngIf="sidePanel">
+    <ng-content select="[cbs-loan-layout=left]"></ng-content>
+    <div class="cbs-loan-layout__toolbar" *ngIf="bottomToolbar">
+        <ng-content select="[cbs-loan-layout=bottom-toolbar]"></ng-content>
+    </div>
+</div>
+
+<div class="cbs-loan-layout__r"
+     [ngClass]="{'cbs-loan-layout--full-width': !sidePanel, 'cbs-loan-layout--scrollable': rightPanelScrollable}">
+    <ng-content select="[cbs-loan-layout=right]"></ng-content>
+</div>

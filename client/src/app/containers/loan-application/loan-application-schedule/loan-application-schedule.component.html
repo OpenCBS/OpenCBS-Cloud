@@ -1,0 +1,58 @@
+<cbs-header *ngIf="editableSchedule">
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'LOAN_APPLICATIONS_ADD' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <p *ngIf="status && status === 'WRONG_TOTAL_AMOUNT'"
+               class="ng-star-inserted slds-accordion__summary-action slds-card__body_inner slds-text-title--caps"
+            >Total amount is <span class="text-error slds-text-color--error">
+                {{ totalPrincipal | cbsNumberFormat }}</span>, must be <span
+                class="text-error">{{ totalAmount | cbsNumberFormat }}</span>
+            </p>
+            <p *ngIf="status && status === 'WRONG_MATURITY_DATA'"
+               class="ng-star-inserted slds-accordion__summary-action slds-card__body_inner slds-text-title--caps"
+            ><span class="text-error slds-text-color--error">
+                Payment date entered incorrectly</span>
+            </p>
+            <button class="slds-button slds-button--neutral" aria-live="assertive"
+                    (click)="cancel(loanAppId)">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    {{ 'CANCEL' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" #submitButton aria-live="assertive"
+                    (click)="saveNewSchedule()"
+                    [disabled]="status && status !== 'VALID'">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>
+                    {{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<cbs-loan-installments-table
+    [data]="installments"
+    [editableColumns]="editableSchedule"
+    [editablePaymentDate]="editablePaymentDate"
+    (onCellEdit)="getCellData($event)"
+></cbs-loan-installments-table>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'SCHEDULE_NOT_SAVED' | translate"
+></cbs-confirm-popup>

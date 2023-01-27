@@ -1,0 +1,42 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'LOAN_PRODUCT_DETAILS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive"
+                    (click)="goToViewLoanProducts()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true"
+                         class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'CANCEL' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" #submitButton aria-live="assertive"
+                    (click)="submitForm()"
+                    [disabled]="loanProductForm?.form.invalid || loanProductForm?.topUpEmpty">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true"
+                         class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-text-title--caps">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <cbs-loan-product-form [isCreateMode]="true"></cbs-loan-product-form>
+    </cbs-form-layout>
+</main>

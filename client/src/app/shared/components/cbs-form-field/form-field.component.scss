@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  margin-top: 0.5rem
+}
+
+:host .slds-dropdown-trigger--click .slds-dropdown {
+  padding: 0;
+  border: none;
+}
+
+:host .slds-datepicker td[aria-disabled="true"] {
+  color: #d8dde6;
+}

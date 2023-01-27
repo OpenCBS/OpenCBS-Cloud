@@ -1,0 +1,67 @@
+:host {
+  .cbs-loan-details-form {
+    &__form {
+      .slds-form-element__control {
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+    }
+
+    &__range {
+      color: #bbb;
+      font-size: 10px;
+      text-align: right;
+      text-transform: uppercase;
+
+      span {
+        color: #54698d;
+        font-weight: bold;
+        margin-right: .85rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+    &__amount {
+      .slds-form-element__static {
+        display: inline-block;
+        border: 1px solid #a8b7c7;
+        border-radius: 0.25rem;
+        padding: 0 1rem 0 0.75rem;
+        height: 2rem;
+        background-color: #e0e5ee;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        line-height: 1.875rem;
+        width: 100%;
+      }
+    }
+  }
+
+  .member-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .member-fields {
+    ::ng-deep {
+      .slds-form-element {
+        margin-bottom: 0;
+      }
+
+      .member-fields__field {
+        margin-bottom: .5rem;
+      }
+    }
+
+    .cbs-loan-details-form__range {
+      margin-bottom: .5rem;
+    }
+  }
+}

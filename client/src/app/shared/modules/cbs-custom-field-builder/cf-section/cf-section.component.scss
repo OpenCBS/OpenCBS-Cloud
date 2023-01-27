@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  margin-bottom: 1rem;
+
+  .cf-section {
+    padding: 1rem;
+    padding-bottom: 1.5rem;
+    border: 1px solid #e4e4e4;
+    border-radius: 2px;
+
+    &:hover {
+      border-color: #ccc;
+    }
+
+    &--highlight {
+      border-color: #00a1df;
+
+      &:hover {
+        border-color: #00a1df;
+      }
+    }
+
+    &__head {
+      margin-bottom: 1rem;
+    }
+
+    &__save-btn {
+      svg {
+        fill: #0070d2;
+      }
+
+      &[disabled] {
+        svg {
+          fill: #d8dde6;
+        }
+      }
+    }
+
+    &__cancel-btn {
+      svg {
+        fill: #c23934;
+      }
+
+      &[disabled] {
+        svg {
+          fill: #d8dde6;
+        }
+      }
+    }
+  }
+
+}

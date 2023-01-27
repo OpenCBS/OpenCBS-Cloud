@@ -1,0 +1,87 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ (loan | async)?.loan?.code ?  (loan | async)?.loan?.code : '' }}"
+                [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" (click)="cancel()">Cancel</button>
+            <button class="slds-button slds-button--success" (click)="repay(tableData)"
+                    #submitButton>{{ 'REPAY' | translate }}
+            </button>
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+<p-table
+    *ngIf="!isLoading && !!tableData.length"
+    [scrollable]="true"
+    [scrollHeight]="'calc(100% - 41px);'"
+    [value]="tableData"
+    [columns]="selectedColumns"
+    [styleClass]="'slds-table slds-table--bordered slds-table--cell-buffer slds-table--col-bordered'"
+    cbsMacAgent
+    [cbsMacAgentClass]="'cbs-mac-user'">
+
+    <ng-template pTemplate="caption" let-columns>
+        <cbs-multiselect
+            [options]="tableColumns"
+            [(selectedOptions)]="selectedColumns"
+        ></cbs-multiselect>
+
+        <div body>
+            <cbs-form-date-control
+                [styleClass]="'slds-email-composer__recipient'"
+                [(ngModel)]="bachRepayDate"
+                (ngModelChange)="repayDate($event)"
+                [enableDropdownPicker]="true"
+                fieldLabel="{{ 'PAYMENT_DATE' | translate }}"
+                [validateDate]="true"
+                [requiredField]="true">
+            </cbs-form-date-control>
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [ngClass]="columnStyleClass(col)">
+                {{ col.header }}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr [ngClass]="rowStyleClass(row)">
+            <ng-container *ngFor="let col of columns; let ind = index">
+                <td *ngIf="row.name === 'Total'
+                || (col.field !== 'principal_payment'
+                && col.field!== 'interest_payment'); else editableCell" [ngClass]="columnStyleClass(col)">
+                    {{row[col.field]}}
+                </td>
+                <ng-template #editableCell>
+                    <td *ngIf="col.field === 'principal_payment' || col.field === 'interest_payment'">
+                        <input class="slds-input"
+                               type="text"
+                               [ngModel]="row[col.field]"
+                               (ngModelChange)="calculateTotal($event, col, row)"
+                        />
+                    </td>
+                </ng-template>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-table>
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'NO_PAYMENT_DONE' | translate"
+></cbs-confirm-popup>
+

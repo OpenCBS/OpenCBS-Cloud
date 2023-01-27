@@ -1,0 +1,215 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ loanAppId ? this.loanApplication['code'] : ''}}"
+                [svgData]="svgData" [badgeLabel]="loanAppStatus | translate" [badgeTheme]="(loanAppStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="center">
+            <div class="slds-progress">
+                <ol class="slds-progress__list">
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.IN_PROGRESS] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.PENDING] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.APPROVED] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.DISBURSED]"
+                        class="slds-progress__item slds-is-completed">
+                        <button class="slds-button slds-progress__marker slds-button_icon slds-progress__marker_icon"
+                                style="cursor: default"
+                                title="Created">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Created</span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.IN_PROGRESS] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.PENDING] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.APPROVED] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.DISBURSED]"
+                        class="slds-progress__item slds-is-completed">
+                        <button class="slds-button slds-progress__marker slds-button_icon slds-progress__marker_icon"
+                                style="cursor: default"
+                                title="Saved">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Saved</span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.IN_PROGRESS]"
+                        class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 3</span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.PENDING] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.APPROVED] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.DISBURSED]"
+                        class="slds-progress__item slds-is-completed">
+                        <button class="slds-button slds-progress__marker slds-button_icon slds-progress__marker_icon"
+                                style="cursor: default"
+                                title="Submitted">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Submitted</span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.IN_PROGRESS] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.PENDING]"
+                        class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 4 </span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.APPROVED] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.DISBURSED]"
+                        class="slds-progress__item slds-is-completed">
+                        <button class="slds-button slds-progress__marker slds-button_icon slds-progress__marker_icon"
+                                style="cursor: default"
+                                title="Approved">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Approved</span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.IN_PROGRESS] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.PENDING] ||
+                    loanApplication?.status === LoanAppStatus[LoanAppStatus.APPROVED]">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 5 </span>
+                        </button>
+                    </li>
+                    <li *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.DISBURSED]"
+                        class="slds-progress__item slds-is-completed">
+                        <button class="slds-button slds-progress__marker slds-button_icon slds-progress__marker_icon"
+                                style="cursor: default"
+                                title="Disbursed">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Disbursed</span>
+                        </button>
+                    </li>
+                </ol>
+                <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0" aria-valuemax="100"
+                     aria-valuenow="50" role="progressbar">
+                    <span class="slds-progress-bar__value" [ngStyle]="{'width': progressValue}">
+                      <span class="slds-assistive-text"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <span *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['SUBMIT_LOANS_APPLICATIONS'] }">
+                <cbs-loan-app-submit-button
+                    *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.IN_PROGRESS]"
+                    (onClickButton)="openModal($event)">
+                </cbs-loan-app-submit-button>
+            </span>
+            <ng-container
+                *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_LOAN_DISBURSEMENT'] }">
+                <cbs-loan-app-confirm-button
+                    [disabled]="readOnly"
+                    *ngIf="loanApplication?.status === LoanAppStatus[LoanAppStatus.APPROVED]"
+                    (onClickButton)="openModal($event)">
+                </cbs-loan-app-confirm-button>
+            </ng-container>
+            <span *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['COLLATERAL'] }"
+                  class="slds-box--x-small">
+              <a *ngIf="loanAppStatus !== 'DISBURSED'" routerLink="new"
+                 class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'ADD' | translate }}</span>
+            </a>
+            </span>
+
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<cbs-confirm-popup [confirmText]="text" [opened]="opened"
+                   (openedChange)="closeModal()"
+                   (onSubmitClick)="submitService.submitLoanApp(loanApplication?.id, loanAppStatus)"
+                   [leftButtonLabel]="'CANCEL' | translate"
+                   [rightButtonLabel]="'CONFIRM' | translate"
+                   [popupLabel]="'CONFIRMATION' | translate">
+</cbs-confirm-popup>
+
+
+<div class="slds-grid slds-grid--align-center">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer"
+           *ngIf="!(collateralsData | async)?.loading && (collateralsData | async)?.collaterals?.length">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="5%">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="10%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col" width="5%">
+                <div class="slds-truncate slds-text-align--center" title="Type">{{ 'TYPE' | translate }}</div>
+            </th>
+            <th scope="col" width="5%">
+                <div class="slds-truncate slds-text-align--center" title="Amount">{{ 'AMOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="5%">
+                <div class="slds-truncate slds-text-align--center" title="Options">{{ 'OPTIONS' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let collateral of getUndeletedCollaterals((collateralsData | async)?.collaterals); let i = index;"
+            [ngClass]="collateral.deleted ? 'isDeleted' : ''">
+            <td data-label="Label" scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </td>
+            <td data-label="Name" scope="row">
+                <a [routerLink]="collateral?.id" class="slds-truncate" title="{{ collateral?.name }}">
+                    {{
+                    collateral?.name | uppercase}}</a>
+            </td>
+            <td data-label="Type" scope="row">
+                <div class="slds-text-align--center" title="{{ collateral?.typeOfCollateral?.caption }}">
+                    <ngl-badge type="info">{{ collateral?.typeOfCollateral?.caption }}</ngl-badge>
+                </div>
+            </td>
+            <td data-label="Amount" scope="row">
+                <div class="slds-text-align--center" title="Amount">
+                    {{ collateral?.amount | cbsNumberFormat }}</div>
+            </td>
+            <td data-label="Options" scope="row" class="slds-text-align--center">
+                <span *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['COLLATERAL'] }">
+                   <button (click)="removeCollateral(collateral.id)" class="slds-button slds-button--icon-border"
+                           [disabled]="loanAppStatus === 'DISBURSED'"
+                           title="Delete" *ngIf="!collateral.deleted">
+                        <svg class="slds-button__icon" aria-hidden="true">
+                            <use
+                                xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                        </svg>
+                        <span class="slds-assistive-text">Delete</span>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p
+        *ngIf="(collateralsData | async)?.loaded && !(collateralsData | async)?.collaterals?.length"
+        class="cbs-no-data-text slds-text-align--center slds-m-top--medium">{{ 'NO_DATA' | translate }}</p>
+</div>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="(collateralsData | async)?.loading"></cbs-loading-indicator>

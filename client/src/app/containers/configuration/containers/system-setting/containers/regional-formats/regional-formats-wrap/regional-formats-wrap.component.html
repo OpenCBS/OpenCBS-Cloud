@@ -1,0 +1,55 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true"
+                               headingTitle="{{ 'REGIONAL_FORMATS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+        <div cbs-page-header-layout="right">
+            <div *ngIf="this.shareService.getData('SHOW_BUTTON')">
+                <button class="slds-button slds-button--neutral" aria-live="assertive"
+                        (click)="cancel()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'CANCEL' | translate }}</span>
+                </button>
+                <button class="slds-button slds-button--success" aria-live="assertive"
+                        (click)="openSubmitModal(dateFormatSettingForm)">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+                </button>
+            </div>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-formats-wrap">
+        <div class="cbs-formats__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-formats__right">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+    <cbs-confirm-popup
+        [confirmText]="'TO_APPLY_NEW_REGIONAL_FORMATS_YOU_SHOULD_LOG_IN_AGAIN' | translate"
+        [opened]="opened"
+        (openedChange)="closeModal()"
+        (onSubmitClick)="submitForm()"
+        [leftButtonLabel]="'CANCEL' | translate"
+        [rightButtonLabel]="'CONFIRM' | translate"
+        [popupLabel]="'CONFIRMATION' | translate">
+    </cbs-confirm-popup>
+</main>
+<!-- ./cbs-main -->

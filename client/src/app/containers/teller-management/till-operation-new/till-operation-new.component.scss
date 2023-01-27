@@ -1,0 +1,45 @@
+:host ::ng-deep {
+  .cbs-profile {
+    &__avatar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1rem;
+
+      .cbs-profile__avatar-item {
+        margin-right: .5rem;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .slds-avatar {
+        cursor: pointer;
+      }
+
+      &__file {
+        position: relative;
+        display: block;
+        height: 100%;
+        background: #e4e4e4;
+
+        .slds-icon_container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+
+  .slds-avatar--large {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .checkbox {
+    margin-top: -4px;
+  }
+}
+
+

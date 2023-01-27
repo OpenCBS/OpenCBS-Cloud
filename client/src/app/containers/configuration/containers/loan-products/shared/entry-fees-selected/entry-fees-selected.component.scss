@@ -1,0 +1,25 @@
+.cbs-entry-fees {
+  border: 1px solid #d8dde6;
+  padding: 5px;
+  margin-bottom: 13px;
+  min-height: 128px;
+  border-radius: 0.25rem;
+
+  li {
+    padding: 5px;
+
+    &:hover,
+    &:hover > button {
+      border-radius: 6px;
+      background-color: #f4f6f9;
+    }
+
+    button {
+      margin-top: -1px;
+      border: none;
+      background: #ffffff;
+      float: right;
+      padding-top: 0px;
+    }
+  }
+}

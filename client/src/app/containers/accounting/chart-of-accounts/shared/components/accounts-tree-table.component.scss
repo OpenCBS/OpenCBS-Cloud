@@ -1,0 +1,31 @@
+.cbs-transaction-type {
+  padding-left: 3rem;
+}
+
+.cbs-tr-hover:hover {
+  background: #f4f6f9;
+  cursor: pointer;
+}
+
+.cbs-treetable__toggler {
+  .slds-button__icon {
+    transform: rotate(0deg);
+    transition: transform 0.175s ease;
+  }
+
+  &--expanded {
+    .slds-button__icon {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.options {
+  display: none;
+}
+
+.cbs-tr-hover:hover {
+  .options {
+    display: inline-block;
+  }
+}

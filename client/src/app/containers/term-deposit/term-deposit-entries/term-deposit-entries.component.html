@@ -1,0 +1,88 @@
+<div class="cbs-fixed-header">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+        <tr>
+            <th>{{ 'CREATED_AT' | translate }}</th>
+            <th>{{ 'AMOUNT' | translate }}</th>
+            <th>{{ 'DEBIT_ACCOUNT' | translate }}</th>
+            <th>{{ 'CREDIT_ACCOUNT' | translate }}</th>
+            <th>{{ 'DESCRIPTION' | translate }}</th>
+            <th>{{ 'CREATED_BY' | translate }}</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<div class="cbs-scrollable-table">
+    <p-dataTable [value]="(entriesState | async)?.data?.content"
+                 emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                 [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'">
+
+        <p-column field="createdAt">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span class="slds-truncate"
+                      [title]="row['effectiveAt']">
+                    {{ row['effectiveAt'] | cbsDateFormat }} {{ row['effectiveAt'] | cbsTimeFormat }}
+                </span>
+            </ng-template>
+        </p-column>
+
+        <p-column field="amount" class="float-right">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span><b>{{ row['amount'] | cbsNumberFormat }}</b></span>
+            </ng-template>
+        </p-column>
+
+        <p-column field="debitAccount">
+            <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate"
+                              [title]="row['debitAccountNumber'] + (row['debitAccountName'])">
+                            {{ row['debitAccountNumber'] }}
+                        </span>
+            </ng-template>
+        </p-column>
+
+        <p-column field="creditAccount">
+            <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate"
+                              [title]="row['creditAccountNumber'] + (row['creditAccountName'])">
+                            {{ row['creditAccountNumber'] }}
+                        </span>
+            </ng-template>
+        </p-column>
+
+        <p-column field="description">
+            <ng-template let-row="rowData" pTemplate="body">
+                <div class="slds-truncate" [title]="row['description']">
+                    {{ row['description'] }}
+                </div>
+            </ng-template>
+        </p-column>
+
+        <p-column field="createdBy">
+            <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate"
+                              [title]="row['createdByFullName']">
+                            {{ row['createdByFullName'] }}
+                        </span>
+            </ng-template>
+        </p-column>
+
+    </p-dataTable>
+</div>
+
+<div class="slds-grid slds-grid--align-center"
+     *ngIf="(entriesState | async)?.totalElements > (entriesState | async)?.size">
+    <ngl-pagination
+        class="cbs-pagination"
+        *ngIf="(entriesState | async)?.loaded"
+        [(page)]="queryObject.page"
+        [total]="(entriesState | async)?.totalElements"
+        limit="5"
+        [perPage]="(entriesState | async)?.size"
+        [previousText]="'PREVIOUS' | translate"
+        [nextText]="'NEXT' | translate"
+        boundaryNumbers="1"
+        (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+</div>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="(entriesState | async)?.loading"></cbs-loading-indicator>

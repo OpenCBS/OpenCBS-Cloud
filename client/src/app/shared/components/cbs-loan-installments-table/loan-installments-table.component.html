@@ -1,0 +1,86 @@
+<!-- [rowStyleClass]="rowStyleClass"-->
+<!---->
+<p-table
+    *ngIf="!isLoading && !!tableData.length"
+    [scrollable]="true"
+    [scrollHeight]="'calc(100% - 41px);'"
+    [value]="tableData"
+    [columns]="selectedColumns"
+    [styleClass]="'slds-table slds-table--bordered slds-table--cell-buffer slds-table--col-bordered'"
+    cbsMacAgent
+    [cbsMacAgentClass]="'cbs-mac-user'">
+
+    <ng-template pTemplate="caption" let-columns>
+        <div style="display:flex;">
+            <cbs-multiselect
+                [options]="tableColumns"
+                [(selectedOptions)]="selectedColumns"
+            ></cbs-multiselect>
+
+            <div class="colors slds-accordion__summary-action">
+                <div class="slds-cell-buffer--right">
+                    <div class="paid slds-avatar--x-small slds-box slds-box_x-small">
+                    </div>
+                    <p class="slds-align-top slds-col--padded slds-text-body--small">{{'PAID_INSTALLMENT' | translate}}</p>
+                </div>
+                <div class="slds-cell-buffer--right">
+                    <div class="unpaid slds-avatar--x-small slds-box slds-box_x-small">
+                    </div>
+                    <p class="slds-align-top slds-col--padded slds-text-body--small">{{'UNPAID_INSTALLMENT' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [ngClass]="columnStyleClass(col)">
+                {{ col.header | translate }}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr [ngClass]="rowStyleClass(row)">
+            <ng-container *ngFor="let col of columns; let ind = index">
+                <td *ngIf="row['#'] === 'Total' || (row['#'] === numberFieldPaymentDate && col.field === editablePaymentDate)
+                || (col.field !== editableColumns && col.field !== editablePaymentDate)
+                || rowStyleClass(row) === 'bold' || rowStyleClass(row) === 'paid' || rowStyleClass(row) === 'late';
+                else editableCell"
+                    [ngClass]="columnStyleClass(col)">
+                    <span>{{row[col.field] !== 'Total' ? row[col.field] : row[col.field] | translate}}</span>
+                </td>
+                <ng-template #editableCell>
+                    <td *ngIf="(row['#'] !== 'Total' && col.field === editableColumns) && rowStyleClass(row) === ''"
+                        [ngClass]="columnStyleClass(col)">
+                        <input class="slds-input"
+                               type="text"
+                               [ngModel]="row[col.field]"
+                               (focusout)="onCellEdit.emit({
+                                value: $event.target.value,
+                                column: col,
+                                row: row
+                               })"
+                        />
+                    </td>
+
+                    <td *ngIf="(row['#'] !== 'Total' && col.field === editablePaymentDate) && rowStyleClass(row) === ''"
+                        [ngClass]="columnStyleClass(col)">
+                        <cbs-form-date-control
+                            [ngModel]="row[col.field]"
+                            (focusout)="onCellEdit.emit({
+                                value: $event.target.value,
+                                column: col,
+                                row: row
+                               })"
+                            [enableDropdownPicker]="false"
+                            [validateDate]="true">
+                        </cbs-form-date-control>
+                    </td>
+                </ng-template>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-table>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

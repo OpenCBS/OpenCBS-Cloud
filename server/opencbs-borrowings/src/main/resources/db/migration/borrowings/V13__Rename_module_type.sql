@@ -1,0 +1,1 @@
+update permissions set module_type = 'BORROWINGS', name = 'GET_BORROWINGS'  where module_type = 'LIABILITY_LOANS';

@@ -1,0 +1,80 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ profileBreadcrumbLabel | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <div class="cbs-new-profile__submit-btn"
+                 *ngIf="(profileFieldsStore | async)?.loaded && (profileFieldsStore | async)?.success">
+                <a routerLink="/profiles" class="slds-button slds-button--neutral slds-not-selected"
+                   aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>{{ 'CANCEL' | translate }}</span>
+                </a>
+                <button (click)="submit(profileForm)" #submitButton
+                        class="slds-button slds-button--success slds-not-selected" aria-live="assertive"
+                        [disabled]="profileForm.invalid">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>{{ 'SAVE' | translate}}</span>
+                </button>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="slds-grid slds-grid--align-center cbs-new-profile" id="scrollable-section">
+        <div class="slds-container--medium">
+
+            <cbs-scrollable-nav
+                [navData]="sectionNavData"
+                [selectorName]="'#section'"
+                [offset]="120"
+                [parentSelector]="'#scrollable-section'"
+                [activeItemId]="activeSectionId"
+            ></cbs-scrollable-nav>
+
+            <div class="slds-form--horizontal cbs-pull-negative">
+                <form novalidate [formGroup]="profileForm" (submit)="submit(profileForm)">
+                    <div formArrayName="fieldSections"
+                         *ngIf="!loading"
+                         cbsVisibleOnSroll
+                         [scrollableBlockId]="'#scrollable-section'"
+                         [visibilityTopOffset]="400"
+                         [visibilityBottomOffset]="400"
+                         (elementVisible)="informVisibleBlock($event)">
+                        <div
+                            *ngFor="let section of profileForm?.controls?.fieldSections?.controls; let i=index;"
+                            class="slds-p-top--medium slds-p-bottom--large"
+                            [attr.id]="'section_' + profileFieldSections[i].id">
+                            <div class="slds-text-heading--small slds-m-bottom--medium">{{
+                                profileFieldSections[i].caption }}
+                            </div>
+                            <ng-container
+                                *ngFor="let field of profileFieldSections[i].customFields; let ind=index;"
+                                cbsDynamicField
+                                [config]="field"
+                                [group]="section.controls[ind]">
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <cbs-loading-indicator [isFixed]="true"
+                               [showLoader]="createProfileState?.loading || loading"></cbs-loading-indicator>
+    </div>
+</main>

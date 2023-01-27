@@ -1,0 +1,54 @@
+<cbs-form-layout *ngIf="borrowing?.loaded">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PROFILE' | translate }}"
+        [value]="borrowing?.data?.profile?.name">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'BORROWING_CODE' | translate }}"
+        [value]="borrowing?.data?.code">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'BORROWING_PRODUCTS' | translate }}"
+        [value]="borrowing?.data?.borrowingProduct?.name">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AMOUNT' | translate }}"
+        value="{{ borrowing?.data?.amount | cbsNumberFormat }}">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        [value]="borrowing?.data?.interestRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+        [value]="borrowing?.data?.gracePeriod">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MATURITY' | translate }}"
+        [value]="borrowing?.data?.maturity">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DISBURSEMENT_DATE' | translate }}"
+        [value]="borrowing?.data?.disbursementDate | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PREFERRED_REPAYMENT_DATE' | translate }}"
+        [value]="borrowing?.data?.preferredRepaymentDate | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CORRESPONDENCE_ACCOUNT' | translate }}"
+        [value]="borrowing?.data?.correspondenceAccount?.number + ' | ' + borrowing?.data?.correspondenceAccount?.name">
+    </cbs-form-readonly-control>
+</cbs-form-layout>

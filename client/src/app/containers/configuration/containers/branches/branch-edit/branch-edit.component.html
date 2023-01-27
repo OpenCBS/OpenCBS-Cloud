@@ -1,0 +1,73 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ branchName }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button [routerLink]="'/configuration/branches/info/' + branchId" class="slds-button slds-button--neutral"
+                    aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'CANCEL' | translate }}</span>
+            </button>
+            <button (click)="saveChanges(form)" [disabled]="form.invalid || !formChanged"
+                    class="slds-button slds-button--success" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'UNSAVED_CHANGES' | translate"></cbs-confirm-popup>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout clasa="cbs-edit-branch">
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <div class="slds-form--horizontal">
+            <form novalidate [formGroup]="form" class="slds-form--stacked" cbsFormFocus>
+
+                <cbs-form-input-control
+                    [requiredField]="true"
+                    [fieldLabel]="'NAME' | translate"
+                    [hasError]="form.get('name').errors && form.get('name').touched"
+                    [formControlName]="'name'">
+                </cbs-form-input-control>
+
+                <div *ngFor="let section of form.controls?.fieldSections['controls']; let i=index;"
+                     class="slds-p-top--medium slds-p-bottom--large"
+                     [attr.id]="'section_' + branchCustomFields[i].id">
+                    <div class="slds-text-title--caps slds-m-bottom--medium">
+                        <strong>{{ customFields[i].caption }}</strong>
+                    </div>
+                    <ng-container
+                        *ngFor="let field of customFields[i].values; let ind=index;"
+                        cbsDynamicField
+                        [config]="field"
+                        [group]="section.controls[ind]">
+                    </ng-container>
+                </div>
+
+            </form>
+        </div>
+
+    </cbs-form-layout>
+
+</main>

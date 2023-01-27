@@ -1,0 +1,96 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ ( profile |
+                            async )?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'CREDIT_LINES' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ ( profile | async )?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success"
+                               *ngIf="(profile | async)?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info"
+                               *ngIf="(profile | async)?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                      *ngIf="attachment?.pinned"
+                      (click)="openAttachment(attachment)">
+                    <span>
+                        <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                             [attr.title]="attachment?.originalFilename" *ngIf="testIfImage(attachment?.contentType)"/>
+                        <span class="cbs-profile__avatar__file">
+                            <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                              [fileType]="getFileExtension(attachment?.originalFilename)"
+                                              [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                        </span>
+                    </span>
+                </span>
+                    </div>
+
+                </div>
+                <button (click)="goToCreateCreditLine(profile)" class="slds-button slds-button--neutral"
+                        *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['CREATE_LOAN_APPLICATION']}">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>
+                        {{ 'CREATE_CREDIT_LINE' | translate }}
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <ng-container *ngIf="profileCreditLineList">
+                <p-dataTable
+                    emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                    [value]="profileCreditLineList?.content"
+                    [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+                    [selectionMode]="'single'"
+                    (onRowSelect)="goToCreditLine($event)">
+                    <p-column field="creditLineName" header="{{ 'NAME' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['name'] }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="committedAmount" header="{{ 'COMMITTED_AMOUNT' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['committedAmount'] | cbsNumberFormat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="availableAmount" header="{{ 'AVAILABLE_AMOUNT' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['availableAmount'] | cbsNumberFormat }}</span>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </ng-container>
+        </div>
+    </div>
+</main>
+
+<!--<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>-->

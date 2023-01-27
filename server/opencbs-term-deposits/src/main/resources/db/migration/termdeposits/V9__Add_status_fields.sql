@@ -1,0 +1,1 @@
+alter table term_deposit_products add column status varchar(10) default 'ACTIVE';

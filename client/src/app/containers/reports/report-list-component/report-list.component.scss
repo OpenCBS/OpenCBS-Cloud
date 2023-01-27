@@ -1,0 +1,10 @@
+:host ::ng-deep {
+  ngl-modal .slds-spinner_container {
+    position: relative;
+  }
+  tbody tr {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

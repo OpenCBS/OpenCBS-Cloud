@@ -1,0 +1,58 @@
+<table class="slds-table slds-table--bordered slds-table--cell-buffer">
+    <thead>
+    <tr class="slds-text-title--caps">
+        <th scope="col" width="20%">
+            <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+        </th>
+        <th scope="col" width="10%">
+            <div class="slds-truncate" title="Amount">{{ 'AMOUNT' | translate }}</div>
+        </th>
+        <th width="20%">
+            <div class="slds-truncate" title="Disbursement Date">{{'PLANNED_DISBURSEMENT_DATE' | translate}}</div>
+        </th>
+        <th width="20%">
+            <div class="slds-truncate" title="Disbursement Date">{{'DISBURSEMENT_DATE' | translate}}</div>
+        </th>
+        <th width="20%">
+            <div class="slds-truncate" title="Cheque Number">{{'REFUND_DATE' | translate}}</div>
+        </th>
+        <th scope="col" width="10%">
+            <div class="slds-truncate" title="Status">{{ 'STATUS' | translate }}</div>
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let payee of loanAppPayees; let i = index;" [ngClass]="payee.isDeleted ? 'isDeleted' : '' "
+        (click)="goToPayee(payee)">
+        <td data-label="Name" scope="row">
+           <div>{{payee?.payeeName}}</div>
+        </td>
+        <td data-label="Amount" scope="row">
+            <div>{{payee?.amount}}</div>
+        </td>
+        <td data-label="Disbursement Data" scope="row">
+            <div>{{payee?.plannedDisbursementDate}}</div>
+        </td>
+        <td data-label="Disbursement Data" scope="row">
+            <div>{{payee?.disbursementDate | cbsDateFormat}}</div>
+            <div *ngIf="!payee.disbursementDate">-</div>
+        </td>
+        <td data-label="Refund Date" scope="row">
+            <div *ngIf="payee.status === 'REFUNDED'">{{payee?.plannedDisbursementDate}}</div>
+            <div *ngIf="payee.status !== 'REFUNDED'">-</div>
+        </td>
+        <td data-label="Status" scope="row">
+            <ngl-badge type="info" *ngIf="payee.status === 'PENDING'">{{payee?.status | translate}}</ngl-badge>
+            <ngl-badge type="success" *ngIf="payee.status === 'DISBURSED'">{{payee?.status | translate}}</ngl-badge>
+            <ngl-badge type="warning" *ngIf="payee.status === 'REFUNDED'">{{payee?.status | translate}}</ngl-badge>
+            <ngl-badge type="warning" *ngIf="payee.status === 'DELETED'">{{payee?.status | translate}}</ngl-badge>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p *ngIf="!loanAppPayees.length"
+   class="slds-text-align--center slds-m-top--large">{{ 'NO_DATA' | translate }}</p>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!loadAppPayees?.loaded"></cbs-loading-indicator>

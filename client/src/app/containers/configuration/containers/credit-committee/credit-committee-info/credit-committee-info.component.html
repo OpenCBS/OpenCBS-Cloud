@@ -1,0 +1,42 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'CREDIT_COMMITTEE' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <a [routerLink]="'/configuration/credit-committee-rules/'+ ccId + '/edit'"
+               class="slds-button slds-button--brand" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>{{ 'EDIT' | translate }}</span>
+            </a>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'UPPER_LIMIT' | translate }}"
+            [value]="(info | async)?.ccRules?.maxValue"></cbs-form-readonly-control>
+        <cbs-list-select [listLabel]="'ROLES' | translate"
+                         [noDataLabel]="'NO_DATA'"
+                         [listData]="(info | async)?.ccRules?.roles"
+                         [displayButton]="false"
+                         [isRequired]="false"
+                         [selectDataLabel]="'SELECT' | translate">
+        </cbs-list-select>
+    </cbs-form-layout>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(info | async)?.loading"></cbs-loading-indicator>
+</main>

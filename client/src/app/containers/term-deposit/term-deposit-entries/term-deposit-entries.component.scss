@@ -1,0 +1,84 @@
+:host ::ng-deep {
+  .cbs-description-block {
+    max-width: 200px;
+  }
+
+  .cbs-scrollable-table {
+    padding-top: 36px;
+  }
+
+  .cbs-fixed-header {
+    position: absolute;
+    min-width: 100%;
+    z-index: 8;
+  }
+
+  .ui-datatable-thead {
+    display: none;
+  }
+
+  .cbs-body {
+    overflow-x: auto;
+    position: relative;
+    overflow-y: hidden;
+  }
+
+  .slds-table {
+    table-layout: fixed;
+    tr {
+      th, td {
+        text-align: center;
+        min-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:nth-child(1) {
+          width: 15rem;
+        }
+        &:nth-child(2) {
+          width: 10rem;
+          text-align: right;
+        }
+        &:nth-child(3) {
+          width: 18rem;
+          text-align: left;
+        }
+        &:nth-child(4) {
+          width: 18rem;
+          text-align: left;
+        }
+        &:nth-child(5) {
+          text-align: left;
+        }
+
+        @media screen and (max-width: 1200px) {
+          &:nth-child(1) {
+            width: 10rem;
+          }
+          &:nth-child(2) {
+            width: 7.5rem;
+            text-align: right;
+          }
+          &:nth-child(3) {
+            width: 13.5rem;
+            text-align: left;
+          }
+          &:nth-child(4) {
+            width: 13.5rem;
+            text-align: left;
+          }
+          &:nth-child(5) {
+            width: 9rem;
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

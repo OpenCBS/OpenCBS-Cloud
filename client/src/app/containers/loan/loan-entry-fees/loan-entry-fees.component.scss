@@ -1,0 +1,42 @@
+:host {
+  .slds-container--medium {
+    width: 100%;
+    max-width: 34rem;
+
+    .cbs-pull-negative {
+      @media screen and (min-width: 994px) {
+        margin-left: -50%;
+      }
+
+    }
+  }
+
+  .slds-text-title--caps {
+    width: 65%;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .slds-form-element > .slds-form-element__legend,
+  .slds-form-element > .slds-form-element__label {
+    @media screen and (min-width: 48em) {
+      top: 0.4rem;
+    }
+  }
+
+  .slds-form-element__control {
+    border: 1px solid #e4e4e4;
+    border-radius: 0.25rem;
+    padding: 0 1rem 0 0.75rem;
+    height: 2rem;
+
+    &--textarea {
+      height: auto;
+      min-height: 76px;
+    }
+  }
+
+  .slds-form--horizontal .slds-form-element + .slds-form-element {
+    margin-top: .8rem;
+  }
+}

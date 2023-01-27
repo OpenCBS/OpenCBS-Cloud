@@ -1,0 +1,13 @@
+<div [ngClass]="isTwoColumn ? 'cbs-two-column' : 'cbs-page-header'" class="slds-page-header " role="banner">
+    <div class="slds-grid slds-grid--align-spread">
+        <div class="slds-col slds-no-flex cbs-page-header--l">
+            <ng-content select="[cbs-page-header-layout=left]"></ng-content>
+        </div>
+        <div class="slds-col slds-no-flex cbs-page-header--c">
+            <ng-content select="[cbs-page-header-layout=center]"></ng-content>
+        </div>
+        <div class="slds-col slds-no-flex cbs-page-header--r">
+            <ng-content select="[cbs-page-header-layout=right]"></ng-content>
+        </div>
+    </div>
+</div>

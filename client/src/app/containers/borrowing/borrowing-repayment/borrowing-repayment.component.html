@@ -1,0 +1,55 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ borrowing?.code }}"
+                [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" (click)="cancel()">Cancel</button>
+            <button class="slds-button slds-button--success"
+                    #submitButton
+                    (click)="repay(formComponent?.repaymentForm?.value)"
+                    [disabled]="formComponent?.repaymentForm?.invalid">{{ 'REPAY' | translate }}
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<cbs-loan-layout [sidebar]="false" [sidePanel]="true" [bottomToolbar]="true">
+    <div cbs-loan-layout="left">
+        <cbs-borrowing-repayment-form
+            (onAutoTypeChange)="onAutoTypeChange($event)"
+            (onSetMaxAmount)="setMaxAmount()"
+            [maxAmount]="maxAmount"
+            (onTotalEdited)="markTotalAsEdited()"></cbs-borrowing-repayment-form>
+    </div>
+    <div cbs-loan-layout="bottom-toolbar">
+        <div class="slds-grid">
+            <div class="slds-col">
+                <button class="slds-button slds-button--brand cbs-repayment-preview"
+                        #previewButton
+                        (click)="previewSchedule(formComponent?.repaymentForm?.getRawValue())"
+                        [disabled]="formComponent?.repaymentForm?.invalid">{{ 'PREVIEW' | translate }}
+                </button>
+            </div>
+            <div class="slds-col slds-m-left--small" *ngIf="isPreviewing">
+                <button class="slds-button slds-button--neutral cbs-repayment-reset"
+                        (click)="resetPreview()">{{ 'RESET' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div cbs-loan-layout="right">
+        <cbs-loan-installments-table [data]="installments"></cbs-loan-installments-table>
+    </div>
+</cbs-loan-layout>

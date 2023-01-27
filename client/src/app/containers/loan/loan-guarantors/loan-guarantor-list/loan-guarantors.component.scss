@@ -1,0 +1,36 @@
+:host ::ng-deep {
+
+  table {
+    tr {
+      height: 2.5rem;
+    }
+  }
+
+  .cbs-guarantors-table {
+    table-layout: fixed;
+  }
+
+  .cbs-guarantors-description {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 30px;
+    padding-left: 15px;
+    .cbs-guarantor-popover {
+      color: #16325c;
+
+      &:hover {
+        color: #16325c;
+        text-decoration: none;
+
+      }
+    }
+  }
+
+  .isDeleted {
+    background: #ececec;
+  }
+
+}
+

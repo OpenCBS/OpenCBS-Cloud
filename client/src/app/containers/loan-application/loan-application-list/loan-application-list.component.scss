@@ -1,0 +1,19 @@
+:host ::ng-deep {
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .selected {
+    border: 1px solid #d6d4d4;
+    border-radius: 4px;
+  }
+}

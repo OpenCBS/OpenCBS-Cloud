@@ -1,0 +1,49 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ this.type | uppercase | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <div class="slds-grid slds-grid--align-center slds-p-top--medium slds-p-bottom--xx-large"
+         *ngIf="!(profileFieldStore | async)?.loading && (profileFieldStore | async)?.profileFields?.length">
+        <div class="slds-container--small">
+            <cbs-cf-builder
+                [data]="(profileFieldStore | async)?.profileFields"
+                [urls]="urls"
+                [fieldLookupTypes]="lookupTypes"
+                [fieldTypes]="fieldTypes"
+                (onSectionEditSuccess)="onUpdateSuccess($event)"
+                (onSectionEditError)="onError($event)"
+                (onSectionAddSuccess)="onAddSuccess($event)"
+                (onSectionAddError)="onError($event)"
+                (onFieldEditSuccess)="onUpdateSuccess($event)"
+                (onFieldEditError)="onError($event)"
+                (onFieldDeleteSuccess)="onDeleteSuccess($event)"
+                (onFieldDeleteError)="onError($event)"
+                (onFieldAddSuccess)="onAddSuccess($event)"
+                (onFieldAddError)="onError($event)"
+            ></cbs-cf-builder>
+        </div>
+    </div>
+
+    <div *ngIf="!(profileFieldStore | async)?.loading && (profileFieldStore | async)?.error"
+         class="slds-text-align--center slds-m-top--medium">
+        {{ 'NO_DATA' | translate }}
+    </div>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(profileFieldStore | async)?.loading && isLoading"></cbs-loading-indicator>
+</main>
+<!-- ./cbs-main -->
+
+
+
+

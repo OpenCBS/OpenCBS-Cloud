@@ -1,0 +1,26 @@
+<div class="slds-pill_container cbs-chips"
+     [ngStyle]="style"
+     [class]="styleClass"
+     [ngClass]="{'cbs-chips--focus': focus,'cbs-chips--disabled': disabled, 'cbs-chips--required': !(value && value.length) }"
+     (click)="inputtext.focus()">
+    <span class="slds-pill" #token *ngFor="let item of value; let i = index;">
+        <span class="slds-pill__label" title="{{ field ? resolveFieldData(item,field) : item }}">{{ field ? resolveFieldData(item,field) : item }}</span>
+        <button type="button" class="slds-button slds-button--icon slds-pill__remove" title="Remove" *ngIf="!disabled"
+                (click)="removeItem($event,i)">
+            <svg class="slds-button__icon" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+            </svg>
+            <span class="slds-assistive-text">Remove</span>
+        </button>
+    </span>
+    <input #inputtext class="cbs-chips__input"
+           [attr.type]="type"
+           [attr.placeholder]="placeholder"
+           [attr.tabindex]="tabindex"
+           (keydown)="onKeydown($event,inputtext)"
+           (focus)="onFocus()"
+           (blur)="onBlur()"
+           [attr.required]="required"
+           [disabled]="maxedOut||disabled"
+           [disabled]="disabled">
+</div>

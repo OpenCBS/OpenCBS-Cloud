@@ -1,0 +1,31 @@
+:host {
+  .cbs-role-create {
+    padding: 20px 15px;
+
+    &__heading {
+      display: block;
+      text-align: center;
+    }
+
+    .slds-container--medium {
+      width: 100%;
+    }
+    .slds-button {
+      margin-top: 1rem;
+    }
+
+    .slds-form--compound {
+      .slds-size--1-of-2 .slds-form-element + .slds-form-element {
+        padding-left: 0;
+      }
+
+      .slds-text-title {
+        color: #0070d2;
+      }
+    }
+
+    .slds-checkbox--toggle .slds-form-element__label {
+      width: 50%;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{guarantor?.profile?.name | uppercase}}"
+                [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <span *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['GUARANTOR'] }">
+                <a *ngIf="loanApplication?.status === loanAppStatusEnum[loanAppStatusEnum.IN_PROGRESS]"
+                   [routerLink]="'/loan-applications/'+ loanAppId + '/guarantors/' + guarantorId +'/edit'"
+                   class="slds-button slds-button--brand" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}</span>
+            </a>
+            </span>
+
+        </div>
+
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<div class="slds-grid slds-grid--align-center">
+    <div class="cbs-guarantor slds-container--medium" *ngIf="guarantor">
+        <div class="slds-form-element__label slds-text-title--caps cbs-guarantor__heading">
+            <strong>{{ 'GUARANTOR' | translate }}</strong>
+        </div>
+
+        <div class="slds-form--horizontal cbs-pull-negative slds-m-top--medium">
+
+            <cbs-form-readonly-control
+                [fieldLabel]="'NAME' | translate"
+                [value]="guarantor?.profile?.name"
+                [showLink]="true"
+                [disabled]="false"
+                (onFieldClick)="goToGuarantorProfile(guarantor.profile)"></cbs-form-readonly-control>
+
+            <div class="slds-m-top_small"></div>
+
+            <cbs-form-readonly-control
+                [fieldLabel]="'RELATIONSHIP' | translate"
+                [value]="guarantor?.relationship?.name"
+                [showLink]="false"
+                [disabled]="false"></cbs-form-readonly-control>
+
+            <div class="slds-m-top_small"></div>
+
+            <cbs-form-readonly-control
+                [fieldLabel]="'AMOUNT' | translate"
+                [value]="guarantor?.amount | cbsNumberFormat"
+                [showLink]="false"
+                [disabled]="false"></cbs-form-readonly-control>
+
+            <div class="slds-m-top_small"></div>
+
+            <cbs-form-readonly-control
+                [fieldLabel]="'DESCRIPTION' | translate"
+                [value]="guarantor?.description"
+                [showLink]="false"
+                [disabled]="false"
+                [isTextarea]="true"></cbs-form-readonly-control>
+
+        </div>
+    </div>
+</div>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!guarantor"></cbs-loading-indicator>

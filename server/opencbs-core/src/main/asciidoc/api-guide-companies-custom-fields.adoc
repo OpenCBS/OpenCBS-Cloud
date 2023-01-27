@@ -1,0 +1,54 @@
+== COMPANIES: CUSTOM FIELDS
+
+=== List custom fields
+
+As of now, there is no separate endpoint to list custom fields for the personal profile. However, you
+can get all custom fields listed when you fetch custom field sections. Please refer to
+<<companies-custom-field-sections-list,the corresponding section>> above.
+
+=== Retrieve a custom field
+
+As of now, you cannot fetch the details of a single custom field. As a workaround you can fetch all custom fields
+as described above and then locate the one you are looking for in the returned collection.
+
+=== Create a custom field
+
+A `POST` request will create a new custom field for the company profile.
+
+The new custom field will be placed at the end of the section and the `order` value will be automatically assigned.
+
+==== Request structure
+
+include::{snippets}/companies-custom-fields-create-example/request-fields.adoc[]
+
+==== Response structure
+
+include::{snippets}/companies-custom-fields-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/companies-custom-fields-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/companies-custom-fields-create-example/http-response.adoc[]
+
+=== Update a custom field
+
+A `PUT` request will updated the details of a custom field for the company profile.
+
+==== Request fields
+
+include::{snippets}/companies-custom-fields-update-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/companies-custom-fields-update-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/companies-custom-fields-update-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/companies-custom-fields-update-example/http-response.adoc[]

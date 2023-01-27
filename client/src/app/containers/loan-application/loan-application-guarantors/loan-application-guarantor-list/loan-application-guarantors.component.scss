@@ -1,0 +1,25 @@
+:host ::ng-deep {
+
+  table {
+    table-layout: fixed;
+
+    tr {
+      height: 2.5rem;
+    }
+  }
+
+  .cbs-guarantor-description {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .isDeleted {
+    background: #ececec;
+  }
+
+  .slds-progress {
+    margin-top: 18px
+  }
+}

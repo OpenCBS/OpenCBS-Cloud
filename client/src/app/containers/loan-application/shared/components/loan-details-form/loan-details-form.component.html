@@ -1,0 +1,195 @@
+<div class="cbs-loan-details-form__form">
+    <form novalidate [formGroup]="form" class="slds-form--stacked" *ngIf="!isLoading">
+        <cbs-form-readonly-control
+            fieldLabel="{{ (profileType === 'GROUP' ? 'GROUP' : 'PROFILE') | translate }}"
+            [value]="profileName"
+            [disabled]="true">
+        </cbs-form-readonly-control>
+
+        <cbs-form-select-control
+            [formControlName]="'creditLineId'"
+            [selectData]="creditLinesData"
+            [selectValue]="'id'"
+            [hasError]="form.get('creditLineId').errors && form.get('creditLineId').touched"
+            fieldLabel="{{ 'CREDIT_LINE' | translate }}"
+            (onChange)="creditLineSelect($event)"
+        ></cbs-form-select-control>
+
+        <cbs-form-lookup-control
+            [disabled]="disabledLoanProduct"
+            formControlName="loanProductId"
+            fieldLabel="{{ 'LOAN_PRODUCT' | translate }}"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [hasError]="form.get('loanProductId').errors && form.get('loanProductId').touched"
+            [picklistDataUrl]="formConfig.loanProductLookupUrl"
+            [requiredField]="true"
+            (onSelect)="onLPSelect($event)"
+        ></cbs-form-lookup-control>
+
+        <cbs-form-lookup-control
+            [hasError]="form.get('currencyId').errors && form.get('currencyId').touched"
+            [requiredField]="true"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [formControlName]="'currencyId'"
+            [fieldLabel]="'CURRENCY' | translate"
+            [picklistDataUrl]="formConfig.currencyConfig"
+        ></cbs-form-lookup-control>
+
+        <div class="slds-form-element" [class.slds-has-error]="
+            (form.get('scheduleType').errors && form.get('scheduleType').touched)
+            || (form.get('scheduleType').invalid && form.get('scheduleType').touched)">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'SCHEDULE_TYPE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <select id="loan-product-schedule-type" class="slds-select" formControlName="scheduleType"
+                        *ngIf="scheduleTypeList.length">
+                    <option *ngIf="!form.value.scheduleType" [ngValue]="null" selected disabled>Select schedule type
+                    </option>
+                    <option *ngFor="let schedule of scheduleTypeList"
+                            [value]="schedule">{{ schedule | translate }}</option>
+                </select>
+                <input *ngIf="!scheduleTypeList.length" class="slds-input" type="text"
+                       value="No schedule types available"
+                       disabled>
+            </div>
+        </div>
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'SCHEDULE_BASED_TYPE' | translate }}"
+            [value]="scheduleBasedType |translate"
+            [disabled]="true">
+        </cbs-form-readonly-control>
+
+        <cbs-payees-block-control
+            *ngIf="loanAppFormState?.loanProduct?.hasPayees"
+            [payeesData]="loanAppFormState?.payees"
+            [showEditBtn]="true"
+            [payeesCount]="loanAppFormState?.payees.length"
+            (onAddPayee)="onPayeeAdd.emit()"
+            (onEditPayee)="onPayeeEdit.emit($event)"
+            (onDeletePayee)="onPayeeDelete.emit($event)"
+        ></cbs-payees-block-control>
+
+        <cbs-form-input-control
+            formControlName="amounts"
+            fieldLabel="{{ 'NET_AMOUNT' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="(form.get('amounts').errors && form.get('amounts').touched) || form.get('amounts').value < amountRange[0] || form.get('amounts').value > amountRange[1]">
+            <div class="cbs-loan-details-form__range" *ngIf="amountRange.length">
+                {{'MIN' | translate}}: <span>{{ amountRange[0] | cbsNumberFormat }}</span> {{'MAX' | translate}}:
+                <span>{{ amountRange[1] | cbsNumberFormat }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            formControlName="interestRate"
+            fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="form.get('interestRate').errors && form.get('interestRate').touched">
+            <div class="cbs-loan-details-form__range" *ngIf="interestRateRange.length">
+                {{'MIN' | translate}}: <span>{{ interestRateRange[0] }}</span> {{'MAX' | translate}}: <span>{{ interestRateRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            formControlName="gracePeriod"
+            fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="form.get('gracePeriod').errors && form.get('gracePeriod').touched">
+            <div class="cbs-loan-details-form__range" *ngIf="gracePeriodRange.length">
+                {{'MIN' | translate}}: <span>{{ gracePeriodRange[0] }}</span> {{'MAX' | translate}}: <span>{{ gracePeriodRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            *ngIf="!byMaturity"
+            formControlName="maturity"
+            fieldLabel="{{ 'NUMBER_OF_INSTALMENTS' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="!byMaturity"
+            [hasError]="form.get('maturity').errors && form.get('maturity').touched">
+            <div class="cbs-loan-details-form__range" *ngIf="maturityRange.length">
+                {{'MIN' | translate}}: <span>{{ maturityRange[0] }}</span> {{'MAX' | translate}}: <span>{{ maturityRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-date-control
+            #maturityDate
+            *ngIf="byMaturity"
+            formControlName="maturityDate"
+            fieldLabel="{{ 'MATURITY_DATE' | translate }}"
+            [requiredField]="byMaturity"
+            [errorMessage]="'MATURITY_DATE_ERROR'"
+            [weekendDisabled]="true"
+            (onChange)="maturityDateChanged($event)"
+        ></cbs-form-date-control>
+        <div class="cbs-loan-details-form__range" style="margin-bottom: 9px" *ngIf="byMaturity && maxMaturityDate">
+            {{'MAX_MATURITY_DATE' | translate}}: <span>{{ maxMaturityDate | cbsDateFormat }}</span>
+        </div>
+
+        <cbs-form-date-control
+            #disbursementDate
+            formControlName="disbursementDate"
+            fieldLabel="{{ 'DISBURSEMENT_DATE' | translate }}"
+            [requiredField]="true"
+            [errorMessage]="'DISBURSEMENT_DATE_ERROR'"
+            [weekendDisabled]="true"
+            (onChange)="disbursementDateChanged($event)"
+        ></cbs-form-date-control>
+
+        <cbs-form-date-control
+            #preferredRepaymentDate
+            formControlName="preferredRepaymentDate"
+            fieldLabel="{{ 'PREFERRED_REPAYMENT_DATE' | translate }}"
+            [requiredField]="true"
+            (onChange)="preferredRepaymentDateChanged($event)"></cbs-form-date-control>
+
+        <ng-container *ngIf="!disabledLoanProduct">
+            <cbs-entry-fees-block
+                *ngIf="!!loanAppFormState?.entryFees?.length"
+                [isValidToCalculate]="loanAppFormState?.valid"
+                [entryFeesData]="loanAppFormState?.entryFees"
+                (onDetailsClick)="onEntryFeesClick.emit()"
+            ></cbs-entry-fees-block>
+        </ng-container>
+
+
+        <div *ngIf="profileType === 'GROUP'" class="slds-text-title--caps member-title">
+            <strong>{{ 'MEMBERS' | translate }}</strong>
+        </div>
+
+        <div *ngIf="profileType === 'GROUP'" class="slds-form-element member-fields" formArrayName="members">
+            <ng-container
+                *ngFor="let field of memberFields; let ind=index;"
+                cbsDynamicField
+                [config]="field"
+                [styleClass]="{'member-fields__field': !amountRange.length}"
+                [group]="form.controls['members']['controls'][ind]">
+                <div class="cbs-loan-details-form__range" *ngIf="amountRange.length">
+                    {{'MIN' | translate}}: <span>{{ amountRange[0] | cbsNumberFormat }}</span> {{'MAX' | translate}}:
+                    <span>{{ amountRange[1] | cbsNumberFormat }}</span>
+                </div>
+            </ng-container>
+        </div>
+
+        <cbs-form-lookup-control
+            [hasError]="form.get('userId').errors && form.get('userId').touched"
+            [requiredField]="true"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [formControlName]="'userId'"
+            [fieldLabel]="'LOAN_OFFICER' | translate"
+            [picklistDataUrl]="formConfig.userLookupUrl"
+        ></cbs-form-lookup-control>
+
+    </form>
+</div>
+
+<cbs-loading-indicator [showLoader]="isLoading" [isFixed]="false"></cbs-loading-indicator>

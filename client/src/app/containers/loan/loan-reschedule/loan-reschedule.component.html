@@ -1,0 +1,89 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ (loan | async)?.loan?.code ? (loan | async)?.loan?.code : '' }}"
+                [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <p *ngIf="status && status === 'WRONG_TOTAL_AMOUNT'"
+               class="ng-star-inserted slds-accordion__summary-action slds-card__body_inner slds-text-title--caps"
+            >Total amount is <span class="text-error slds-text-color--error">
+                {{ totalPrincipal | cbsNumberFormat }}</span>, must be <span
+                class="text-error">{{ totalAmount | cbsNumberFormat }}</span>
+            </p>
+            <p *ngIf="status && status === 'WRONG_MATURITY_DATA'"
+               class="ng-star-inserted slds-accordion__summary-action slds-card__body_inner slds-text-title--caps"
+            ><span class="text-error slds-text-color--error">
+                Payment date entered incorrectly</span>
+            </p>
+
+            <button class="slds-button slds-button--neutral"
+                    (click)="cancel()">{{'CANCEL' | translate}}
+            </button>
+            <button class="slds-button slds-button--success"
+                    (click)="rescheduleApply()"
+                    #submitButton
+                    [disabled]="(rescheduleFormComponent?.rescheduleForm?.invalid || !formStatusChanged && (status && status !== 'VALID'))">
+                {{ 'RESCHEDULE' | translate }}
+            </button>
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+
+<cbs-loan-layout [sidebar]="false" [sidePanel]="true" [bottomToolbar]="true">
+    <div cbs-loan-layout="left">
+        <cbs-reschedule-form>
+        </cbs-reschedule-form>
+    </div>
+    <div cbs-loan-layout="bottom-toolbar">
+        <div class="slds-grid">
+            <div class="slds-col">
+                <button class="slds-button slds-button--brand cbs-repayment-preview"
+                        (click)="preview()"
+                        #previewButton>{{ 'PREVIEW' | translate }}
+                </button>
+            </div>
+            <div class="slds-col slds-m-left--small">
+                <button class="slds-button slds-button--neutral cbs-repayment-reset"
+                        (click)="resetPreview()">{{ 'RESET' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div cbs-loan-layout="right">
+        <cbs-loan-installments-table
+            [data]="installments"
+            [editableColumns]="editableSchedule"
+            [editablePaymentDate]="editablePaymentDate"
+            (onCellEdit)="getCellData($event)"
+        ></cbs-loan-installments-table>
+    </div>
+</cbs-loan-layout>
+
+<ngl-modal [header]="'ACTUALIZE_LOAN' | translate" [(open)]="isOpenActualize">
+    <div body>
+        <p class="slds-accordion__section slds-align--absolute-center slds-text-color--error slds-text-heading--small">
+            The contract (code = {{loanCode}}) is not actualized.</p>
+        <p class="slds-accordion__section slds-align--absolute-center slds-text-color--weak slds-text-heading--small">
+            Do you want to actualize it to {{ this.rescheduleFormComponent.rescheduleForm.value.rescheduleDate }}?</p>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpenActualize = false">{{ 'NO' | translate }}
+        </button>
+        <button class="slds-button slds-button--success" (click)="submitActualizeLoan()">{{ 'YES' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'RESCHEDULE_NOT_SAVED' | translate"></cbs-confirm-popup>

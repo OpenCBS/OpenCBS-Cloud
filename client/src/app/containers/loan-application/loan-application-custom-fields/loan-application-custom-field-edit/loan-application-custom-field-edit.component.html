@@ -1,0 +1,82 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block *ngIf="loanAppId" headingTitle="
+            {{ loanAppId ? loanApplication['code'] : '' }}" [svgData]="svgData"
+                               [badgeLabel]="loanAppStatus | translate"
+                               [badgeTheme]="(loanAppStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button *ngIf="loanApplication?.status === loanAppStatusEnum[loanAppStatusEnum.IN_PROGRESS]"
+                    class="slds-button slds-button--neutral" aria-live="assertive"
+                    [routerLink]="'/loan-applications/' + loanAppId + '/custom-fields'">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'CANCEL' | translate }}</span>
+            </button>
+            <button *ngIf="loanApplication?.status === loanAppStatusEnum[loanAppStatusEnum.IN_PROGRESS]"
+                    class="slds-button slds-button--success" aria-live="assertive"
+                    (click)="submitForm(form)"
+                    [disabled]="form.invalid">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<div class="slds-grid scrollable" cbs-loan-layout="right" id="scrollable-section">
+
+    <cbs-form-layout *ngIf="true">
+        <cbs-scrollable-nav
+            [navData]="sectionNavData"
+            [selectorName]="'#section'"
+            [parentSelector]="'#scrollable-section'"
+            [offset]="10"
+            [activeItemId]="activeSectionId"
+        ></cbs-scrollable-nav>
+
+        <div class="slds-form--horizontal">
+            <form novalidate [formGroup]="form">
+                <div formArrayName="fieldSections"
+                     cbsVisibleOnSroll
+                     [scrollableBlockId]="'#scrollable-section'"
+                     [visibilityTopOffset]="400"
+                     [visibilityBottomOffset]="400"
+                     (elementVisible)="informVisibleBlock($event)">
+                    <div
+                        *ngFor="let section of form.controls['fieldSections'].controls; let i=index;"
+                        class="slds-p-top--medium slds-p-bottom--large"
+                        [attr.id]="'section_' + loanAppCustomFields[i].id">
+                        <div class="slds-text-title--caps slds-m-bottom--medium">
+                            <strong>{{ customFields[i].caption }}</strong>
+                        </div>
+                        <ng-container
+                            *ngFor="let field of customFields[i].values; let ind=index;"
+                            cbsDynamicField
+                            [config]="field"
+                            [group]="section.controls[ind]">
+                        </ng-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </cbs-form-layout>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="false" [isFixed]="false"></cbs-loading-indicator>
+
+</div>
+
+
+

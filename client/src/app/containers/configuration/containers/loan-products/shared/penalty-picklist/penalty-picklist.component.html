@@ -1,0 +1,5 @@
+<ngl-picklist [data]="penalties" [disabled]="!penalties.length || disablePickList" [nglPick]="pick"
+              (nglPickChange)="selectPenalty($event)" [(open)]="open" filter="value">
+    <span class="slds-truncate">{{ selectDataLabel | translate }}</span>
+    <ng-template nglPicklistItem let-penalties>{{ penalties?.name }}</ng-template>
+</ngl-picklist>

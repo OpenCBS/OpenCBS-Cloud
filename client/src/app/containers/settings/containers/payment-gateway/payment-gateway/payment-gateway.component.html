@@ -1,0 +1,92 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'PAYMENT_GATEWAY' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-row">
+                    <span #dropdown>
+                        <form novalidate [formGroup]="form" class="slds-form--stacked">
+                            <div class="cbs-controls-container">
+                                <cbs-form-date-control
+                                    class="slds-m-right--x-small"
+                                    formControlName="start"
+                                    [hasError]="form.get('start').errors && form.get('start').touched"
+                                    [requiredField]="true"></cbs-form-date-control>
+                                <span class="cbs-long-dash">&#8212;</span>
+                                <cbs-form-date-control
+                                    formControlName="end"
+                                    [hasError]="form.get('end').errors && form.get('end').touched"
+                                    [requiredField]="true"></cbs-form-date-control>
+                                <button class="slds-button slds-button--success filter"
+                                        (click)="filter()"
+                                        aria-live="assertive">
+                                    <span class="slds-text-not-selected">
+                                        {{ 'FILTER' | translate }}
+                                    </span>
+                                </button>
+                                <button class="slds-button slds-button--success"
+                                        (click)="export()"
+                                        [disabled]="!selectedLoanList.length"
+                                        aria-live="assertive">
+                                    <span class="slds-text-not-selected">
+                                        {{ 'EXPORT' | translate }}
+                                    </span>
+                                </button>
+                                <cbs-loading-indicator [isFixed]="true"
+                                                       [showLoader]="isLoading"></cbs-loading-indicator>
+                            </div>
+                        </form>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <p-table [value]="paymentGatewayData?.loans"
+             [(selection)]="selectedLoanList"
+             [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+             [rowHover]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 40px">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th style="width: 15%" [title]="'FORMATTED_NUMBER' | translate">{{ 'FORMATTED_NUMBER' | translate }}</th>
+                <th style="width: 15%" [title]="'CUSTOMER_NAME' | translate">{{ 'CUSTOMER_NAME' | translate }}</th>
+                <th style="width: 15%" [title]="'FORMATTED_NUMBER(T-account)' | translate">{{ 'FORMATTED_NUMBER(T-account)' | translate }}</th>
+                <th style="width: 15%" [title]="'REPAYMENT_AMOUNT' | translate">{{ 'REPAYMENT_AMOUNT' | translate }}</th>
+                <th style="width: 15%" [title]="'DATE' | translate">{{ 'DATE' | translate }}</th>
+                <th style="width: 15%" [title]="'PARTNER' | translate">{{ 'PARTNER' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+            <tr class="p-selectable-row" [ngClass]="rowStyleClass(customer)">
+                <td>
+                    <p-tableCheckbox [value]="customer"></p-tableCheckbox>
+                </td>
+                <td>{{ customer['formattedNumber'] }}</td>
+                <td>{{ customer['customerName'] }}</td>
+                <td>{{ customer['contractNumber'] }}</td>
+                <td>{{ customer['repaymentAmount'] | cbsNumberFormat }}</td>
+                <td>{{ customer['paymentDate'] | cbsDateFormat }}</td>
+                <td>{{ customer['partnerName'] }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">{{ 'NO_RECORDS_FOUND' | translate }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <cbs-loading-indicator [isFixed]="true"
+                           [showLoader]="!paymentGatewayData?.loaded"></cbs-loading-indicator>
+</main>

@@ -1,0 +1,59 @@
+<div class="slds-form--horizontal cbs-pull-negative slds-m-top--medium">
+    <form novalidate [formGroup]="collateralForm" class="slds-form--stacked" cbsFormFocus>
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'COLLATERAL' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element"
+             [class.slds-has-error]="collateralForm.get('typeOfCollateralId').errors?.required && collateralForm.get('typeOfCollateralId').touched">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'TYPE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <div class="slds-select_container">
+                    <select class="slds-select" #typeSelect formControlName="typeOfCollateralId"
+                            (change)="getFields(typeSelect.value)">
+                        <option *ngFor="let type of collateralTypeState?.collateralTypes" [value]="type.id">{{
+                            type.caption }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form-element" [class.slds-has-error]="
+            (collateralForm.get('name').errors?.required && collateralForm.get('name').touched)
+            || (collateralForm.get('name').invalid && collateralForm.get('name').touched)">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'NAME' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <input type="text" id="name" class="slds-input" formControlName="name"/>
+            </div>
+        </div>
+        <div class="slds-form-element" [class.slds-has-error]="
+            (collateralForm.get('amount').errors?.required && collateralForm.get('amount').touched)
+            || (collateralForm.get('amount').invalid && collateralForm.get('amount').touched)">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'AMOUNT' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <input type="number" [onlyNumber]="true" id="amount" class="slds-input" formControlName="amount"/>
+            </div>
+        </div>
+
+        <div formArrayName="fieldValues" class="cbs-collateral-form__fields">
+
+            <ng-container
+                *ngFor="let field of customFields; let ind=index;"
+                cbsDynamicField
+                [config]="field"
+                [group]="collateralForm.controls['fieldValues'].controls[ind]">
+            </ng-container>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,129 @@
+<div class="slds-container--fluid">
+    <div class="slds-grid slds-wrap slds-gutters" cbsMatchHeight="cbs-special-operation-item">
+        <div *ngFor="let item of arr"
+             class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">
+            <a [ngClass]="{'disabled': item?.disabled}" (click)="navigate(item)"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="item?.icon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small slds-truncate">{{ item.name | translate }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+<ngl-modal [header]="'WRITE_OFF' | translate" [(open)]="isOpenWriteOffModal">
+    <div body>
+        <form novalidate [formGroup]="writeOffForm" class="slds-form--stacked">
+            <cbs-form-date-control
+                formControlName="date"
+                fieldLabel="{{ 'DATE' | translate }}"
+                [validateDate]="true"
+                (onChange)="calculateWriteOffValue($event)"
+                [hasError]="writeOffForm.get('date').errors && writeOffForm.get('date').touched"
+                [requiredField]="true"></cbs-form-date-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'PRINCIPAL' | translate"
+                [inputType]="'number'"
+                [hasError]="writeOffForm.get('principal').errors && writeOffForm.get('principal').touched"
+                (onChange)="validateWriteOffValue($event, 'principal')"
+                [formControlName]="'principal'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'INTEREST' | translate"
+                [inputType]="'number'"
+                [hasError]="writeOffForm.get('interest').errors && writeOffForm.get('interest').touched"
+                (onChange)="validateWriteOffValue($event, 'interest')"
+                [formControlName]="'interest'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'PENALTY' | translate"
+                [inputType]="'number'"
+                [hasError]="writeOffForm.get('penalty').errors && writeOffForm.get('penalty').touched"
+                (onChange)="validateWriteOffValue($event, 'penalty')"
+
+                [formControlName]="'penalty'">
+            </cbs-form-input-control>
+
+            <cbs-form-textarea-control
+                [fieldLabel]="'COMMENT' | translate"
+                [formControlName]="'comment'"
+                [requiredField]="true">
+            </cbs-form-textarea-control>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="writeOffForm.invalid" class="slds-button slds-button--success"
+                (click)="submitWriteOff()">{{ 'SAVE' |
+            translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+
+<ngl-modal [header]="'ACTUALIZE_LOAN' | translate" [(open)]="isOpenActualize">
+    <div body>
+        <cbs-form-date-control
+            [(ngModel)]="loanDate"
+            [enableDropdownPicker]="true"
+            fieldLabel="{{ 'DATE' | translate }}"
+            [validateDate]="true"
+            [requiredField]="true">
+        </cbs-form-date-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpenActualize = false">{{ 'CANCEL' | translate }}
+        </button>
+        <button class="slds-button slds-button--success" (click)="submitActualizeLoan()">{{ 'START' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<ngl-modal [header]="'REASSIGN_LOAN' | translate" [(open)]="isOpenReassignLoan">
+    <div body>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'ASSIGN_FROM' | translate }}"
+            [value]="currentLoanOfficer?.firstName + ' ' + currentLoanOfficer?.lastName">
+        </cbs-form-readonly-control>
+
+        <cbs-form-lookup-control
+            [requiredField]="true"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [fieldLabel]="'ASSIGN_TO' | translate"
+            (onSelect)="selectedUser($event)"
+            [picklistDataUrl]="userConfig">
+        </cbs-form-lookup-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpenReassignLoan = false">{{ 'CANCEL' | translate }}
+        </button>
+        <button class="slds-button slds-button--success" [disabled]="disabledReassignLoanBtn"
+                (click)="reassignLoanModal()">{{ 'OK' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidePanel]="false">
+        <div cbs-loan-layout="right">
+            <cbs-confirm-popup
+                [confirmText]="'ARE_YOU_SURE_YOU_WANT_TO_REASSIGN_THE_LOAN' | translate"
+                [opened]="opened"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="setReassignLoan()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

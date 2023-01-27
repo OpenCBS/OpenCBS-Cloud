@@ -1,0 +1,18 @@
+<ul class="slds-global-header__item slds-grid slds-grid--vertical-align-center">
+    <li class="slds-dropdown-trigger slds-dropdown-trigger--click slds-m-left--x-small">
+        <div nglDropdown [(open)]="open">
+            <button class="slds-button" [title]="'USERNAME' | translate" aria-haspopup="true" nglDropdownTrigger>
+                <span class="slds-avatar slds-avatar--circle slds-avatar--medium">
+                    <ng-content select=".cbs-user-dropdown-avatar"></ng-content>
+                </span>
+            </button>
+            <div class="slds-dropdown slds-dropdown--right">
+                <div class="slds-popover slds-nubbin--top-right" nglDropdownItem role="dialog">
+                    <div class="slds-popover__body">
+                        <ng-content select=".cbs-user-dropdown-body"></ng-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

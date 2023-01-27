@@ -1,0 +1,83 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'TERM_DEPOSITS' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="clearSearch()"
+                (onSearch)="search($event)"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+        <!-- /cbs-page-header-layout = center -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <p-dataTable
+        emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+        [value]="(termDepositData | async)?.termDeposit"
+        [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+        [selectionMode]="'single'"
+        (onRowSelect)="goToTermDeposit($event)">
+        <p-column field="profile" header="{{ 'PROFILE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['profileName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="code" header="{{ 'CODE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['code'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdAt" header="{{ 'CREATED_AT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['createdAt'] | cbsDateFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="openDate" header="{{ 'OPEN_DATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['openDate'] | cbsDateFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="status" header="{{ 'TERM_DEPOSIT_OFFICER' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['serviceOfficerFirstName'] + ' ' + row['serviceOfficerLastName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="status" header="{{ 'STATUS' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <ngl-badge [type]="(row['status'] | statusBadge)">
+                    {{ row['status'] === 'IN_PROGRESS' ? 'IN PROGRESS' : row['status'] }}
+                </ngl-badge>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(termDepositData | async)?.loading"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(termDepositData | async)?.totalElements > (termDepositData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(termDepositData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(termDepositData | async)?.totalElements"
+            limit="5"
+            [perPage]="(termDepositData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToNextPage($event)" #pagination></ngl-pagination>
+    </div>
+
+</main>
+<!-- ./cbs-main -->

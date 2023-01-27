@@ -1,0 +1,164 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                [isMainPage]="true"
+                headingTitle="{{ 'TRANSFER_FROM_BANK_TO_VAULT' | translate }}"
+                [svgData]="svgData"
+            ></cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <div class="cbs-new-profile__submit-btn">
+                <a
+                    routerLink="/transfers"
+                    class="slds-button slds-button--neutral slds-not-selected"
+                    aria-live="assertive"
+                >
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>
+                        {{ 'CANCEL' | translate }}
+                    </span>
+                </a>
+                <button
+                    (click)="handleConfirmModalVisibility(true)" #submitButton
+                    class="slds-button slds-button--success slds-not-selected"
+                    aria-live="assertive"
+                    [disabled]="form.invalid"
+                >
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>
+                        {{ 'TRANSFER' | translate}}
+                    </span>
+                </button>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+
+        <form
+            novalidate
+            [formGroup]="form"
+            class="slds-form--horizontal slds-m-top--medium"
+            cbsFormFocus
+        >
+            <cbs-form-lookup-control
+                [formControlName]="'bankAccountId'"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'BANK_ACCOUNT' | translate"
+                [hasError]="form.get('bankAccountId').errors && form.get('bankAccountId').touched"
+                [requiredField]="true"
+                [code]="true"
+                [picklistDataUrl]="accountFilterConfig"
+                (onSelect)="markSelectedFieldLabel($event, 'bankAccountId')"
+            ></cbs-form-lookup-control>
+
+            <cbs-form-readonly-control
+                *ngIf="hasBalance"
+                fieldLabel="{{ 'BALANCE' | translate }}"
+                [value]="balance | cbsNumberFormat">
+            </cbs-form-readonly-control>
+
+            <cbs-form-select-control
+                [formControlName]="'vaultId'"
+                [selectData]="vaults"
+                [requiredField]="true"
+                [hasError]="form.get('vaultId').errors && form.get('vaultId').touched"
+                fieldLabel="{{ 'VAULT' | translate }}"
+                (onSelect)="markSelectedFieldLabel($event, 'vaultId')"
+            ></cbs-form-select-control>
+
+            <cbs-form-input-control
+                [formControlName]="'amount'"
+                [fieldLabel]="'AMOUNT' | translate"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('amount').errors && form.get('amount').touched"
+            ></cbs-form-input-control>
+
+            <cbs-form-date-control
+                formControlName="date"
+                fieldLabel="{{ 'DATE' | translate }}"
+                [hasError]="form.get('date').errors && form.get('date').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+
+            <cbs-form-readonly-control
+                fieldLabel="{{ 'CURRENCY' | translate }}"
+                [value]="bankAccountCurrency">
+            </cbs-form-readonly-control>
+
+            <cbs-form-input-control
+                [formControlName]="'chequeNumber'"
+                [fieldLabel]="'CHEQUE_NUMBER' | translate"
+                [inputType]="'text'"
+                [requiredField]="true"
+                [hasError]="form.get('chequeNumber').errors && form.get('chequeNumber').touched"
+            ></cbs-form-input-control>
+
+            <cbs-form-input-control
+                [formControlName]="'chequePayee'"
+                [fieldLabel]="'CHEQUE_PAYEE' | translate"
+                [requiredField]="true"
+                [hasError]="form.get('chequePayee').errors && form.get('chequePayee').touched"
+            ></cbs-form-input-control>
+
+            <cbs-form-lookup-control
+                [formControlName]="'personInCharge'"
+                [hasError]="form.get('personInCharge').errors && form.get('personInCharge').touched"
+                [requiredField]="true"
+                [picklistDataUrl]="formUserConfig"
+                (onSelect)="markSelectedFieldLabel($event, 'personInCharge')"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                fieldLabel="{{ 'PERSON_IN_CHARGE' | translate }}">
+            </cbs-form-lookup-control>
+
+            <cbs-form-textarea-control
+                [requiredField]="true"
+                [hasError]="form.get('description').errors && form.get('description').touched"
+                [formControlName]="'description'"
+                [fieldLabel]="'DESCRIPTION' | translate"
+            ></cbs-form-textarea-control>
+        </form>
+
+    </cbs-form-layout>
+
+    <cbs-loading-indicator
+        [isFixed]="true"
+        [showLoader]="isSubmittingTransfer"
+    ></cbs-loading-indicator>
+</main>
+
+<cbs-confirm-popup
+    [opened]="showConfirmModal"
+    (onSubmitClick)="submit(form)"
+    (openedChange)="handleConfirmModalVisibility(false)"
+    [leftButtonLabel]="'NO' | translate"
+    [rightButtonLabel]="'YES' | translate"
+    [popupLabel]="'CONFIRMATION' | translate"
+>
+    Please, review and confirm <b>bank to vault</b> transfer details: <br>
+    <div class="confirmation-review-data">
+        {{ 'BANK_ACCOUNT' | translate }}: <b>{{ selectedFormFieldLabels['bankAccountId'] }}</b><br>
+        {{ 'VAULT' | translate }}: <b>{{ selectedFormFieldLabels['vaultId'] }}</b><br>
+        {{ 'AMOUNT' | translate }}: <b>{{ form.value.amount }}</b><br>
+        {{ 'CHEQUE_NUMBER' | translate }}: <b>{{ form.value.chequeNumber }}</b><br>
+        {{ 'CHEQUE_PAYEE' | translate }}: <b>{{ form.value.chequePayee }}</b><br>
+        {{ 'PERSON_IN_CHARGE' | translate }}: <b>{{ selectedFormFieldLabels['personInCharge'] }}</b><br>
+        {{ 'DESCRIPTION' | translate }}: <b>{{ form.value.description }}</b><br>
+    </div>
+</cbs-confirm-popup>

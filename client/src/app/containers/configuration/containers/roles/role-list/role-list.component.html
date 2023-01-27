@@ -1,0 +1,70 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'ROLES' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <a class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-checkbox">
+                    <input type="checkbox" id="show-all" (click)="showAllRoles()"/>
+                    <label class="slds-checkbox__label" for="show-all">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-box--x-small">{{'SHOW_ALL' | translate}}</span>
+                    </label>
+                </span>
+            </a>
+            <a *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_ROLE'] }"
+               routerLink="/configuration/roles/new" class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'CREATE' | translate }}
+                </span>
+            </a>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="Role Id">#</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Role Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Role Status">{{ 'STATUS' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let role of (roles | async)?.roles; let i = index" (click)="goToRoleDetails(role)"
+            [ngClass]="rowStyleClass(role)">
+            <th data-label="Label" scope="row" class="slds-truncate" title="{{role.name}}">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Role Name" scope="row" class="slds-truncate" title="{{role.name}}">
+                {{role.name | uppercase}}
+            </th>
+            <th data-label="Role Status" scope="row" class="slds-truncate" title="{{role.statusType }}">
+                {{role.statusType | translate}}
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="(roles | async)?.loading"></cbs-loading-indicator>

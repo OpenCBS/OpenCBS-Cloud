@@ -1,0 +1,42 @@
+<cbs-form-layout>
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <cbs-loan-details-form
+        [hidden]="!formVisible"
+        [loanAppFormState]="loanAppFormState"
+        (onLoanProductSelect)="selectLoanProduct($event)"
+        (onCreditLineSelect)="selectCreditLine($event)"
+        (onPayeeAdd)="openAddPayeeModal()"
+        (onPayeeDelete)="confirmDeletingPayee($event)"
+        (onPayeeEdit)="openEditPayeeModal($event)"
+        (onEntryFeesClick)="openEntryFeeDetails()"
+    ></cbs-loan-details-form>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="!formVisible"></cbs-loading-indicator>
+
+</cbs-form-layout>
+
+
+<cbs-confirm-popup
+    [(opened)]="isConfirmOpen"
+    (onSubmitClick)="deletePayee()"
+    (openedChange)="closeConfirmPopup()"
+    [leftButtonLabel]="'CANCEL' | translate"
+    [rightButtonLabel]="'CONFIRM' | translate"
+    [popupLabel]="'CONFIRMATION' | translate"
+    [confirmText]="'DELETE' | translate"></cbs-confirm-popup>
+
+<cbs-payee-form-modal
+    headerTitle="{{ isCreatePayeeMode ? ('ADD' | translate) :  ('EDIT' | translate) }}"
+    (onSubmit)="submitPayee($event)">
+</cbs-payee-form-modal>
+
+<cbs-entry-fees-modal
+    headerTitle="{{ 'ENTRY_FEES' | translate }}"
+    [loanAppFormState]="loanAppFormState"
+    (resetFeeCalculation)="cancel()"
+    (onSaveNewValue)="saveNewEntryFeeValues($event)"
+></cbs-entry-fees-modal>
+

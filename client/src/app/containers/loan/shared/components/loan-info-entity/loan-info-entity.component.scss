@@ -1,0 +1,24 @@
+.loan-info-entity {
+  position: absolute;
+  bottom: 5px;
+  right: 25em;
+
+  .balance-info {
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.70rem;
+  }
+}
+
+.loan-info-entity-unallocated {
+  line-height: normal;
+  position: absolute;
+  bottom: 2px;
+  right: 21em;
+
+  .balance-info-unallocated {
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.65rem;
+  }
+}

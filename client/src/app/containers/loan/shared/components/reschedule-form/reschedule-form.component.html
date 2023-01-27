@@ -1,0 +1,70 @@
+<div class="cbs-reschedule-form" *ngIf="isLoaded">
+    <form novalidate [formGroup]="rescheduleForm" class="slds-form--stacked">
+        <cbs-form-date-control
+            [formControlName]="'rescheduleDate'"
+            [validateDate]="true"
+            [requiredField]="true"
+            [hasError]="rescheduleForm.get('rescheduleDate').errors && rescheduleForm.get('rescheduleDate').touched"
+            fieldLabel="{{ 'RESCHEDULE_DATE' | translate }}"
+        ></cbs-form-date-control>
+
+        <cbs-form-date-control
+            [formControlName]="'firstInstallmentDate'"
+            [validateDate]="true"
+            [requiredField]="true"
+            [hasError]="rescheduleForm.get('firstInstallmentDate').errors && rescheduleForm.get('firstInstallmentDate').touched"
+            fieldLabel="{{ 'FIRST_INSTALLMENT_DATE' | translate }}"
+        ></cbs-form-date-control>
+
+        <cbs-form-lookup-control
+            [requiredField]="false"
+            [hasError]="rescheduleForm.get('scheduleType').errors && rescheduleForm.get('scheduleType').touched"
+            [formControlName]="'scheduleType'"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [fieldLabel]="'SCHEDULE_TYPE' | translate"
+            [defaultValue]="scheduleType"
+            [picklistDataUrl]="scheduleTypeConfig">
+        </cbs-form-lookup-control>
+
+        <cbs-form-input-control
+            [formControlName]="'interestRate'"
+            [requiredField]="true"
+            [inputType]="'number'"
+            [hasError]="(rescheduleForm.get('interestRate').errors && rescheduleForm.get('interestRate').touched
+             || rescheduleForm.get('interestRate').value < loanProduct?.interestRateMin
+             || rescheduleForm.get('interestRate').value > loanProduct?.interestRateMax)"
+            fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        ></cbs-form-input-control>
+        <div class="cbs-reschedule-form__range">
+            {{'MIN' | translate}}: <span>{{ loanProduct?.interestRateMin }}</span> {{'MAX' | translate}}:
+            <span>{{ loanProduct?.interestRateMax }}</span>
+        </div>
+
+        <cbs-form-input-control
+            *ngIf="!byMaturity"
+            [formControlName]="'maturity'"
+            [requiredField]="byMaturity"
+            [inputType]="'number'"
+            [hasError]="rescheduleForm.get('maturity').errors && rescheduleForm.get('maturity').touched"
+            fieldLabel="{{ 'NUMBER_OF_INSTALMENTS' | translate }}"
+        ></cbs-form-input-control>
+
+        <cbs-form-date-control
+            *ngIf="byMaturity"
+            [formControlName]="'maturityDate'"
+            [validateDate]="true"
+            [requiredField]="!byMaturity"
+            [hasError]="rescheduleForm.get('maturityDate').errors && rescheduleForm.get('maturityDate').touched"
+            fieldLabel="{{ 'MATURITY_DATE' | translate }}"
+        ></cbs-form-date-control>
+
+        <cbs-form-input-control
+            [formControlName]="'gracePeriod'"
+            [inputType]="'number'"
+            [hasError]="rescheduleForm.get('gracePeriod').errors && rescheduleForm.get('gracePeriod').touched"
+            fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+        ></cbs-form-input-control>
+
+    </form>
+</div>

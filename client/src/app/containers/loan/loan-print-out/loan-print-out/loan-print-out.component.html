@@ -1,0 +1,40 @@
+<table *ngIf="forms.length" class="slds-table slds-table--bordered slds-table--cell-buffer">
+    <thead>
+    <tr class="slds-text-title--caps">
+        <th scope="col" width="3%">
+            <div class="slds-truncate" title="#">#</div>
+        </th>
+        <th scope="col" width="77%">
+            <div class="slds-truncate" title="Code">{{ 'NAME' | translate }}</div>
+        </th>
+        <th scope="col" width="20%">
+            <div class="slds-truncate" title="Currency">{{ 'DOWNLOAD' | translate }}</div>
+        </th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let form of forms; let i = index;">
+        <td data-label="#" scope="row">
+            {{i + 1}}
+        </td>
+        <td data-label="Title" scope="row">
+            {{ form?.label}}
+        </td>
+        <td data-label="Type" scope="row">
+            <ngl-icon *ngIf="form?.loaderType === 'JASPER_LOADER'" (click)="downLoad(form)" icon="html" category="doctype"
+                      size="large"></ngl-icon>
+            <ngl-icon *ngIf="form?.loaderType === 'EXCEL_LOADER'" (click)="downLoad(form)" icon="excel" category="doctype"
+                      size="large"></ngl-icon>
+            <ngl-icon *ngIf="form?.loaderType === 'WORD_LOADER'" (click)="downLoad(form)" icon="word" category="doctype"
+                      size="large"></ngl-icon>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p *ngIf="!forms.length" class="slds-text-align--center slds-m-top_large">
+    {{ 'NO_DATA' | translate }}
+</p>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

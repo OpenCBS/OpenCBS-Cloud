@@ -1,0 +1,25 @@
+<div class="slds-form-element"
+     [class.slds-has-error]="showError && hasError"
+     [ngClass]="styleClass"
+     [ngStyle]="style">
+    <label class="slds-form-element__label" *ngIf="!!fieldLabel.length">
+        <abbr class="slds-required" title="required" *ngIf="requiredField">*</abbr>
+        {{ fieldLabel }}
+    </label>
+    <div class="slds-form-element__control">
+        <cbs-picklist
+            [config]="picklistDataUrl"
+            [value]="value"
+            [filterType]="picklistFilterType"
+            [code]="code"
+            [searchPlaceholder]="searchPlaceholder"
+            [selectPlaceholder]="selectPlaceholder"
+            [defaultValue]="defaultValue"
+            [disabled]="disabled"
+            (onPicklistOpen)="onPicklistOpen($event)"
+            (onPicklistClose)="onPicklistClose($event)"
+            (onClear)="onClear()"
+            (onSelect)="setLookupValue($event)"></cbs-picklist>
+        <ng-content></ng-content>
+    </div>
+</div>

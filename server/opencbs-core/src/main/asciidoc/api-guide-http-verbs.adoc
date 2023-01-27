@@ -1,0 +1,21 @@
+[[overview-http-verbs]]
+== HTTP VERBS
+
+The API uses these HTTP verbs to manage resources.
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+

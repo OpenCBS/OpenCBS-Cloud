@@ -1,0 +1,351 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'GENERAL_LEDGER' | translate }}"
+                               [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-row">
+                    <span>
+                        <form novalidate [formGroup]="form" class="slds-form--stacked">
+                            <div class="cbs-controls-container">
+                                <cbs-form-date-control
+                                    (onChange)="valid()"
+                                    class="slds-m-right--x-small"
+                                    formControlName="start"
+                                    [hasError]="form.get('start').errors && form.get('start').touched"
+                                    [requiredField]="true"
+                                    [maxDate]="maxDate"></cbs-form-date-control>
+                                <span class="cbs-long-dash">&#8212;</span>
+                                 <cbs-form-date-control
+                                     formControlName="end"
+                                     [hasError]="form.get('end').errors && form.get('end').touched"
+                                     [requiredField]="true"
+                                     [minDate]="minDate">
+                                 </cbs-form-date-control>
+                                <cbs-form-lookup-control
+                                    class="slds-col_padded-left"
+                                    [requiredField]="false"
+                                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                                    [code]="true"
+                                    [formControlName]="'bankAccountId'"
+                                    [picklistDataUrl]="accountFilterConfig">
+                                </cbs-form-lookup-control>
+                                <button class="slds-button slds-button--neutral filter"
+                                        (click)="filter()"
+                                        aria-live="assertive">
+                                    <span class="slds-text-not-selected">
+                                        {{ 'FILTER' | translate }}
+                                    </span>
+                                </button>
+
+                                <span nglDropdown [(open)]="open" class="slds-button-group">
+                                    <button class="slds-button slds-button--neutral" nglDropdownTrigger>
+                                        <span class="slds-truncate">
+                                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                                            </svg>
+                                            {{ 'ADD_TRANSACTION' | translate }}
+                                        </span>
+                                        <ngl-icon icon="down" type="default" size="x-small"></ngl-icon>
+                                    </button>
+                                    <div class="slds-dropdown slds-dropdown--left cbs-dropdown cbs-dropdown--full-width">
+                                        <ul class="dropdown__list" role="menu">
+                                            <li class="slds-dropdown__item">
+                                                <a (click)="openTransactionModal('SINGLE')" role="menuitem" nglDropdownItem>
+                                                    <p class="slds-truncate">{{ 'SINGLE_TRANSACTION' | translate }}</p>
+                                                </a>
+                                            </li>
+                                            <li class="slds-dropdown__item">
+                                                <a (click)="openTransactionModal('MULTIPLE')" role="menuitem" nglDropdownItem>
+                                                    <p class="slds-truncate">{{ 'MULTIPLE_TRANSACTION' | translate }}</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </span>
+                            </div>
+                        </form>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </div>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="cbs-body">
+        <div class="cbs-fixed-header">
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                <thead>
+                <tr>
+                    <th>{{ 'DATE' | translate }}</th>
+                    <th>{{ 'AMOUNT' | translate }}</th>
+                    <th>{{ 'DEBIT_ACCOUNT' | translate }}</th>
+                    <th>{{ 'CREDIT_ACCOUNT' | translate }}</th>
+                    <th>{{ 'BRANCH' | translate }}</th>
+                    <th>{{ 'DESCRIPTION' | translate }}</th>
+                    <th>{{ 'CREATED_BY' | translate }}</th>
+                    <th scope="col">
+                        <div class="slds-truncate" title=""></div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="cbs-scrollable-table">
+            <p-dataTable [value]="entries?.entries"
+                         emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                         [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'">
+                <p-column field="createdAt">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span>{{ row['effectiveAt'] | cbsDateFormat }} {{ row['effectiveAt'] | cbsTimeFormat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="amount" class="float-right">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span><b>{{ row['amount'] | cbsNumberFormat }}</b></span>
+                    </ng-template>
+                </p-column>
+                <p-column field="debitAccount">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate"
+                              [title]="(row['debitAccountName'])">
+                            {{ row['debitAccountNumber'] }}
+                        </span>
+                    </ng-template>
+                </p-column>
+                <p-column field="creditAccount">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate"
+                              [title]="(row['creditAccountName'])">
+                            {{ row['creditAccountNumber'] }}
+                        </span>
+                    </ng-template>
+                </p-column>
+
+                <p-column field="branch">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate" [title]="row['branchName']">
+                            {{ row['branchName'] }}
+                        </span>
+                    </ng-template>
+                </p-column>
+                <p-column field="description">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <div class="slds-truncate" [title]="row['description']">
+                            {{ row['description'] }}
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="createdBy">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span class="slds-truncate"
+                              [title]="row['createdByFullName']">
+                            {{ row['createdByFullName'] }}
+                        </span>
+                    </ng-template>
+                </p-column>
+                <p-column field="download">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <button (click)="download(row['id'])"
+                                class="slds-button slds-button--icon slds-button--icon-more slds-m-left--small"
+                                aria-haspopup="true" title="Configuration">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#download"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Configuration</span>
+                        </button>
+                    </ng-template>
+                </p-column>
+
+            </p-dataTable>
+        </div>
+    </div>
+
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="entries?.loading || isLoading"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(accountEntriesData | async)?.totalElements > (accountEntriesData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(accountEntriesData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(accountEntriesData | async)?.totalElements"
+            limit="5"
+            [perPage]="(accountEntriesData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)"></ngl-pagination>
+    </div>
+
+</main>
+<!-- ./cbs-main -->
+<ngl-modal [header]="'ADD_SINGLE_TRANSACTION' | translate" [(open)]="isSingleTransactionModalOpened">
+    <div body>
+        <div class="slds-form--stacked">
+            <form novalidate [formGroup]="singleTransactionForm">
+                <cbs-form-lookup-control
+                    #lookupDebitAccount
+                    [hasError]="singleTransactionForm.get('debitAccountId').errors && singleTransactionForm.get('debitAccountId').touched"
+                    [requiredField]="true"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [code]="true"
+                    [formControlName]="'debitAccountId'"
+                    [fieldLabel]="'DEBIT_ACCOUNT' | translate"
+                    [picklistDataUrl]="accountConfig">
+                </cbs-form-lookup-control>
+
+                <cbs-form-lookup-control
+                    #lookupCreditAccount
+                    [hasError]="singleTransactionForm.get('creditAccountId').errors && singleTransactionForm.get('creditAccountId').touched"
+                    [requiredField]="true"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [code]="true"
+                    [formControlName]="'creditAccountId'"
+                    [fieldLabel]="'CREDIT_ACCOUNT' | translate"
+                    [picklistDataUrl]="accountConfig">
+                </cbs-form-lookup-control>
+
+                <cbs-form-input-control
+                    [requiredField]="true"
+                    [fieldLabel]="'AMOUNT' | translate"
+                    [inputType]="'number'"
+                    [hasError]="singleTransactionForm.get('amount').errors && singleTransactionForm.get('amount').touched"
+                    [formControlName]="'amount'">
+                </cbs-form-input-control>
+
+                <cbs-form-textarea-control
+                    [requiredField]="true"
+                    [hasError]="singleTransactionForm.get('description').errors && singleTransactionForm.get('description').touched"
+                    formControlName="description"
+                    fieldLabel="{{ 'DESCRIPTION' | translate }}"
+                ></cbs-form-textarea-control>
+
+                <cbs-form-date-control
+                    [requiredField]="true"
+                    [fieldLabel]="'DATE' | translate"
+                    [hasError]="singleTransactionForm.get('createdAt').errors && singleTransactionForm.get('createdAt').touched"
+                    [formControlName]="'createdAt'"
+                ></cbs-form-date-control>
+
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'AUTO_PRINT' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <label class="slds-checkbox" for="auto-print-single-transaction">
+                            <input type="checkbox" name="autoPrint" id="auto-print-single-transaction" formControlName="autoPrint"/>
+                            <span class="slds-checkbox--faux"></span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="singleTransactionForm.invalid" class="slds-button slds-button--success"
+                (click)="submitSingleTransaction()">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<ngl-modal [header]="'ADD_MULTIPLE_TRANSACTION' | translate" [(open)]="isMultipleTransactionModalOpened">
+    <div body>
+        <div class="slds-form--stacked">
+            <form novalidate [formGroup]="multipleTransactionForm">
+                <cbs-form-lookup-control
+                    #lookupTransactionTemplate
+                    [hasError]="multipleTransactionForm.get('transactionTemplateId').errors && multipleTransactionForm.get('transactionTemplateId').touched"
+                    [requiredField]="true"
+                    [formControlName]="'transactionTemplateId'"
+                    [fieldLabel]="'TRANSACTION_TEMPLATE' | translate"
+                    (onSelect)="selectTransactionTemplateValue($event)"
+                    [picklistDataUrl]="transactionTemplateConfig">
+                </cbs-form-lookup-control>
+
+                <div *ngIf="multipleTransactionCreditAccounts.length" class="slds-accordion__section accounts">
+                    <div class="account">
+                        <label class="slds-text-title--caps slds-align--absolute-center">
+                            {{ 'DEBIT_ACCOUNT' | translate }}
+                        </label>
+                        <span *ngFor="let debitAccount of multipleTransactionDebitAccounts">
+                            <cbs-form-input-control
+                                [requiredField]="true"
+                                [disabled]="isDebitTransactionAccount"
+                                [fieldLabel]="debitAccount.name"
+                                [innerValue]="isDebitTransactionAccount ? totalAmountAccounts : 0"
+                                [inputType]="'number'"
+                                (onChange)="debitAccountsValue(debitAccount.id, $event)">
+                            </cbs-form-input-control>
+                        </span>
+                    </div>
+
+                    <div class="account">
+                        <label class="slds-text-title--caps slds-align--absolute-center">
+                            {{ 'CREDIT_ACCOUNT' | translate }}
+                        </label>
+                        <span *ngFor="let creditAccount of multipleTransactionCreditAccounts">
+                            <cbs-form-input-control
+                                [requiredField]="true"
+                                [disabled]="!isDebitTransactionAccount"
+                                [fieldLabel]="creditAccount.name"
+                                [innerValue]="!isDebitTransactionAccount ? totalAmountAccounts : 0"
+                                [inputType]="'number'"
+                                (onChange)="creditAccountsValue(creditAccount.id, $event)">
+                            </cbs-form-input-control>
+                        </span>
+                    </div>
+                </div>
+
+                <cbs-form-textarea-control
+                    [requiredField]="true"
+                    [hasError]="multipleTransactionForm.get('description').errors && multipleTransactionForm.get('description').touched"
+                    formControlName="description"
+                    fieldLabel="{{ 'DESCRIPTION' | translate }}"
+                ></cbs-form-textarea-control>
+
+                <cbs-form-date-control
+                    [requiredField]="true"
+                    [fieldLabel]="'DATE' | translate"
+                    [hasError]="multipleTransactionForm.get('dateTime').errors && multipleTransactionForm.get('dateTime').touched"
+                    [formControlName]="'dateTime'"
+                ></cbs-form-date-control>
+
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'AUTO_PRINT' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <label class="slds-checkbox" for="auto-print-multiple-transaction">
+                            <input type="checkbox" name="autoPrint" id="auto-print-multiple-transaction" formControlName="autoPrint"/>
+                            <span class="slds-checkbox--faux"></span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral"
+                (click)="cancel()">{{ 'CANCEL' | translate }}
+        </button>
+        <button [disabled]="multipleTransactionForm.invalid" class="slds-button slds-button--success"
+                (click)="submitMultipleTransaction()">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+

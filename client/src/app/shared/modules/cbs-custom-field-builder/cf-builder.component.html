@@ -1,0 +1,34 @@
+<cbs-cf-section
+    *ngFor="let section of data; let last = last; let sectionInd=index;"
+    [sectionData]="section"
+    [url]="urls?.sectionUrl"
+    (onEditError)="callSectionEditError($event)"
+    (onEditSuccess)="callSectionEditSuccess($event)"
+    (onAddSuccess)="callSectionAddSuccess($event)"
+    (onAddError)="callSectionAddError($event)"
+    (onAddCancel)="onSectionAddCancel()">
+
+    <cbs-cf-field
+        *ngFor="let field of section?.customFields; let fieldInd=index; trackBy: field?.id;"
+        [uid]="sectionInd + '_' + fieldInd"
+        [url]="urls?.fieldUrl"
+        [fieldData]="field"
+        [sectionId]="section?.id"
+        [addSectionId]="true"
+        [lookupTypes]="fieldLookupTypes"
+        [fieldTypes]="fieldTypes"
+        (onFieldEditSuccess)="callFieldEditSuccess($event)"
+        (onFieldEditError)="callFieldEditError($event)"
+        (onFieldDeleteSuccess)="callFieldDeleteSuccess($event)"
+        (onFieldDeleteError)="callFieldDeleteError($event)"
+        (onFieldAddCancel)="onFieldAddCancel($event)"
+        (onFieldAddSuccess)="callFieldAddSuccess($event)"
+        (onFieldAddError)="callFieldAddError($event)"
+    ></cbs-cf-field>
+
+    <cbs-cf-add [buttonTitle]="'ADD_FIELD' | translate" [disabled]="last && sectionAddMode" (onClick)="addField(section?.id)"
+                [uid]="sectionInd + 1"></cbs-cf-add>
+</cbs-cf-section>
+<cbs-cf-add [buttonTitle]="'ADD_SECTION' | translate" (onClick)="addSection()" [disabled]="sectionAddMode"></cbs-cf-add>
+
+

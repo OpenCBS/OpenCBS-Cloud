@@ -1,0 +1,93 @@
+<cbs-form-layout *ngIf="provisioning">
+
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AUTOMATIC_PROVISION_RATE' | translate }}"
+        [value]="provisioning?.value"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AUTOMATIC_PROVISION_AMOUNT' | translate }}"
+        [value]="provisioning?.reserve"
+    ></cbs-form-readonly-control>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'SET_PROVISION_MANUALLY' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <label class="slds-checkbox" for="setProvisionManual">
+                <input (click)="setProvisionManually()" [checked]="isSpecific" type="checkbox" name="setProvisionManual"
+                       id="setProvisionManual"/>
+                <span class="slds-checkbox--faux"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'SET_PROVISION_RATE' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <input class="slds-input" type="number" [onlyNumber]="true"
+                       [disabled]="!isSpecific || isRate"
+                       (focusout)="valProvision($event.target['value'], 'rate')"
+                       (keyup)="typeProvisionValue($event.target['value'], 'rate')"
+                       [(ngModel)]="specificValue">
+            </div>
+        </div>
+    </div>
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'SET_PROVISION_AMOUNT' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <input class="slds-input" type="number" [onlyNumber]="true"
+                       [disabled]="!isSpecific || isAmount"
+                       (focusout)="valProvision($event.target['value'], 'amount')"
+                       (keyup)="typeProvisionValue($event.target['value'], 'amount')"
+                       [(ngModel)]="specificReserve">
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element__control">
+        <div class="slds-align--absolute-center">
+            <button class="slds-button slds-button--neutral" aria-live="assertive"
+                    [disabled]="!specificReserve && !specificValue"
+                    (click)="resetValue()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'RESET' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" aria-live="assertive"
+                    (click)="openSetProvisionModal()"
+                    [disabled]="!disabledBtn">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+    </div>
+
+</cbs-form-layout>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="SetProvisioning()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'CANCEL' | translate"
+                   [rightButtonLabel]="'CONFIRM' | translate"
+                   [popupLabel]="'CONFIRMATION' | translate"
+                   [confirmText]="'Set provision manual' | translate">
+</cbs-confirm-popup>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!loan?.loaded || isLoading"
+></cbs-loading-indicator>

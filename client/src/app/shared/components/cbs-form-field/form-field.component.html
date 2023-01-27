@@ -1,0 +1,138 @@
+<div *ngIf="!fieldsReadOnly">
+    <div class="slds-form-element"
+         [formGroup]="fieldForm"
+         [class.slds-has-error]="
+            (fieldForm.get('value').errors?.required && fieldForm.get('value').touched)
+            || (fieldForm.get('value').invalid && fieldForm.get('value').touched)
+            || (fieldForm.get('value').hasError('invalid-date'))">
+        <input type="number" [onlyNumber]="true" formControlName="fieldId" hidden/>
+        <label class="slds-form-element__label" *ngIf="checkboxData?.fieldType !== 'CHECKBOX'">
+            <abbr class="slds-required" title="required"
+                  *ngIf="fieldForm.get('value').errors?.required && fieldForm.get('value').touched">*</abbr>
+            {{fieldCaption}}
+        </label>
+        <div [ngSwitch]="fieldType">
+            <div *ngSwitchCase="'TEXT'">
+                <div class="slds-form-element__control">
+                    <input class="slds-input" type="text" formControlName="value"/>
+                </div>
+            </div>
+            <div *ngSwitchCase="'NUMERIC'">
+                <div class="slds-form-element__control">
+                    <input class="slds-input" type="number" [onlyNumber]="true" formControlName="value"/>
+                </div>
+            </div>
+            <div *ngSwitchCase="'TEXT_AREA'">
+                <div class="slds-form-element__control">
+                    <textarea class="slds-textarea" name="" formControlName="value"></textarea>
+                </div>
+            </div>
+            <div *ngSwitchCase="'LIST'">
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select class="slds-select" formControlName="value">
+                            <option *ngFor="let val of listValues" [value]="val">{{ val }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div *ngSwitchCase="'DATE'">
+                <input type="text" hidden formControlName="value">
+                <cbs-datepicker [value]="dateValue" (valueInvalid)="dateInvalid()"
+                                (valueChange)="setDate($event)"></cbs-datepicker>
+            </div>
+            <div *ngSwitchCase="'LOOKUP'">
+                <input type="text" hidden formControlName="value">
+                <cbs-picklist
+                    [config]="lookupUrl"
+                    [value]="lookupValue"
+                    [filterType]="'name'"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    (onSelect)="setLookupValue($event)"></cbs-picklist>
+            </div>
+            <div *ngSwitchCase="'CHECKBOX'">
+                <div class="slds-form-element__control">
+                    <span class="slds-checkbox">
+                        <input type="checkbox" formControlName="value"
+                               [id]="'checkbox-' + checkboxData?.name + '-' + checkboxData?.id"/>
+                        <label class="slds-checkbox__label"
+                               [attr.for]="'checkbox-' + checkboxData?.name + '-' + checkboxData?.id">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{ checkboxData?.caption }}</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+            <div *ngSwitchCase="'PATTERN'">
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select class="slds-select" formControlName="value">
+                            <option *ngFor="let val of patternValues" [value]="val">{{ val }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div *ngSwitchCase="'GRID'">
+                <div class="slds-form-element__control">
+                    <p-table [columns]="gridHeaders" [value]="gridValues">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr class="slds-border--bottom">
+                                <th *ngFor="let col of columns"
+                                    class="slds-app-launcher__header-search slds-border--left slds-border--right
+                            slds-border--top slds-box--small slds-text-title--caps">
+                                    {{col.value}}
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr class="slds-border--bottom">
+                                <td pEditableColumn *ngFor="let col of columns"
+                                    class="slds-border--left slds-border--right slds-border--top
+                                    slds-app-launcher__header-search">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text"
+                                                   [(ngModel)]="rowData[col.value]"
+                                                   (ngModelChange)="getGridValues()"
+                                                   [ngModelOptions]="{standalone: true}">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{rowData[col.value]}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="footer" let-rowData>
+                            <tr class="slds-avatar--small">
+                                <td class="p-text-right slds-border--left slds-border--right slds-border--top
+                                slds-border--bottom slds-app-launcher__header-search slds-text-title_caps">
+                                    Total
+                                </td>
+                                <td *ngFor="let row of rowData.slice(1, rowData.length)"
+                                    class="slds-border--left slds-border--right slds-border--top slds-border--bottom
+                                    slds-app-launcher__header-search slds-text-title_caps">
+                                    {{calculateTotal(row['value'])}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slds-form-element__row" *ngIf="fieldsReadOnly">
+    <div class="slds-form-element slds-size--1-of-1" [formGroup]="fieldForm">
+        <input type="number" formControlName="fieldId" [onlyNumber]="true" hidden/>
+        <input type="text" formControlName="value" hidden/>
+        <span class="slds-form-element__label">{{ fieldCaption }}</span>
+        <div class="slds-form-element__control slds-has-divider--bottom">
+            <span class="slds-form-element__static">{{ fieldValue }}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'EXPORTED_FILE_LIST' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-export-file-wrap">
+        <div class="cbs-export-file__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-export-file__right">
+            <p-table [value]="integrationWithBankExportFileList?.integrationWithBankExportFileList"
+                     dataKey="code" styleClass="p-datatable-customers" [rowHover]="true"
+                     [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'">
+                <ng-template pTemplate="header">
+                    <tr class="slds-text-heading--label">
+                        <th pSortableColumn="profileName">{{ 'IDENTIFICATION' | translate }}</th>
+                        <th pSortableColumn="date">{{ 'DATE' | translate }}</th>
+                        <th pSortableColumn="code">{{ 'USER' | translate }}</th>
+                        <th pSortableColumn="principal">{{'COMMENT' | translate}}</th>
+                        <th pSortableColumn="principal">{{'STATUS' | translate}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-loan>
+                    <tr class="p-selectable-row">
+                        <td>{{loan['uid']}}</td>
+                        <td>{{loan['date']}}</td>
+                        <td>{{loan['createdUser']}}</td>
+                        <td>{{loan['comment']}}</td>
+                        <td>{{loan['status']}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">{{ 'NO_RECORDS_FOUND' | translate}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <div class="slds-grid slds-grid--align-center"
+                 *ngIf="integrationWithBankExportFileList?.totalElements > integrationWithBankExportFileList?.size">
+                <ngl-pagination
+                    class="cbs-pagination"
+                    *ngIf="integrationWithBankExportFileList?.loaded"
+                    [(page)]="queryObject.page"
+                    [total]="integrationWithBankExportFileList?.totalElements"
+                    limit="5"
+                    [perPage]="integrationWithBankExportFileList?.size"
+                    [previousText]="'PREVIOUS' | translate"
+                    [nextText]="'NEXT' | translate"
+                    boundaryNumbers="1"
+                    (pageChange)="goToPage($event)"></ngl-pagination>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="integrationWithBankExportFileList?.loading"></cbs-loading-indicator>

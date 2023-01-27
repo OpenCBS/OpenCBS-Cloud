@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.opencbs</groupId>
+    <name>opencbs-cloud</name>
+    <artifactId>opencbs-cloud</artifactId>
+    <description>OpenCBS-Cloud server</description>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>opencbs-core</module>
+        <module>opencbs-spring-boot-starter</module>
+        <module>opencbs-server</module>
+        <module>opencbs-borrowings</module>
+        <module>opencbs-savings</module>
+        <module>opencbs-term-deposits</module>
+        <module>opencbs-bonds</module>
+        <module>opencbs-loans</module>
+    </modules>
+</project>

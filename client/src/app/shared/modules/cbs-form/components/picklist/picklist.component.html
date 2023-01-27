@@ -1,0 +1,81 @@
+<div [ngClass]="'slds-picklist cbs-picklist'">
+    <div class="slds-dropdown-trigger" #trigger>
+        <button type="button" class="slds-button slds-button--neutral slds-grid slds-grid--align-spread"
+                cdk-overlay-origin
+                #origin="cdkOverlayOrigin"
+                (click)="open()"
+                [disabled]="disabled">
+            <span class="slds-truncate" *ngIf="valueString"><span
+                *ngIf="selectedCode">{{selectedCode + ' | ' }}</span>{{ valueString | translate }} </span>
+            <span class="slds-truncate" *ngIf="!valueString">{{ !disabled ? selectPlaceholder : '-' }}</span>
+            <ngl-icon icon="down" variant="default" size="x-small" *ngIf="!isOpened"></ngl-icon>
+            <ngl-icon icon="close" variant="default" size="x-small" *ngIf="isOpened"></ngl-icon>
+        </button>
+        <button *ngIf="valueString && !disabled" type="button" class="cbs-picklist__clear-btn" (click)="remove()">
+            <svg aria-hidden="true">
+                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+            </svg>
+        </button>
+    </div>
+
+    <ng-template
+        cdk-connected-overlay
+        cdkConnectedOverlayHasBackdrop
+        cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+        [cdkConnectedOverlayOrigin]="origin"
+        [cdkConnectedOverlayOpen]="isOpened"
+        [cdkConnectedOverlayMinWidth]="triggerRect?.width"
+        [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+        (backdropClick)="close()"
+        (detach)="close()"
+    >
+        <div class="cbs-picklist__dropdown slds-dropdown slds-dropdown--left" role="listbox">
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                <svg class="slds-input__icon slds-icon-text-default" aria-hidden="true" *ngIf="!searchQuery">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                </svg>
+                <svg class="slds-input__icon slds-icon-text-default cbs-picklist__clear-search-btn" aria-hidden="true"
+                     *ngIf="searchQuery" (click)="clear()">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+                </svg>
+                <input type="text" class="slds-input" #searchInput [ngModel]="searchQuery"
+                       (ngModelChange)="search($event); searchQuery = $event;" placeholder="{{ searchPlaceholder }}"/>
+            </div>
+            <div class="cbs-picklist__list"
+                 #scrollBlock
+                 infinite-scroll
+                 [infiniteScrollDistance]="2"
+                 [infiniteScrollThrottle]="200"
+                 (scrolled)="onScroll()"
+                 [scrollWindow]="false">
+                <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                    <li role="presentation" class="slds-listbox__item" *ngFor="let item of lookupList"
+                        (click)="select(item)" (keyup.enter)="select(item)">
+                        <span
+                            class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-media_center"
+                            role="option" [ngClass]="{'slds-is-selected': item?.selected }">
+                            <span class="slds-media__figure">
+                                <svg class="slds-icon slds-icon_x-small slds-listbox__icon-selected"
+                                     [attr.aria-hidden]="!isOpened">
+                                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                </svg>
+                            </span>
+                            <span class="slds-media__body">
+                                <span class="slds-truncate" [attr.title]="item[filterType]">
+                                    <span
+                                        *ngIf="code">{{item['number'] + ' | ' }}</span>{{ item[filterType] | translate }}
+                                </span>
+                            </span>
+                        </span>
+                    </li>
+                    <li *ngIf="!lookupList?.length">
+                        <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                            <span class="slds-truncate">{{'NO_DATA_AVAILABLE' | translate }}</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-template>
+
+</div>

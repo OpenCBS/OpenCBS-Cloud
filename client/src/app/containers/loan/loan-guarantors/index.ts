@@ -1,0 +1,5 @@
+export * from './loan-guarantor-create/loan-guarantor-create.component'
+export * from './loan-guarantor-list/loan-guarantors.component'
+export * from './loan-guarantors-info/loan-guarantors-info.component'
+export * from './loan-guarantor-edit/loan-guarantor-edit.component'
+export * from '../shared/components/guarantor-form/guarantor-form.component'

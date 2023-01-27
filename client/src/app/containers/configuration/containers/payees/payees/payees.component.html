@@ -1,0 +1,150 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'PAYEES' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="openModal()">
+        <span class="slds-text-not-selected">
+        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+        </svg>{{ 'CREATE' | translate }}
+        </span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="10%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col" width="15%">
+                <div class="slds-truncate" title="Name">{{ 'ACCOUNT_NUMBER' | translate }}</div>
+            </th>
+            <th scope="col" width="35%">
+                <div class="slds-truncate" title="Description">{{ 'DESCRIPTION' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let payee of (payees | async)?.payees; let i = index;">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{ (payees | async)?.size * (payees | async)?.currentPage + i + 1}}">
+                    {{ (payees | async)?.size * (payees | async)?.currentPage + i + 1}}
+                </div>
+            </th>
+            <th data-label="Name" scope="row">
+                <div class="slds-truncate" title="">
+                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-user"
+                                  title="{{ payee?.name }} avatar">
+                                <svg aria-hidden="true" class="slds-icon slds-icon--x-small">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         xlink:href="assets/icons/action-sprite/svg/symbols.svg#user"></use>
+                                </svg>
+                                <span class="slds-assistive-text">{{ payee?.name }} avatar</span>
+                            </span>
+                    <a href="javascript:void(0)">{{ payee?.name }}</a>
+                </div>
+            </th>
+            <th data-label="Account number">
+                <div class="slds-truncate"
+                     title="{{payee?.accountNumber + ' | ' + payee?.accountName}}">
+                    <p *ngIf="payee?.accountNumber && payee?.accountName">{{payee?.accountNumber + ' | ' +
+                        payee?.accountName}}</p>
+                    <p *ngIf="!payee?.accountNumber && !payee?.accountName">-</p>
+                </div>
+            </th>
+            <th class="slds-tree-container slds-truncate_container_10" data-label="Description">
+                <div class="slds-truncate" title="{{ payee?.description }}">
+                    {{ payee?.description }}
+                </div>
+            </th>
+            <th class="slds-text-align--right">
+                <button class="slds-button slds-button--neutral"
+                        (click)="openModal(payee)">
+                    <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(payees | async)?.loading"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center" *ngIf="(payees | async)?.totalElements > (payees | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(payees | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(payees | async)?.totalElements"
+            limit="5"
+            [perPage]="(payees | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+</main>
+<!-- ./cbs-main -->
+
+<ngl-modal [ngClass]="isExpanded ? 'form-expanded' : ''"
+           header="{{ isNew ? ('PAYEE_NEW_TITLE' | translate) :  ('EDIT' | translate) }}" [(open)]="opened">
+    <div body>
+        <form novalidate [formGroup]="form" #formFocus>
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'NAME' | translate"
+                [hasError]="form.get('name').errors && form.get('name').touched"
+                [formControlName]="'name'">
+            </cbs-form-input-control>
+
+            <cbs-form-lookup-control
+                #account
+                (onSelect)="setLookupValue($event)"
+                [formControlName]="'currentAccountId'"
+                [code]="true"
+                [hasError]="form.get('currentAccountId').errors && form.get('currentAccountId').touched"
+                [requiredField]="true"
+                [picklistDataUrl]="formConfig"
+                (onOpenPicklist)="changeModalSize($event, true)"
+                (onClosePicklist)="changeModalSize($event, false)"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                fieldLabel="{{ 'ACCOUNT_NUMBER' | translate }}">
+            </cbs-form-lookup-control>
+
+            <cbs-form-textarea-control
+                class="cbs-textarea"
+                [requiredField]="false"
+                [fieldLabel]="'DESCRIPTION' | translate"
+                [formControlName]="'description'">
+            </cbs-form-textarea-control>
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="closeModal()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success"
+                [disabled]="form?.invalid || !formChanged"
+                (click)="submitPayee()">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

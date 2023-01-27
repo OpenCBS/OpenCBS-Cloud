@@ -1,0 +1,37 @@
+<div *ngIf="!isLoading">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <div class="slds-form--horizontal">
+
+        <form novalidate [formGroup]="form">
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'NAME' | translate"
+                [hasError]="form.get('name').errors && form.get('name').touched"
+                [formControlName]="'name'">
+            </cbs-form-input-control>
+
+            <cbs-form-lookup-control
+                [hasError]="form.get('branchId').errors && form.get('branchId').touched"
+                [requiredField]="true"
+                [formControlName]="'branchId'"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'BRANCH' | translate"
+                [picklistDataUrl]="config">
+            </cbs-form-lookup-control>
+
+            <div formArrayName="accounts" class="cbs-collateral-form__fields">
+
+                <ng-container
+                    *ngFor="let field of customFields; let ind=index;"
+                    cbsDynamicField
+                    [config]="field"
+                    [group]="form.controls['accounts'].controls[ind]">
+                </ng-container>
+            </div>
+
+        </form>
+    </div>
+</div>

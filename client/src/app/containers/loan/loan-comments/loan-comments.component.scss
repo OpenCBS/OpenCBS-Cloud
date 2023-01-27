@@ -1,0 +1,65 @@
+:host ::ng-deep {
+
+  table {
+    tr {
+      height: 3rem;
+    }
+  }
+
+  cbs-scrollable-nav {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 155px;
+    width: 200px;
+    z-index: 9;
+    transform: translateX(200%);
+    @media screen and (min-width: 1070px) {
+      display: block;
+    }
+  }
+
+  .cbs-scrollable-table {
+    overflow-y: auto;
+    padding-top: 0;
+    position: absolute;
+    height: calc(100% - 59px);
+    min-width: 100%;
+    left: 0;
+  }
+
+  .slds-accordion__section {
+    padding-top: 50px;
+  }
+
+  .comment {
+    position:absolute;
+    bottom:0;
+    height:60px;
+    width: 99%;
+
+    .comment-text {
+      margin-right: 57px;
+    }
+  }
+
+  .comment-button {
+    height: 45px !important;
+    border-radius: 50% !important;
+    width: 45px !important;
+    margin: 2px 0;
+  }
+
+  .slds-textarea {
+    height: 55px !important;
+  }
+
+  .slds-text-not-selected {
+    margin-left: -2px !important;
+  }
+
+  .slds-button__icon--stateful {
+    width: 1rem !important;
+    height: 1rem !important;
+  }
+}

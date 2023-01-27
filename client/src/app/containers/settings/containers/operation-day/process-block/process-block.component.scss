@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  border: 1px solid #e0e5ee;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+
+  cbs-form-date-control {
+    display: inline-block;
+    width: 60%;
+  }
+
+  button {
+    width: 60%;
+  }
+
+  .slds-text-heading--medium {
+    color: #32c24d;
+  }
+}

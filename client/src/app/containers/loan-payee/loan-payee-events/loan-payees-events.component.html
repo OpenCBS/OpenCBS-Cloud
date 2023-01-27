@@ -1,0 +1,122 @@
+<p-dataTable
+    emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+    #dt
+    [value]="events"
+    [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+    [scrollable]="true"
+    [scrollHeight]="'calc(100% - 41px);'"
+    cbsMacAgent
+    [expandableRows]="true"
+    [cbsMacAgentClass]="'cbs-mac-user'">
+
+    <p-column [style]="{'min-width':'65px', 'width':'65px'}" field="id" header="#">
+        <ng-template let-row="rowData" pTemplate="body">
+            <span *ngIf="row['id'] > 0">{{ row['id']}}</span>
+            <button (click)="onEventClick(row)" [ngClass]="{'cbs-treetable__toggler--expanded' : row.expanded }"
+                    class="slds-button cbs-treetable__toggler slds-button--icon slds-button--icon-x-small slds-m-right--x-small"
+                    aria-controls="expand"
+                    *ngIf="row['id'] === 0">
+                ...
+                <span class="slds-assistive-text">{{'TOGGLE' | translate}}</span>
+            </button>
+        </ng-template>
+    </p-column>
+    <p-column [style]="{'min-width':'170px', 'width':'170px'}" field="effectiveAt" header="{{ 'DATE' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <span>{{ row['effectiveAt'] | cbsDateFormat }} {{ row['effectiveAt'] | cbsTimeFormat }}</span>
+        </ng-template>
+    </p-column>
+    <p-column styleClass="slds-truncate" [style]="{'min-width':'150px', 'width':'150px'}" field="profile"
+              header="{{ 'TYPE' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <ng-container *ngIf="row['otherFee']; else onlyType">
+                <span>{{ row['otherFee']['name'] + ' - ' + (row['eventType'] | translate) }}</span>
+            </ng-container>
+            <ng-template #onlyType><span>{{ row['eventType'] | translate }}</span></ng-template>
+        </ng-template>
+    </p-column>
+    <p-column [style]="{'min-width':'140px', 'width':'140px'}" field="amount" header="{{ 'AMOUNT' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <span>{{ row['amount'] | cbsNumberFormat }}</span>
+        </ng-template>
+    </p-column>
+    <p-column styleClass="slds-text-align--center" [style]="{'min-width':'90px', 'width':'90px'}" field="interestRate"
+              header="{{ '#' }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <ng-container *ngIf="row['installmentNumber']; else empty">
+                <span class="">{{ row['installmentNumber'] }}</span>
+            </ng-container>
+            <ng-template #empty>
+                <div>-</div>
+            </ng-template>
+        </ng-template>
+    </p-column>
+    <p-column [style]="{'min-width':'195px', 'width':'195px'}" field="createdBy"
+              header="{{ 'CREATED_BY' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <span>{{ row['createdBy']['firstName'] + ' ' + row['createdBy']['lastName'] }}</span>
+        </ng-template>
+    </p-column>
+    <p-column [style]="{'min-width':'200px', 'width':'200px'}" field="createdAt"
+              header="{{ 'ENTRY_DATE' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <span>{{ row['createdAt'] | cbsDateFormat }} {{ row['createdAt'] | cbsTimeFormat }}</span>
+        </ng-template>
+    </p-column>
+    <p-column [style]="{'min-width':'200px', 'width':'200px'}" field="createdAt"
+              header="{{ 'CHEQUE_NUMBER' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <ng-container *ngIf="row['checkNumber']; else empty">
+                <span class="">{{ row['checkNumber'] }}</span>
+            </ng-container>
+            <ng-template #empty>
+                <div>-</div>
+            </ng-template>
+        </ng-template>
+    </p-column>
+
+    <p-column [style]="{'min-width':'200px', 'width':'200px', 'max-width':'200px'}" field="description"
+              header="{{ 'DESCRIPTION' | translate }}">
+        <ng-template let-row="rowData" pTemplate="body">
+            <span class="slds-truncate slds-show">{{ row['description'] }}</span>
+        </ng-template>
+    </p-column>
+    <ng-template let-parentEvent pTemplate="rowexpansion">
+        <table>
+            <tbody>
+            <ng-container *ngFor="let event of parentEvent.childNotes">
+                <tr class="cbs-tr-hover">
+                    <td [ngStyle]="{'min-width':'50px', 'width':'50px', 'padding-left': '5rem'}">
+                        <span>{{event['id']}}</span></td>
+                    <td [ngStyle]="{'min-width':'170px', 'width':'170px'}">
+                        {{ event['effectiveAt'] | cbsDateFormat }} {{ event['effectiveAt'] | cbsTimeFormat }}
+                    </td>
+                    <td [ngStyle]="{'min-width':'150px', 'width':'150px'}">{{ event['eventType'] | translate }}</td>
+                    <td [ngStyle]="{'min-width':'140px', 'width':'140px'}">{{ event['amount'] | cbsNumberFormat }}</td>
+                    <td [ngStyle]="{'min-width':'90px', 'width':'90px'}">
+                        <ng-container *ngIf="event['installmentNumber']; else empty">
+                            <span class="">{{ event['installmentNumber'] }}</span>
+                        </ng-container>
+                        <ng-template #empty>
+                            <div>-</div>
+                        </ng-template>
+                    </td>
+                    <td [ngStyle]="{'min-width':'195px', 'width':'195px'}">{{ event['createdBy']['firstName'] + ' ' +
+                        event['createdBy']['lastName'] }}
+                    </td>
+                    <td [ngStyle]="{'min-width':'200px', 'width':'200px'}">
+                        {{ event['createdAt'] | cbsDateFormat }} {{ event['createdAt'] | cbsTimeFormat }}
+                    </td>
+                    <td [ngStyle]="{'min-width':'200px', 'width':'200px'}">{{ event['checkNumber'] }}
+                    </td>
+                    <td [ngStyle]="{'min-width':'200px', 'width':'200px', 'max-width':'200px'}">
+                        <span class="slds-truncate slds-show">{{ event['description'] }}</span>
+                    </td>
+                </tr>
+            </ng-container>
+            </tbody>
+        </table>
+    </ng-template>
+</p-dataTable>
+<cbs-loading-indicator [isFixed]="true" [showLoader]="payeeEventsState?.loading || isLoading"></cbs-loading-indicator>
+<p *ngIf="!events" class="slds-text-align--center slds-m-top--large">{{ 'NO_DATA' | translate }}</p>

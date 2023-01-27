@@ -1,0 +1,93 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ loan.id ? this.loan.code : ''}}"
+                [svgData]="svgData" [badgeLabel]="loan.status | translate" [badgeTheme]="(loan.status) | statusBadge">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <cbs-loan-info-entity></cbs-loan-info-entity>
+            <a *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['COLLATERAL'] }"
+                [routerLink]="'/loans/' + loan.id+ '/' + profile.type.toLowerCase() + '/collateral/new'"
+               class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'ADD' | translate }}</span>
+            </a>
+        </div>
+
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+
+<div class="slds-grid slds-grid--align-center">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer"
+           *ngIf="!(collateralData | async)?.loading && (collateralData | async)?.collaterals?.length">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="5%">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="10%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col" width="5%">
+                <div class="slds-truncate slds-text-align--center" title="Type">{{ 'TYPE' | translate }}</div>
+            </th>
+            <th scope="col" width="5%">
+                <div class="slds-truncate slds-text-align--center" title="Amount">{{ 'AMOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="5%">
+                <div class="slds-truncate slds-text-align--center" title="Options">{{ 'OPTIONS' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let collateral of getUndeletedCollaterals((collateralData | async)?.collaterals); let i = index;"
+            [ngClass]="collateral.deleted ? 'isDeleted' : ''">
+            <td data-label="Label" scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </td>
+            <td data-label="Name" scope="row">
+                <a [routerLink]="collateral?.id" class="slds-truncate" title="{{ collateral?.name }}">{{
+                    collateral?.name | uppercase}}</a>
+            </td>
+            <td data-label="Type" scope="row">
+                <div class="slds-text-align--center" title="{{ collateral?.typeOfCollateral?.caption }}">
+                    <ngl-badge type="info">{{ collateral?.typeOfCollateral?.caption }}</ngl-badge>
+                </div>
+            </td>
+            <td data-label="Amount" scope="row">
+                <div class="slds-text-align--center" title="Amount">{{ collateral?.amount | cbsNumberFormat}}</div>
+            </td>
+            <td data-label="Options" scope="row" class="slds-text-align--center">
+                <span *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['COLLATERAL'] }" >
+                    <button (click)="removeCollateral(collateral.id)" class="slds-button slds-button--icon-border"
+                            title="Delete" *ngIf="!collateral.deleted">
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Delete</span>
+                </button>
+                </span>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p
+        *ngIf="(collateralData | async)?.loaded && !(collateralData | async)?.collaterals?.length"
+        class="cbs-no-data-text slds-text-align--center slds-m-top--medium">{{ 'NO_DATA' | translate }}</p>
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(collateralData | async)?.loading"></cbs-loading-indicator>
+
+</div>
+

@@ -1,0 +1,53 @@
+<div class="slds-container--fluid">
+    <div class="slds-grid slds-wrap slds-gutters" cbsMatchHeight="cbs-special-operation-item">
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+            *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['DEPOSIT'] }">
+            <a class="cbs-special-operation-item slds-text-align--center" routerLink="DEPOSIT_TO_CURRENT_ACCOUNT">
+                <cbs-icon [iconConfig]="depositToCurrentAccountIcon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small">{{ 'DEPOSIT_TO_CURRENT_ACCOUNT' | translate  }}</span>
+            </a>
+        </div>
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+            *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['WITHDRAW'] }">
+            <a class="cbs-special-operation-item slds-text-align--center" routerLink="WITHDRAW_FROM_CURRENT_ACCOUNT">
+                <cbs-icon [iconConfig]="withdrawFromCurrentAccountIcon"
+                          [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small">{{ 'WITHDRAW_FROM_CURRENT_ACCOUNT' | translate }}</span>
+            </a>
+        </div>
+        <ng-container *ngIf="currentInstance != 'rwanda'">
+            <div
+                class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+                *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['DEPOSIT-SAVING'] }">
+                <a class="cbs-special-operation-item slds-text-align--center" routerLink="DEPOSIT_TO_SAVING_ACCOUNT">
+                    <cbs-icon [iconConfig]="depositToSavingAccountIcon"
+                              [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                    <span class="slds-text-heading--small">{{ 'DEPOSIT_TO_SAVING_ACCOUNT' | translate  }}</span>
+                </a>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="currentInstance != 'rwanda'">
+            <div
+                class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+                *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['WITHDRAW-SAVING'] }">
+                <a class="cbs-special-operation-item slds-text-align--center" routerLink="WITHDRAW_FROM_SAVING_ACCOUNT">
+                    <cbs-icon [iconConfig]="withdrawFromSavingAccountIcon"
+                              [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                    <span class="slds-text-heading--small">{{ 'WITHDRAW_FROM_SAVING_ACCOUNT' | translate }}</span>
+                </a>
+            </div>
+        </ng-container>
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+            *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['TILL_REPAY'] }">
+            <a class="cbs-special-operation-item slds-text-align--center" [routerLink]="'/till/' + tillId + '/loans'">
+                <cbs-icon [iconConfig]="repayIcon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small">{{ 'REPAYMENT' | translate  }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,64 @@
+<div class="slds-form-element">
+    <label class="slds-form-element__label">
+        {{ 'PENALTIES' | translate}}
+    </label>
+
+    <div class="slds-form-element__control cbs-penalties">
+        <div class="slds-text-align--center" *ngIf="!selectedPenalties.length">{{ label | translate}}</div>
+        <ul class="slds-scrollable" *ngIf="selectedPenalties.length">
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                <thead>
+                <tr class="slds-text-title--caps">
+                    <th scope="col" width="30%">
+                        <div class="slds-truncate" title="Code">{{ 'NAME' | translate }}</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Code">{{ 'START_DATE' | translate }}</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Code">{{ 'END_DATE' | translate }}</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Code">{{ 'PENALTY_TYPE' | translate }}</div>
+                    </th>
+                    <th scope="col" width="10%">
+                        <div class="slds-truncate" title="Code">{{ 'PENALTY' | translate }}</div>
+                    </th>
+                    <th scope="col" width="5%">
+                        <div class="slds-truncate" title="Delete"></div>
+                    </th>
+                </tr>
+
+                </thead>
+
+                <tbody>
+                <tr *ngFor="let selectedPenalty of selectedPenalties">
+                    <td data-label="Name" scope="row">
+                        {{ selectedPenalty?.name}}
+                    </td>
+                    <td data-label="Start date" scope="row">
+                        {{ selectedPenalty?.beginPeriodDay}}
+                    </td>
+                    <td data-label="End date" scope="row">
+                        {{ selectedPenalty?.endPeriodDay}}
+                    </td>
+                    <td data-label="Penalty type" scope="row">
+                        {{ selectedPenalty?.penaltyType | translate}}
+                    </td>
+                    <td data-label="Penalty" scope="row">
+                        {{ selectedPenalty?.penalty }}
+                    </td>
+                    <td data-label="Branch" scope="row">
+                        <button class="slds-input--bare" (click)="delete(selectedPenalty)" *ngIf="displayButton">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                            </svg>
+                            <span class="slds-assistive-text">{{'DELETE' | translate}}</span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </ul>
+    </div>
+</div>

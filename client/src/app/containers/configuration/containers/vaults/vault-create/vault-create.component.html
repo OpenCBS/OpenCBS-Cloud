@@ -1,0 +1,73 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'VAULTS' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="goToViewVaults()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    {{ 'CANCEL' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" aria-live="assertive" (click)="submit()"
+                    [disabled]="form.invalid">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>
+                    {{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout *ngIf="!isLoading">
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <div class="slds-form--horizontal">
+
+            <form novalidate [formGroup]="form">
+                <cbs-form-input-control
+                    [requiredField]="true"
+                    [fieldLabel]="'NAME' | translate"
+                    [hasError]="form.get('name').errors && form.get('name').touched"
+                    [formControlName]="'name'">
+                </cbs-form-input-control>
+
+                <cbs-form-lookup-control
+                    [hasError]="form.get('branchId').errors && form.get('branchId').touched"
+                    [requiredField]="true"
+                    [formControlName]="'branchId'"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [fieldLabel]="'BRANCH' | translate"
+                    [picklistDataUrl]="config">
+                </cbs-form-lookup-control>
+
+                <div formArrayName="accounts" class="cbs-collateral-form__fields">
+
+                    <ng-container
+                        *ngFor="let field of customFields; let ind=index;"
+                        cbsDynamicField
+                        [config]="field"
+                        [group]="form.controls['accounts'].controls[ind]">
+                    </ng-container>
+                </div>
+
+            </form>
+        </div>
+    </cbs-form-layout>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>
+</main>

@@ -1,0 +1,159 @@
+<cbs-form-layout *ngIf="loanApplicationState?.loaded && loanApplicationState?.success">
+
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PROFILE' | translate }}"
+        [value]="(loan | async)?.loan?.profile?.name"
+        (onFieldClick)="goToProfile()"
+        [showLink]="true"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'LOAN_APPLICATION_CODE' | translate }}"
+        [value]="loanApp?.code"
+        (onFieldClick)="goToLoanApplication()"
+        [showLink]="true"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        *ngIf="profileType !== 'groups'"
+        fieldLabel="{{ 'LOAN_CODE' | translate }}"
+        [value]="(loan | async)?.loan?.code"
+    ></cbs-form-readonly-control>
+
+    <ng-container *ngIf="loanApp?.creditLineInfoDto">
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'CREDIT_LINE' | translate }}"
+            [value]="loanApp?.creditLineInfoDto['name']"></cbs-form-readonly-control>
+    </ng-container>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'LOAN_PRODUCT' | translate }}"
+        [value]="loanApp?.loanProduct?.name"
+    ></cbs-form-readonly-control>
+
+    <cbs-payees-block-control
+        *ngIf="loanApp?.loanProduct?.hasPayees"
+        [payeesData]="loanApp?.payees"
+        [isCollapsed]="false"
+        [readonly]="false"
+        [showEditBtn]="false"
+        [payeesCount]="loanApp?.activePayeesCount"
+        (onAddPayee)="openAddPayeeModal()"
+        (onDeletePayee)="showConfirmPopup($event)"
+    ></cbs-payees-block-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AMOUNT' | translate }}"
+        value="{{ (loan | async)?.loan?.amount | cbsNumberFormat }}"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        [value]="(loan | async)?.loan?.interestRate"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+        [value]="(loan | async)?.loan?.gracePeriod"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        *ngIf="loanApp?.loanProduct?.scheduleBasedType === 'BY_INSTALLMENT'"
+        fieldLabel="{{ 'NUMBER_OF_INSTALMENTS' | translate }}"
+        [value]="(loan | async)?.loan?.maturity"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        *ngIf="loanApp?.loanProduct?.scheduleBasedType === 'BY_MATURITY'"
+        fieldLabel="{{ 'MATURITY_DATE' | translate }}"
+        [value]="(loan | async)?.loan?.maturityDate | cbsDateFormat"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DISBURSEMENT_DATE' | translate }}"
+        [value]="loanApp?.disbursementDate | cbsDateFormat"
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PREFERRED_REPAYMENT_DATE' | translate }}"
+        [value]="loanApp?.preferredRepaymentDate | cbsDateFormat"
+    ></cbs-form-readonly-control>
+
+    <ng-container *ngIf="!loanApp?.creditLineInfoDto">
+        <cbs-entry-fees-block
+            *ngIf="!!loanApp?.entryFees?.length"
+            [isValidToCalculate]="true"
+            [entryFeesData]="loanApp?.entryFees"
+            (onDetailsClick)="openEntryFees()"
+        ></cbs-entry-fees-block>
+    </ng-container>
+
+    <div *ngIf="profileType=== 'groups'" class="slds-text-title--caps slds-m-bottom--medium member-title">
+        <strong>{{ 'MEMBERS' | translate }}</strong>
+    </div>
+
+    <div *ngIf="profileType === 'groups'">
+        <div *ngFor="let member of members">
+            <cbs-form-readonly-control
+                fieldLabel="{{ member?.name | translate }}"
+                [value]="member?.amount">
+            </cbs-form-readonly-control>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'TOTAL' | translate }}"
+        [value]="(loan | async)?.loan?.amount | cbsNumberFormat "
+    ></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'LOAN_OFFICER' | translate }}"
+        [value]="(loan | async)?.loan?.loanOfficer['firstName'] + ' ' + (loan | async)?.loan?.loanOfficer['lastName']"
+    ></cbs-form-readonly-control>
+
+</cbs-form-layout>
+
+
+<ngl-modal header="{{ 'ENTRY_FEES' | translate }}" [(open)]="isOpen">
+    <div body>
+        <span *ngFor="let fee of loanApp?.entryFees">
+            <cbs-form-readonly-control
+                [fieldLabel]="fee?.entryFee?.name"
+                [value]="fee.amount"></cbs-form-readonly-control>
+            <div class="form-control-range">
+                <span *ngIf="fee?.entryFee?.percentage">({{'PERCENTAGE' | translate}})</span>
+                <span *ngIf="!fee?.entryFee?.percentage">({{'FLAT' | translate}})</span>
+            </div>
+        </span>
+
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'TOTAL' | translate }}"
+            [value]="totalEntryFees"></cbs-form-readonly-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpen = false">{{ 'CLOSE' | translate }}</button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-payee-form-modal
+    headerTitle="{{ ('ADD' | translate) }}"
+    (onSubmit)="submitPayee($event)">
+</cbs-payee-form-modal>
+
+<cbs-confirm-popup [opened]="isVisible"
+                   (onSubmitClick)="deleteCurrentPayee()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'CANCEL' | translate"
+                   [rightButtonLabel]="'CONFIRM' | translate"
+                   [popupLabel]="'CONFIRMATION' | translate"
+                   [confirmText]="'DELETE_PAYEE_TEXT' | translate">
+</cbs-confirm-popup>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!loanApplicationState?.loaded || isLoading || !(loan | async)?.loaded"
+></cbs-loading-indicator>

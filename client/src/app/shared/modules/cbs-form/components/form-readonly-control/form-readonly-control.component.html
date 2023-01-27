@@ -1,0 +1,27 @@
+<div class="slds-form-element"
+     [ngClass]="styleClass"
+     [ngStyle]="style">
+    <label *ngIf="fieldLabel" class="slds-form-element__label">
+        {{ fieldLabel }}
+    </label>
+    <div class="slds-form-element__control" [ngClass]="{'slds-form-element__control--disabled': disabled,
+                                                        'slds-form-element__control--textarea': isTextarea,
+                                                        'slds-form-element__control--readonly--warning': this.outputType === outputTypeEnum.Warning,
+                                                        'slds-form-element__control--readonly--standard': this.outputType === outputTypeEnum.OK}">
+        <span class="slds-form-element__static slds-truncate"
+              *ngIf="value != 0; else zeroValue">{{ value ? value : '-' }}
+             <button class="slds-button details-button"
+                *ngIf="showLink" (click)="onFieldClick.emit()">
+                <svg class="slds-button__icon slds-button__icon_left slds-button__icon--small">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                         xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info_alt"></use>
+                </svg>{{'INFO' | translate}}
+            </button>
+        </span>
+        <ng-content></ng-content>
+    </div>
+</div>
+
+<ng-template #zeroValue>
+    <span class="slds-form-element__static">{{ value }}</span>
+</ng-template>

@@ -1,0 +1,137 @@
+<div class="cbs-loan-details-form__form">
+    <form novalidate [formGroup]="form" class="slds-form--stacked">
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'PROFILE' | translate }}"
+            [value]="getProfile()"
+            [disabled]="true">
+        </cbs-form-readonly-control>
+
+        <cbs-form-lookup-control
+            [hasError]="hasError('equivalentCurrencyId')"
+            [requiredField]="true"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [formControlName]="'equivalentCurrencyId'"
+            [fieldLabel]="'CURRENCY' | translate"
+            [picklistDataUrl]="currencyConfig"
+            (onSelect)="amountRelatedFieldChanged()"
+        >
+        </cbs-form-lookup-control>
+
+        <cbs-form-input-control
+            formControlName="number"
+            fieldLabel="{{ 'NUMBER_OF_BONDS' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="hasError('number')"
+            (onChange)="amountRelatedFieldChanged()">
+            <div class="cbs-loan-details-form__range" *ngIf="numberRange.length">
+                Min: <span>{{ numberRange[0] }}</span> Max: <span>{{ numberRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-date-control
+            formControlName="sellDate"
+            fieldLabel="{{ 'START_DATE' | translate }}"
+            [hasError]="hasError('sellDate')"
+            [requiredField]="true"
+            (onChange)="amountRelatedFieldChanged(); couponRelatedFieldChanged()"
+        ></cbs-form-date-control>
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'AMOUNT' | translate}}(EUR)"
+            [value]="getAmount()"
+            [disabled]="true">
+        </cbs-form-readonly-control>
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'EQUIVALENT_AMOUNT' | translate }}"
+            [value]="getEquivalentAmount()"
+            [disabled]="true">
+        </cbs-form-readonly-control>
+
+        <cbs-form-lookup-control
+            [hasError]="hasError('bankAccountId')"
+            [requiredField]="true"
+            searchPlaceholder="{{ 'SEARCH' | translate }}"
+            selectPlaceholder="{{ 'SELECT' | translate }}"
+            [code]="true"
+            [formControlName]="'bankAccountId'"
+            [fieldLabel]="'BANK_ACCOUNT' | translate"
+            [picklistDataUrl]="accountConfig"
+            (onSelect)="amountRelatedFieldChanged()">
+        </cbs-form-lookup-control>
+
+        <cbs-form-input-control
+            formControlName="interestRate"
+            fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="hasError('interestRate')"
+            (onChange)="amountRelatedFieldChanged()">
+            <div class="cbs-loan-details-form__range" *ngIf="interestRateRange.length">
+                Min: <span>{{ interestRateRange[0] }}</span> Max: <span>{{ interestRateRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            formControlName="penaltyRate"
+            fieldLabel="{{ 'PENALTY_RATE' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="hasError('penaltyRate')"
+            (onChange)="amountRelatedFieldChanged()">
+            <div class="cbs-loan-details-form__range" *ngIf="penaltyRateRange.length">
+                Min: <span>{{ penaltyRateRange[0] }}</span> Max: <span>{{ penaltyRateRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-select-control
+            formControlName="interestScheme"
+            [selectData]="interestScheme"
+            [requiredField]="true"
+            [hasError]="hasError('interestScheme')"
+            fieldLabel="{{ 'INTEREST_SCHEME' | translate }}"
+            (change)="amountRelatedFieldChanged()"
+        ></cbs-form-select-control>
+
+        <cbs-form-select-control
+            formControlName="frequency"
+            [selectData]="frequency"
+            [requiredField]="true"
+            [hasError]="hasError('frequency')"
+            fieldLabel="{{ 'COUPON_FREQUENCY' | translate }}"
+            (change)="couponRelatedFieldChanged()"
+        ></cbs-form-select-control>
+
+        <cbs-form-input-control
+            formControlName="maturity"
+            fieldLabel="{{ 'MATURITY' | translate }}"
+            [inputType]="'number'"
+            [requiredField]="true"
+            [hasError]="hasError('maturity')"
+            (onChange)="couponRelatedFieldChanged()">
+            <div class="cbs-loan-details-form__range" *ngIf="numberRange.length">
+                Min: <span>{{ numberRange[0] }}</span> Max: <span>{{ numberRange[1] }}</span>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-date-control
+            formControlName="couponDate"
+            fieldLabel="{{ 'COUPON_DATE' | translate }}"
+            [hasError]="hasError('couponDate')"
+            [requiredField]="true"
+            [enableDropdownPicker]="false"
+        ></cbs-form-date-control>
+
+        <cbs-form-date-control
+            formControlName="expireDate"
+            fieldLabel="{{ 'EXPIRE_DATE' | translate }}"
+            [hasError]="hasError('expireDate')"
+            [requiredField]="true"
+            [enableDropdownPicker]="false">
+        </cbs-form-date-control>
+    </form>
+</div>
+
+<!--<cbs-loading-indicator [showLoader]="isLoading" [isFixed]="false"></cbs-loading-indicator>-->

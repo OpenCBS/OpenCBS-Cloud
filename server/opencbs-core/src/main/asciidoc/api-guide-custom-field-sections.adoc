@@ -1,0 +1,38 @@
+[[custom-field-sections]]
+== Custom field sections
+
+Custom fields are usually grouped into logically units called _sections_. For example, there could be
+a section for personal information, another one for contact details, yet another one for professional
+information, and so on.
+
+Custom fields sections are a separate resource in the system that can be queried, too. Just like custom
+fields, custom fields sections do not exist on their own and are always come as part of another resource
+(like profiles, loan applications, loans, etc.). Hence, the endpoint that you should use to query for
+custom field sections depends on the resource they are attached to. But the response structure is always
+the same:
+
+[[custom-field-section-response-structure]]
+=== Response structure
+
+|===
+|Path|Type|Description
+
+|`id`
+|`Number`
+|The ID of the custom field section.
+
+|`caption`
+|`String`
+|The caption of the custom field section. Should be used as a label to mark the beginning of the logical
+group of custom fields that the section consists of.
+
+|`order`
+|`Number`
+|The field is used to sort sections, if there is more than one.
+
+|`customFields[]`
+|`Array`
+|An array of <<custom-field-response-structure,custom field objects>> contained in the section.
+
+
+|===

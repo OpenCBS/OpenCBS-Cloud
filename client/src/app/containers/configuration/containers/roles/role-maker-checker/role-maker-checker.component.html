@@ -1,0 +1,60 @@
+<div class="slds-grid slds-grid--align-center cbs-role">
+    <div class="slds-container--medium" *ngIf="!isLoading">
+        <div class="slds-form-element__label slds-text-title--caps cbs-role__heading slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+
+        <div class="slds-form--horizontal cbs-pull-negative cbs-role__fields slds-attachments">
+            <div class="slds-form-element">
+                <span class="slds-form-element__label">{{ 'ACTIVE_ROLE' | translate }}</span>
+                <div class="slds-form-element__control slds-has-divider--bottom">
+                    <span
+                        class="slds-form-element__static">{{ roleMakerChecker['statusType'] | translate }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form--horizontal cbs-pull-negative cbs-role__fields">
+            <div class="slds-form-element">
+                <span class="slds-form-element__label">{{ 'NAME' | translate }}</span>
+                <div class="slds-form-element__control slds-has-divider--bottom">
+                            <span
+                                class="slds-form-element__static">
+                                <strong>
+                                {{ roleMakerChecker['name'] | uppercase }}
+                                </strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-m-top--medium">
+            <div class="slds-form-element__label slds-text-title--caps cbs-role__heading">
+                <strong>{{ 'PERMISSIONS' | translate }}</strong>
+            </div>
+        </div>
+
+        <div class="slds-form--horizontal cbs-pull-negative cbs-role__permissions">
+            <div *ngFor="let roleMakerCheckerGroup of roleMakerCheckerGroups; let i = index;">
+                <div class="slds-text-title slds-m-top--small slds-m-bottom--x-small">
+                    <strong>{{ roleMakerCheckerGroup?.group | translate }}</strong>
+                </div>
+                <div class="slds-form-element" *ngFor="let permission of roleMakerCheckerGroup?.permissions;">
+                    <div class="slds-form-element__control">
+                        <span class="slds-checkbox">
+                            <input
+                                type="checkbox"
+                                aria-describedby="permission-all"
+                                [ngModel]="permission.checked"/>
+                            <label class="slds-checkbox__label">
+                                <span class="slds-checkbox--faux"></span>
+                                <span class="slds-form-element__label">{{ permission?.name }}</span>
+                            </label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

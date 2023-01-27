@@ -1,0 +1,113 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [headingTitle]="collateralTypeDetails?.caption" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <div class="slds-grid slds-grid--align-center slds-p-top--medium slds-p-bottom--xx-large">
+        <div class="slds-container--small" *ngIf="collateralTypeDetails?.loaded && collateralTypeDetails?.success">
+            <div class="cbs-collateral-type__head">
+                <div class="slds-form-element slds-hint-parent slds-has-divider--bottom" *ngIf="!isEditView">
+                    <button class="slds-button slds-float--right slds-button--icon slds-button--icon-small"
+                            title="Edit this Field" (click)="activateEdit(collateralTypeDetails?.name)">
+                        <svg class="slds-button__icon slds-button__icon--hint" aria-hidden="true">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                        </svg>
+                        <span class="slds-assistive-text">{{'EDIT_FIELD' | translate}}</span>
+                    </button>
+                    <span class="slds-form-element__label">{{'DETAILS' | translate}}</span>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ collateralTypeDetails?.caption }}</span>
+                    </div>
+                </div>
+                <form novalidate *ngIf="isEditView" #captionForm="ngForm" (ngSubmit)="submitForm(captionForm)">
+                    <div class="slds-form-element slds-hint-parent"
+                         [class.slds-has-error]="caption.errors?.required && caption.touched">
+                        <button type="submit"
+                                class="slds-button slds-float--right slds-button--icon slds-button--icon-small cbs-collateral-type__save-btn"
+                                [title]="'SAVE' | translate"
+                                [disabled]="captionForm.invalid || !formChanged"
+                                tabindex="2">
+                            <svg class="slds-button__icon slds-button__icon--hint" aria-hidden="true">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                            <span class="slds-assistive-text">{{'SAVE' | translate}}</span>
+                        </button>
+                        <button type="button"
+                                class="slds-button slds-float--right slds-button--icon slds-button--icon-small cbs-collateral-type__cancel-btn"
+                                [title]="'CANCEL' | translate"
+                                (click)="closeEdit()"
+                                tabindex="3">
+                            <svg class="slds-button__icon slds-button__icon--hint" aria-hidden="true">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                            </svg>
+                            <span class="slds-assistive-text">{{'CANCEL' | translate}}</span>
+                        </button>
+                        <input type="hidden"
+                               name="id"
+                               #caption="ngModel"
+                               [ngModel]="collateralTypeDetails?.id">
+                        <label class="slds-form-element__label" for="section-title">{{'NAME' | translate}}</label>
+                        <div class="slds-form-element__control">
+                            <input type="text" id="section-title" class="slds-input"
+                                   tabindex="1"
+                                   [placeholder]="'TITLE' | translate"
+                                   maxlength="40"
+                                   name="caption"
+                                   #caption="ngModel"
+                                   [ngModel]="collateralTypeDetails?.caption"
+                                   (ngModelChange)="checkValueChange($event)"
+                                   required/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <cbs-cf-field
+                *ngFor="let field of collateralTypeDetails?.customFields; let fieldInd=index; trackBy: field?.id;"
+                [uid]="fieldInd"
+                [url]="fieldUrl"
+                [lookupTypes]="lookupTypes"
+                [fieldTypes]="fieldTypes"
+                [fieldData]="field"
+                [componentFieldType]="'collateral'"
+                [sectionId]="collateralTypeDetails?.id"
+                [addSectionId]="true"
+                (onFieldEditSuccess)="callFieldEditSuccess($event)"
+                (onFieldEditError)="callFieldEditError($event)"
+                (onFieldAddCancel)="onFieldAddCancel()"
+                (onFieldDeleteSuccess)="onDeleteSuccess()"
+                (onFieldDeleteError)="onError($event)"
+                (onFieldAddSuccess)="callFieldAddSuccess($event)"
+                (onFieldAddError)="callFieldAddError($event)"
+            ></cbs-cf-field>
+
+            <cbs-cf-add [buttonTitle]="'ADD_FIELD' | translate" [disabled]=""
+                        (onClick)="addField(collateralTypeDetails?.id)" [uid]="collateralTypeDetails?.id"></cbs-cf-add>
+        </div>
+    </div>
+
+    <div *ngIf="!collateralTypeDetails?.loading && collateralTypeDetails?.error"
+         class="slds-text-align--center slds-m-top--medium">
+        {{ 'NO_DATA' | translate }}
+    </div>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="collateralTypeDetails?.loading"></cbs-loading-indicator>
+
+</main>
+<!-- ./cbs-main -->
+
+
+
+
+

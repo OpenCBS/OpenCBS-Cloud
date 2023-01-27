@@ -1,0 +1,28 @@
+<div class="slds-form--horizontal">
+    <form novalidate [formGroup]="form" class="slds-form--stacked" cbsFormFocus>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'UPPER_LIMIT' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <input type="number"
+                       id="amount"
+                       class="slds-input"
+                       [onlyNumber]="true"
+                       formControlName="amount"/>
+            </div>
+        </div>
+        <cbs-list-select (onRemoveItem)="removeRole($event)"
+                         (onSelectItem)="addRole($event)"
+                         [picklistData]="roles"
+                         [listLabel]="'ROLES' | translate"
+                         [listData]="selectedItems"
+                         [isRequired]="true"
+                         [displayButton]="true"
+                         [noDataLabel]="'NO_DATA' | translate"
+                         [selectDataLabel]="'SELECT' | translate">
+        </cbs-list-select>
+
+    </form>
+</div>

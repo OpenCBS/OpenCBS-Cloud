@@ -1,0 +1,89 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'HOLIDAYS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="openCreateModal()">
+        <span class="slds-text-not-selected">
+        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+        </svg>{{ 'CREATE' | translate }}
+        </span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="25%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Description">{{ 'DATE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Periodicity">{{ 'REPEAT' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let holiday of (holidays | async)?.holidays; let i = index;">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Name" scope="row">
+                <div class="slds-truncate" title="">
+                    <a href="javascript:void(0)">{{ holiday?.name }}</a>
+                </div>
+            </th>
+            <th data-label="Date" scope="row">
+                <div class="slds-truncate" title="">
+                    <p *ngIf="holiday?.date">{{ holiday?.date }}</p>
+                    <p *ngIf="!holiday?.date">-</p>
+                </div>
+            </th>
+            <th data-label="Periodicity" scope="row">
+                <ngl-badge type="info" *ngIf="holiday?.annual">{{ 'HOLIDAY_ANNUAL' | translate }}</ngl-badge>
+            </th>
+            <th class="slds-text-align--right">
+                <button class="slds-button slds-button--neutral"
+                        (click)="openEditModal(holiday)">
+                    <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(holidays | async)?.loading"></cbs-loading-indicator>
+
+</main>
+<!-- ./cbs-main -->
+
+<cbs-custom-modal-form
+    headerTitle="{{ isNew ? ('HOLIDAY_NEW_TITLE' | translate) :  ('EDIT' | translate) }}"
+    (submitForm)="submitHoliday($event)"></cbs-custom-modal-form>
+
+
+
+

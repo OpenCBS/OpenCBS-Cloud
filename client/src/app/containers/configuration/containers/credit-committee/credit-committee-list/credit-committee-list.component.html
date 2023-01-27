@@ -1,0 +1,69 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'CREDIT_COMMITTEE' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button routerLink="/configuration/credit-committee-new-rules" class="slds-button slds-button--neutral"
+                    aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>{{ 'CREATE' | translate }}
+                </span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="25%">
+                <div class="slds-truncate" title="Name">{{ 'RANGE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Description">{{ 'ROLES' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let committee of (ccRules | async)?.cc_rules" (click)="goToCreditCommitee(committee)">
+            <th scope="row" href="javascript:void(0)">
+                <div class="slds-truncate" title="Id {{committee.id}}">{{ committee.id}}</div>
+            </th>
+            <th data-label="Range" scope="row">
+                <div class="slds-truncate" title="">
+                    {{ (committee?.minValue | cbsNumberFormat) + ' - ' + (committee?.maxValue | cbsNumberFormat) }}
+                </div>
+            </th>
+            <th data-label="Roles" scope="row">
+                <div class="slds-truncate" title="" *ngIf="committee?.roles.length > 0">
+                    <span *ngFor="let role of committee?.roles, let j = index">{{ role?.name | uppercase}}
+                        <span *ngIf="j + 1 !== committee?.roles?.length">{{','}}</span>
+                    </span>
+                </div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(ccRules | async)?.loading"></cbs-loading-indicator>
+
+</main>
+
+
+

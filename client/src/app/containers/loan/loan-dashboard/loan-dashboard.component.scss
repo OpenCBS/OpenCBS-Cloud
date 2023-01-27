@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  overflow-y: auto;
+  height: 100%;
+
+  .slds-text-title--caps {
+    width: 65%;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .cbs-hint-icon {
+    position: absolute;
+    right: 8px;
+    top: 6px;
+  }
+
+  .cbs-entry-fees__total {
+    position: absolute;
+    top: 6px;
+    right: 1rem;
+  }
+  .member-title {
+    margin-top: 1rem;
+  }
+}

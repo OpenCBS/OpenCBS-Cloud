@@ -1,0 +1,76 @@
+:host ::ng-deep {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: auto;
+  padding: 0;
+
+  .slds-grid--vertical-align-center {
+    height: 100%;
+  }
+
+  .cbs-mac-user {
+    .ui-datatable-scrollable-header-box {
+      .slds-table {
+        width: 100%;
+      }
+    }
+  }
+
+  p-datatable {
+    height: 100%;
+    display: block;
+    overflow: hidden;
+
+    .ui-datatable,
+    .ui-datatable-scrollable-wrapper,
+    .ui-datatable-scrollable-view {
+      height: 100%;
+    }
+
+    .ui-datatable-scrollable-header-box {
+      .slds-table {
+        width: calc(100% - 15px);
+      }
+    }
+
+    .ui-datatable-scrollable-body {
+      height: calc(100% - 37px) !important;
+      overflow-y: scroll;
+    }
+
+    tr.ui-widget-content.is-deleted {
+      background-color: #ececec;
+    }
+
+    tr.ui-expanded-row-content > td {
+      border-top: 0;
+      padding: 0;
+    }
+  }
+
+  .cbs-transaction-type {
+    padding-left: 3rem;
+  }
+
+  .cbs-tr-hover:hover {
+    background: #f4f6f9;
+    cursor: pointer;
+  }
+
+  .cbs-branches-lookup {
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+  }
+
+  .cbs-branch-lookup-label {
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  .cbs-treetable__toggler {
+    font-size: 18px;
+    margin: 0 0 0 -3px;
+  }
+}

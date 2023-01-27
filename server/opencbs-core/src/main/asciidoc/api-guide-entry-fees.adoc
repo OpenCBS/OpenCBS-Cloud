@@ -1,0 +1,59 @@
+== ENTRY FEES
+
+The Entry Fees resource is used to list, create, and update entry fees.
+
+=== Retrieve an entry fee
+
+A `GET` request will retrieve the details of an entry fee.
+
+==== Response fields
+
+include::{snippets}/entry-fees-get-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/entry-fees-get-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/entry-fees-get-example/http-response.adoc[]
+
+=== Create an entry fee
+
+A `POST` request will create a new entry fee.
+
+==== Request fields
+
+include::{snippets}/entry-fees-create-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/entry-fees-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/entry-fees-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/entry-fees-create-example/http-response.adoc[]
+
+=== Update an entry fee
+
+A `PUT` request will update the details of an entry fee.
+
+==== Request fields
+
+include::{snippets}/entry-fees-update-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/entry-fees-update-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/entry-fees-update-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/entry-fees-update-example/http-response.adoc[]

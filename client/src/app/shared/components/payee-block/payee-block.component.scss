@@ -1,0 +1,24 @@
+.payee {
+  position: relative;
+  margin-top: 1rem;
+  background-color: white;
+  color: #16325c;
+  border: 1px solid #d8dde6;
+  padding: 1rem 3rem 1rem 1rem;
+
+  &__action {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+  }
+
+  .slds-col {
+    &:first-child {
+      width: 40%;
+    }
+
+    &:last-child {
+      width: 60%;
+    }
+  }
+}

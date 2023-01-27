@@ -1,0 +1,12 @@
+:host ::ng-deep {
+  .accounts-label {
+    text-transform: none;
+  }
+  .slds-visual-picker__text-check {
+    top: 0.5rem;
+    right: -1.375rem;
+  }
+  .slds-button:focus {
+    box-shadow: none;
+  }
+}

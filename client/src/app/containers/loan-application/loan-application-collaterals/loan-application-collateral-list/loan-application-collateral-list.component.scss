@@ -1,0 +1,16 @@
+:host ::ng-deep {
+
+  table {
+    tr {
+      height: 3rem;
+    }
+  }
+
+  .isDeleted {
+    background: #ececec;
+  }
+
+  .slds-progress {
+    margin-top: 18px
+  }
+}

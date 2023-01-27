@@ -1,0 +1,13 @@
+.ui-datatable {
+  .ui-datatable-scrollable-body .slds-table--bordered {
+    position: relative;
+    margin-top: -1px;
+    border-top: none;
+  }
+
+  thead tr {
+    color: rgb(84, 105, 141);
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+  }
+}

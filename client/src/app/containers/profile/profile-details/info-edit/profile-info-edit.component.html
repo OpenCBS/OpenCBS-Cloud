@@ -1,0 +1,146 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps"><a routerLink="/profiles">{{ 'PROFILES' |
+                        translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ (profile | async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'INFORMATION' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">Live</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">Pending</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                      <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                            *ngIf="attachment?.pinned"
+                            (click)="openAttachment(attachment)">
+                          <span>
+                              <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                                   [attr.title]="attachment?.originalFilename"
+                                   *ngIf="testIfImage(attachment?.contentType)"/>
+                              <span class="cbs-profile__avatar__file">
+                                  <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                                    [fileType]="getFileExtension(attachment?.originalFilename)"
+                                                    [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                              </span>
+                          </span>
+                      </span>
+                    </div>
+
+                </div>
+                <div class="slds-grid slds-grid--align-end">
+                    <a [routerLink]="'/profiles/' + type + '/' + (profile | async)?.id + '/info'"
+                       class="slds-button slds-button--neutral slds-not-selected" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>{{ 'CANCEL' | translate }}</span>
+                    </a>
+                    <button class="slds-button slds-button--success slds-not-selected" aria-live="assertive"
+                            (click)="submitForm(profileForm)"
+                            [disabled]="profileForm.invalid || !formChanged">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>{{ 'SAVE' | translate }}</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <div class="slds-grid slds-grid--align-center">
+                <div class="slds-container--medium">
+
+                    <cbs-scrollable-nav
+                        [navData]="sectionNavData"
+                        [selectorName]="'#section'"
+                        [parentSelector]="'#scrollable-section'"
+                        [offset]="10"
+                        [activeItemId]="activeSectionId"
+                    ></cbs-scrollable-nav>
+
+                    <div *ngIf="!isLoading" class="cbs-pull-negative">
+
+
+                        <div class="slds-form--horizontal">
+                            <form novalidate [formGroup]="profileForm" (submit)="submitForm(profileForm)">
+                                <div formArrayName="fieldSections"
+                                     cbsVisibleOnSroll
+                                     [scrollableBlockId]="'#scrollable-section'"
+                                     [visibilityTopOffset]="400"
+                                     [visibilityBottomOffset]="400"
+                                     (elementVisible)="informVisibleBlock($event)" cbsFormFocus>
+                                    <div
+                                        *ngFor="let section of profileForm.controls.fieldSections.controls; let i=index;"
+                                        class="slds-p-top--medium slds-p-bottom--large"
+                                        [attr.id]="'section_' + profileFieldSections[i].id">
+                                        <div class="slds-text-heading--small slds-m-bottom--small">
+                                            {{ profileFieldSections[i].caption | translate }}
+                                        </div>
+                                        <ng-container
+                                            *ngFor="let field of profileFieldSections[i].values; let ind=index;"
+                                            cbsDynamicField
+                                            [config]="field"
+                                            [group]="section.controls[ind]">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <cbs-loading-indicator [isFixed]="true"
+                                           [showLoader]="isLoading || updateState?.loading"></cbs-loading-indicator>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'UNSAVED_CHANGES' | translate"></cbs-confirm-popup>
+
+<ngl-modal [(open)]="opened" (openChange)="resetModal()">
+    <div body>
+        <img [src]="imageUrl" alt="">
+    </div>
+</ngl-modal>
+
+
+
+
+
+
+
+

@@ -1,0 +1,205 @@
+<div class="cf-field"
+     [ngClass]="{'cf-field--collapsed': formCollapsed}">
+    <div class="cf-field__header slds-grid slds-grid--align-spread slds-grid--vertical-align-center">
+        <h2 class="slds-truncate">
+            <span class="slds-text-heading--small">{{ fieldData.caption }}</span>
+        </h2>
+        <button class="slds-button slds-button--icon-border-filled slds-button--icon-x-small" aria-haspopup="true"
+                (click)="toggleEditView()">
+            <svg class="slds-button__icon cf-field__trigger" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+            </svg>
+            <span class="slds-assistive-text">More Options</span>
+        </button>
+    </div>
+
+    <div class="cf-field__body">
+        <form novalidate class="slds-form--stacked" #fieldForm="ngForm" (ngSubmit)="submitForm(fieldForm)">
+            <input type="text" name="order" #order="ngModel" [ngModel]="fieldData?.order" hidden>
+            <input *ngIf="!isListSelected" type="text" name="extra" #extra="ngModel" [ngModel]="fieldData?.extra"
+                   hidden>
+
+            <div class="slds-form-element" [class.slds-has-error]="caption.errors?.required && caption.touched">
+                <label class="slds-form-element__label" for="field-caption">{{'FIELD_CAPTION' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="field-caption" class="slds-input" [placeholder]="'CAPTION' | translate" required
+                           name="caption"
+                           #caption="ngModel"
+                           [ngModel]="fieldData?.caption"/>
+                </div>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="field-caption">{{'FIELD_DESCRIPTION' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <textarea
+                        name="description"
+                        id="field-description"
+                        class="slds-input description"
+                        [attr.cols]="30"
+                        [attr.rows]="3"
+                        [placeholder]="'DESCRIPTION' | translate"
+                        [ngModel]="fieldData?.description"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="slds-form-element" [class.slds-has-error]="fieldType.errors?.required && fieldType.touched">
+                <label class="slds-form-element__label" for="field-type">{{'FIELD_TYPE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select id="field-type" class="slds-select"
+                                name="fieldType"
+                                #fieldType="ngModel"
+                                [ngModel]="fieldData?.fieldType"
+                                (ngModelChange)="checkFieldType($event, 'new')"
+                                required>
+                            <option *ngFor="let option of fieldTypes" [attr.value]="option?.key">{{ option?.caption }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element" *ngIf="isDateSelected">
+                <cbs-form-date-control
+                    [ngModel]="fieldData?.extra?.defaultValue"
+                    (ngModelChange)="setDefaultValue($event)"
+                    (onChange)="setDefaultValue($event)"
+                    [ngModelOptions]="{standalone: true}"
+                    fieldLabel="{{ 'DEFAULT_DATE' | translate }}">
+                </cbs-form-date-control>
+            </div>
+
+            <div class="slds-form-element" *ngIf="isListSelected">
+                <label class="slds-form-element__label" for="field-type">List Options</label>
+
+                <cbs-chips [ngModel]="listOptions" name="extra" [required]="true"></cbs-chips>
+
+                <div *ngIf="changeValueField.extra && changeValueField.extra.length" class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        {{'DEFAULT_VALUE' | translate}}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                            <select class="slds-select"
+                                    [ngModel]="defaultValue"
+                                    (ngModelChange)="setDefaultValue($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                <option value="">Please select</option>
+                                <option *ngFor="let item of changeValueField.extra">
+                                    <span *ngIf="item">{{ item }}</span>
+                                    <span *ngIf="!item">Please Select</span>
+                                </option>
+                            </select>
+                            <button *ngIf="defaultValue"
+                                    type="button"
+                                    class="cbs-picklist__clear-btn"
+                                    (click)="removeSelectedValue()">
+                                <svg aria-hidden="true">
+                                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element" *ngIf="isPatternSelected">
+
+                <label class="slds-form-element__label" for="field-type">Pattern (REGEX)</label>
+                <input type="text" class="slds-input" placeholder="Pattern" [required]="true"
+                       [ngModel]="fieldData?.extra?.pattern"
+                       [ngModelOptions]="{standalone: true}"
+                       (keyup)="patternData($event)"/>
+
+                <label class="slds-form-element__label" for="field-type">Error Message</label>
+                <input type="text" class="slds-input" placeholder="Message" [required]="true"
+                       [ngModel]="fieldData?.extra?.message"
+                       [ngModelOptions]="{standalone: true}"
+                       (keyup)="messageData($event)"/>
+            </div>
+
+            <div class="slds-form-element"
+                 *ngIf="isNumericSelected || isTextAreaSelected || isTextSelected || isPatternSelected">
+                <label class="slds-form-element__label" for="field-type">{{'DEFAULT_VALUE' | translate}}</label>
+                <input [onlyNumber]="isNumericSelected" class="slds-input" [placeholder]="'DEFAULT_VALUE' | translate" [required]="true"
+                       [ngModel]="defaultValue"
+                       [ngModelOptions]="{standalone: true}"
+                       (keyup)="setDefaultValue($event)"/>
+            </div>
+
+            <div class="slds-form-element" *ngIf="isLookupSelected">
+                <label class="slds-form-element__label" for="lookup-type">Lookup Type</label>
+
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select id="lookup-type" class="slds-select"
+                                name="extra"
+                                #extra="ngModel"
+                                [ngModel]="lookupValue"
+                                (ngModelChange)="getDefaultLookupValue($event, 'new')"
+                                required>
+                            <option *ngFor="let option of lookupTypes" [attr.value]="option?.key">
+                                {{ option?.name | cbsCapitalize }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element" *ngIf="isLookupAddValue">
+                <cbs-form-lookup-control
+                    class="slds-col_padded-left"
+                    fieldLabel="{{'DEFAULT_VALUE' | translate}}"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [requiredField]="false"
+                    (onSelect)="setDefaultValue($event)"
+                    [picklistDataUrl]="lookupUrl">
+                </cbs-form-lookup-control>
+            </div>
+
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                <span class="slds-checkbox">
+                    <input type="checkbox" name="unique" [attr.id]="'checkbox-unique' + uid"
+                           #unique="ngModel"
+                           [ngModel]="fieldData?.unique"/>
+                    <label class="slds-checkbox__label" [attr.for]="'checkbox-unique' + uid">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-form-element__label">{{'HAS_UNIQUE_VALUE' | translate}}</span>
+                    </label>
+                </span>
+                </div>
+            </div>
+
+            <div class="slds-form-element">
+                <div class="slds-form-element__control">
+                <span class="slds-checkbox">
+                    <input type="checkbox" name="required" [attr.id]="'checkbox-required' + uid"
+                           #required="ngModel"
+                           [ngModel]="fieldData?.required"/>
+                    <label class="slds-checkbox__label" [attr.for]="'checkbox-required' + uid">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-form-element__label">{{'REQUIRED_FIELD' | translate}}</span>
+                    </label>
+                </span>
+                </div>
+            </div>
+        </form>
+        <div class="cf-field__footer">
+            <button class="slds-button" [disabled]="fieldForm.invalid || !formChanged" (click)="submitForm(fieldForm)">
+                {{'SAVE' | translate}}
+            </button>
+            <span>|</span>
+            <button class="slds-button slds-text-color--error" (click)="cancel()">{{'CANCEL' | translate}}</button>
+            <span>|</span>
+            <button class="slds-button slds-text-color--error"
+                    [disabled]="fieldForm.invalid || newFieldMode"
+                    (click)="deleteField(fieldForm)">
+                {{'DELETE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>

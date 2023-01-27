@@ -1,0 +1,64 @@
+<ngl-modal [header]="headerTitle" [(open)]="isOpen" xmlns="http://www.w3.org/1999/html">
+    <div body>
+        <form novalidate #f="ngForm" class="slds-form--stacked" #formFocus>
+            <div class="slds-form-element" [class.slds-has-error]="name.errors?.required && name.touched">
+                <label class="slds-form-element__label" for="text-input-01">{{'NAME' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="text-input-01" class="slds-input" name="name" minlength="3" #name="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+
+            <cbs-form-textarea-control
+                [requiredField]="true"
+                class="cbs-textarea"
+                [fieldLabel]="'DESCRIPTION' | translate"
+                name="description"
+                #description="ngModel" ngModel>
+            </cbs-form-textarea-control>
+
+            <cbs-form-lookup-control
+                #chargeAccount
+                [requiredField]="true"
+                [code]="true"
+                name="chargeAccountId"
+                #chargeAccountId="ngModel" ngModel
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'CHARGE_ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+
+            <cbs-form-lookup-control
+                #incomeAccount
+                [requiredField]="true"
+                [code]="true"
+                name="incomeAccountId"
+                #incomeAccountId="ngModel" ngModel
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'INCOME_ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+
+            <cbs-form-lookup-control
+                #expenseAccount
+                [requiredField]="true"
+                [code]="true"
+                name="expenseAccountId"
+                #expenseAccountId="ngModel" ngModel
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'EXPENSE_ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success" #submitButton
+                [disabled]="f.invalid || !formChanged || fieldTouched" (click)="submit(f)">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

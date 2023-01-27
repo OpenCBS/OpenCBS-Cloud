@@ -1,0 +1,177 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'BORROWING_PRODUCTS' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <a [routerLink]="'/configuration/borrowing-products/'+ borrowingProduct?.id + '/edit'"
+               class="slds-button slds-button--brand" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}</span>
+            </a>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout *ngIf="borrowingProductState?.loaded && borrowingProductState?.success">
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'NAME' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ borrowingProduct?.name }}</span>
+            </div>
+        </div>
+
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'CODE' | translate }}"
+            [value]="borrowingProduct?.code"></cbs-form-readonly-control>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'SCHEDULE_TYPE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ borrowingProduct?.scheduleType | translate }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'CURRENCY' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static"
+                      *ngIf="borrowingProduct?.currency">{{borrowingProduct?.currency?.name}}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row">
+            <label class="slds-form-element__label">
+                {{ 'INTEREST_RATE' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MINVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.interestRateMin }}</span>
+                        <span class="cbs-hint-icon">%</span>
+                    </div>
+                </div>
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MAXVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.interestRateMax }}</span>
+                        <span class="cbs-hint-icon">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row">
+            <label class="slds-form-element__label">
+                {{ 'AMOUNT' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MINVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.amountMin | cbsNumberFormat }}</span>
+                    </div>
+                </div>
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MAXVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.amountMax | cbsNumberFormat }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row">
+            <label class="slds-form-element__label">
+                {{ 'MATURITY' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MINVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.maturityMin }}</span>
+                    </div>
+                </div>
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MAXVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.maturityMax }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="slds-form-element cbs-compound-form__row">
+            <label class="slds-form-element__label">
+                {{ 'GRACE_PERIOD' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MINVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.gracePeriodMin }}</span>
+                    </div>
+                </div>
+                <div class="cbs-compound-form__1-of-2">
+                    <label class="cbs-compound-form__label">
+                        {{ 'MAXVALUE' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <span class="slds-form-element__static">{{ borrowingProduct?.gracePeriodMax }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-text-title--caps slds-m-bottom--medium account-title">
+            <strong>{{ 'ACCOUNTS' | translate }}</strong>
+        </div>
+
+        <div *ngFor="let account of borrowingProduct?.accounts">
+            <cbs-form-readonly-control
+                fieldLabel="{{ account?.accountRuleType | translate }}"
+                [value]="account?.accountDto?.number + ' | ' + account?.accountDto?.name">
+            </cbs-form-readonly-control>
+        </div>
+    </cbs-form-layout>
+
+    <p *ngIf="borrowingProductState?.loaded && !borrowingProductState?.error"
+       class="slds-text-align--center slds-m-top--large">{{ borrowingProductState?.errorMessage }}</p>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="borrowingProductState?.loading"></cbs-loading-indicator>
+</main>

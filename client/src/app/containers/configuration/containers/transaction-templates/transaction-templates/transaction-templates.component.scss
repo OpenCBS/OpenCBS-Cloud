@@ -1,0 +1,53 @@
+:host ::ng-deep {
+  ngl-modal .dropdown__list {
+    max-height: 9.5rem;
+  }
+
+  .cbs-expanded-modal {
+    .slds-modal__content {
+      min-height: 20rem;
+    }
+  }
+
+  table {
+    table-layout: fixed;
+  }
+
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cbs-picklist {
+    .slds-picklist {
+      width: 100%;
+      margin-top: 1rem;
+
+      .slds-dropdown {
+        width: 100%;
+        max-width: 100%;
+
+        input {
+          display: none;
+        }
+
+        dropdown__list {
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+      }
+
+      .slds-button {
+        width: 100%;
+      }
+    }
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

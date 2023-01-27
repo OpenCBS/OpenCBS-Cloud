@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  width: 100%;
+
+  .cbs-main-nav {
+    justify-content: space-between;
+
+    .slds-context-bar__label-action:focus,
+    .slds-context-bar__label-action:focus:hover {
+      text-decoration: none;
+    }
+  }
+
+  .slds-context-bar {
+    padding: 0;
+  }
+
+  .slds-context-bar__item {
+    border-right: 1px solid #d8dde6;
+
+    &.slds-is-active {
+      border-left: none;
+      border-bottom-color: #00a1df;
+
+      &:before {
+        content: none;
+      }
+
+      &:after {
+        top: auto;
+        bottom: -3px;
+      }
+    }
+  }
+}

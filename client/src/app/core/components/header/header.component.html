@@ -1,0 +1,165 @@
+<header class="cbs-header">
+    <div class="slds-context-bar cbs-header__top">
+        <div class="slds-context-bar__primary slds-context-bar__item--divider-right">
+            <div class="slds-context-bar__item slds-no-hover slds-grid--vertical-align-center">
+                <div class="slds-context-bar__icon-action">
+                    <a routerLink="/dashboard" class="slds-icon-waffle_container slds-context-bar__button">
+                        <cbs-logo-svg-hor></cbs-logo-svg-hor>
+                    </a>
+                </div>
+                <a routerLink="/dashboard" class="cbs-header__logo-text">
+                    <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                        <span class="slds-truncate" title="OpenCBS">Open<strong>CBS</strong></span>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <cbs-main-nav [navElements]="mainNavElements">
+            <button (click)="openVersionModal()" class="slds-button slds-button--icon slds-button--icon-more"
+                    aria-haspopup="true" [title]="'VERSION' | translate">
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#help"></use>
+                </svg>
+                <span class="slds-assistive-text">{{'VERSION' | translate}}</span>
+            </button>
+            <button *cbsVisibleByPermission="{ group: 'TASKS_MANAGEMENT', permissions: ['TASKS_MANAGEMENT'] }" routerLink="/event-manager"
+                    class="slds-button slds-button--icon slds-button--icon-more" aria-haspopup="true"
+                    [title]="'EVENT_MANAGER' | translate">
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#event"></use>
+                </svg>
+                <span class="slds-assistive-text">{{'EVENT_MANAGER' | translate}}</span>
+            </button>
+
+            <button *cbsVisibleByPermission="{ group: 'SETTINGS', permissions: ['SETTING'] }" routerLink="/settings"
+                    class="slds-button slds-button--icon slds-button--icon-more slds-m-left--small" aria-haspopup="true"
+                    [title]="'SETTINGS' | translate">
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#custom_apps"></use>
+                </svg>
+                <span class="slds-assistive-text">{{'SETTINGS' | translate}}</span>
+            </button>
+
+            <button *cbsVisibleByPermission="{ group: 'CONFIGURATIONS', permissions: ['CONFIGURATIONS'] }" routerLink="/configuration"
+                    class="slds-button slds-button--icon slds-button--icon-more slds-m-left--small" aria-haspopup="true"
+                    [title]="'CONFIGURATION' | translate">
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+                <span class="slds-assistive-text">{{'CONFIGURATION' | translate}}</span>
+            </button>
+
+            <div>
+                <span nglDropdown [(open)]="openLang">
+                    <button class="slds-button slds-m-left--x-small" nglDropdownTrigger>
+                        <span *ngIf="!currentLang" title="English">
+                            <span class="slds-truncate">
+                                {{ 'En' }}
+                            </span>
+                            <img class="slds-icon--x-small"
+                                 src="../../../../assets/icons/flags/united-states.png" alt=""/>
+                        </span>
+
+                        <span class="slds-truncate">
+                            {{ currentLang | cbsCapitalize }}
+                        </span>
+                        <img *ngIf="currentLang === 'en'" class="slds-icon--x-small" title="English"
+                             src="../../../../assets/icons/flags/united-states.png" alt=""/>
+                        <img *ngIf="currentLang === 'ru'" class="slds-icon--x-small" title="Русский"
+                             src="../../../../assets/icons/flags/russia.png" alt=""/>
+                        <img *ngIf="currentLang === 'fr'" class="slds-icon--x-small" title="Français"
+                             src="../../../../assets/icons/flags/france.png" alt=""/>
+                        <img *ngIf="currentLang === 'ar'" class="slds-icon--x-small" title="Arabic"
+                             src="../../../../assets/icons/flags/united-arab-emirates.png" alt=""/>
+                    </button>
+                    <div class="slds-dropdown cbs-dropdown slds-col--padded-medium">
+                        <ul class="dropdown__list" role="menu">
+                            <li class="slds-dropdown__item">
+                                <a (click)="changeLang('en')" role="menuitem" nglDropdownItem title="English">
+                                    <p class="slds-truncate lang-label">{{ 'En' | translate }}</p>
+                                    <img class="slds-icon--x-small"
+                                         src="../../../../assets/icons/flags/united-states.png" alt=""/>
+                                </a>
+                            </li>
+                            <li class="slds-dropdown__item">
+                                <a (click)="changeLang('ru')" role="menuitem" nglDropdownItem title="Русский">
+                                    <p class="slds-truncate lang-label">{{ 'Ru' | translate }}</p>
+                                    <img class="slds-icon--x-small"
+                                         src="../../../../assets/icons/flags/russia.png" alt=""/>
+                                </a>
+                            </li>
+                            <li class="slds-dropdown__item">
+                                <a (click)="changeLang('fr')" role="menuitem" nglDropdownItem title="Français">
+                                    <p class="slds-truncate lang-label">{{ 'Fr' | translate }}</p>
+                                    <img class="slds-icon--x-small"
+                                         src="../../../../assets/icons/flags/france.png" alt=""/>
+                                </a>
+                            </li>
+                            <li class="slds-dropdown__item">
+                                <a (click)="changeLang('ar')" role="menuitem" nglDropdownItem title="Arabic">
+                                    <p class="slds-truncate lang-label">{{ 'Ar' | translate }}</p>
+                                    <img class="slds-icon--x-small"
+                                         src="../../../../assets/icons/flags/united-arab-emirates.png" alt=""/>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </span>
+
+                <cbs-user-dropdown>
+                    <div class="cbs-user-dropdown-avatar">
+                        <img src="/assets/images/avatar1.jpg" alt=""/>
+                    </div>
+                    <div class="cbs-user-dropdown-body">
+                        <article class="slds-comment slds-media slds-hint-parent">
+                            <div class="slds-media__figure">
+                                <a href="javascript:void(0);" title=""
+                                   class="slds-avatar slds-avatar--circle slds-avatar--large">
+                                    <img src="/assets/images/avatar1.jpg" alt=""/>
+                                </a>
+                            </div>
+                            <div class="slds-media__body">
+                                <header class="slds-media slds-media--center">
+                                    <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                        <p class="slds-text-heading--medium"
+                                           title="{{(currentUser | async)?.firstName}} {{(currentUser | async)?.lastName}}">
+                                            {{(currentUser | async)?.firstName}} {{(currentUser | async)?.lastName}}
+                                        </p>
+                                    </div>
+                                </header>
+                                <footer>
+                                    <ul class="slds-list--horizontal slds-has-dividers--right slds-text-body--small">
+                                        <li class="slds-item" (click)="goToUserDetails()">
+                                            <a href="javascript:void(0);" title="User settings">{{
+                                                'CURRENT_USER_SETTINGS' | translate }}</a></li>
+                                        <li class="slds-item"><a href="javascript:void(0);" (click)="logout()"
+                                                                 title="Logout">{{ 'SIGN_OUT' | translate }}</a></li>
+                                    </ul>
+                                </footer>
+                            </div>
+                        </article>
+                    </div>
+                </cbs-user-dropdown>
+            </div>
+        </cbs-main-nav>
+    </div>
+
+    <ngl-modal [header]="false" header="Version" [(open)]="open">
+        <div body>
+            <div class="cbs-auth-logo">
+                <cbs-logo-svg></cbs-logo-svg>
+            </div>
+            <div class="title" align="center">
+                <p><span>{{'TITLE' | translate}}</span> - {{version?.title}}</p>
+            </div>
+            <div class="system_version" align="center">
+                <p><span>{{'SYSTEM_VERSION' | translate}}</span> - {{version?.version}}</p>
+            </div>
+        </div>
+    </ngl-modal>
+
+    <div class="cbs-header__bottom">
+        <ng-content></ng-content>
+    </div>
+</header>

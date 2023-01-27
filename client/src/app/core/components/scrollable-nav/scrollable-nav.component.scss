@@ -1,0 +1,34 @@
+:host {
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    line-height: 1.8;
+    font-size: .85rem;
+    color: #0070d2;
+    padding: 3px 10px;
+    cursor: pointer;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0px;
+      background: #0070d2;
+    }
+
+    &.active {
+      background: #f0f8fc;
+
+      &:before {
+        width: 2px;
+      }
+    }
+  }
+}

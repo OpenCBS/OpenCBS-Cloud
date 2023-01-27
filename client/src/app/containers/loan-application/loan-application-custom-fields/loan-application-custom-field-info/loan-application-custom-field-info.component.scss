@@ -1,0 +1,40 @@
+:host ::ng-deep {
+  cbs-form-layout {
+    width: 100%;
+  }
+
+  cbs-scrollable-nav {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 155px;
+    width: 200px;
+    z-index: 9;
+    transform: translateX(200%);
+    @media screen and (min-width: 1070px) {
+      display: block;
+    }
+  }
+
+  .slds-container--medium {
+    @media screen and (min-width: 994px) {
+      max-width: 35rem;
+    }
+
+    .cbs-pull-negative {
+      @media screen and (min-width: 994px) {
+        margin-left: -50%;
+      }
+    }
+  }
+
+  #scrollable-section {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .slds-progress {
+    margin-top: 18px
+  }
+}

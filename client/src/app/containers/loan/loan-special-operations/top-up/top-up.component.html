@@ -1,0 +1,68 @@
+<cbs-form-layout>
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'TOP_UP' | translate }}</strong>
+    </div>
+
+    <div class="cbs-loan-details-form__form">
+        <form novalidate [formGroup]="topUpForm" class="slds-form--stacked">
+            <cbs-form-input-control
+                [formControlName]="'amount'"
+                fieldLabel="{{ 'AMOUNT' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="(topUpForm.get('amount').errors && topUpForm.get('amount').touched)">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [formControlName]="'interestRate'"
+                fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="(topUpForm.get('interestRate').errors && topUpForm.get('interestRate').touched)">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [formControlName]="'gracePeriod'"
+                fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="(topUpForm.get('gracePeriod').errors && topUpForm.get('gracePeriod').touched)">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [formControlName]="'maturity'"
+                fieldLabel="{{ 'MATURITY' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="(topUpForm.get('maturity').errors && topUpForm.get('maturity').touched)">
+            </cbs-form-input-control>
+
+            <cbs-form-date-control
+                [formControlName]="'disbursementDate'"
+                fieldLabel="{{ 'TOP_UP_DATE' | translate }}"
+                [hasError]="topUpForm.get('disbursementDate').errors && topUpForm.get('disbursementDate').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+
+            <cbs-form-date-control
+                [formControlName]="'preferredRepaymentDate'"
+                fieldLabel="{{ 'PREFERRED_REPAYMENT_DATE' | translate }}"
+                [hasError]="topUpForm.get('preferredRepaymentDate').errors && topUpForm.get('preferredRepaymentDate').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+
+            <cbs-entry-fees-block
+                *ngIf="loanApp?.entryFees?.length"
+                [isValidToCalculate]="true"
+                [entryFeesData]="loanAppEntryFees"
+                (onDetailsClick)="openEntryFees()"
+            ></cbs-entry-fees-block>
+        </form>
+    </div>
+</cbs-form-layout>
+
+<cbs-entry-fees-modal
+    headerTitle="{{ 'ENTRY_FEES' | translate }}"
+    (resetFeeCalculation)="cancel()"
+    (onSaveNewValue)="saveNewEntryFeeValues($event)"
+></cbs-entry-fees-modal>

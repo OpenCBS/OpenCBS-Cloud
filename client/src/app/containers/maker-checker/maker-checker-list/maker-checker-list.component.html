@@ -1,0 +1,73 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'MAKER_CHECKER' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <p-dataTable
+        emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+        [value]="makerChecker"
+        [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+        [selectionMode]="'single'"
+        (onRowSelect)="goToMakerChecker($event)"
+    >
+        <p-column field="profileName" header="{{ 'REQUEST_TYPE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['type'] | translate }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdAt" header="{{ 'CREATED_AT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['createdAt'] | cbsDateFormat }} {{ row['createdAt'] | cbsTimeFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdAt" header="{{ 'EXPIRE_DATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['expireDate'] | cbsDateFormat }} {{ row['expireDate'] | cbsTimeFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdBy" header="{{ 'CREATED_BY' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['createdByFirstName'] + ' ' + row['createdByLastName'] }}</span>
+            </ng-template>
+        </p-column>
+
+
+
+        <p-column field="branchName" header="{{ 'BRANCH_NAME' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['branchName']}}</span>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(makerCheckersData | async)?.loading"></cbs-loading-indicator>
+
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(makerCheckersData | async)?.totalElements > (makerCheckersData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(makerCheckersData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(makerCheckersData | async)?.totalElements"
+            limit="5"
+            [perPage]="(makerCheckersData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+
+</main>
+<!-- ./cbs-main -->
+

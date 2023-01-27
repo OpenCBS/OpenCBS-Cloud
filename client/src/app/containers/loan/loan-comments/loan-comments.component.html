@@ -1,0 +1,89 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ loan?.id ? this.loan['code'] : '' }}"
+                               [svgData]="svgData"
+                               [badgeLabel]="loanStatus | translate"
+                               [badgeTheme]="(loanStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <cbs-loan-info-entity></cbs-loan-info-entity>
+        </div>
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+
+<div class="slds-grid slds-grid--align-center">
+    <div infiniteScroll
+         [infiniteScrollDistance]="1"
+         [infiniteScrollThrottle]="300"
+         [infiniteScrollDisabled]="loanApplicationCommentsData?.currentPage == loanApplicationCommentsData?.totalPages"
+         (scrolled)="onScroll({page: loanApplicationCommentsData?.currentPage})"
+         [scrollWindow]="false"
+         class="cbs-scrollable-table">
+        <table class="slds-table slds-table--cell-buffer"
+               *ngIf="!loanApplicationCommentsData?.loading && loanApplicationCommentsData?.loanApplicationComments?.length">
+            <tbody>
+            <div *ngFor="let comment of loanApplicationCommentsData?.loanApplicationComments; let i = index;">
+                <div class="slds-box--small slds-has-divider_bottom slds-action-overflow--touch__footer">
+                    <div *ngIf="comment" class="demo-only slds-size_3-of-4">
+                        <div class="slds-media">
+                            <div class="slds-box_small">
+                              <span class="slds-avatar slds-box--xx-small">
+                                <img alt="User name" src="../../../../assets/icons/utility/user_60.png"
+                                     title="User avatar">
+                              </span>
+                            </div>
+                            <div class="slds-media__body slds-align-content-center">
+                                <h3 class="slds-text-heading--small slds-dl--inline__label"
+                                >{{ comment?.userLastName + ' ' + comment?.userFirstName }}</h3>
+                                <p class="slds-context-bar__icon-action"
+                                >added a comment - {{ comment?.createdAt | cbsDateFormat }} {{ comment?.createdAt | cbsTimeFormat }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="slds-box--small">{{ comment?.payload }}</p>
+
+                </div>
+            </div>
+
+            </tbody>
+        </table>
+    </div>
+
+    <p *ngIf="loanApplicationCommentsData?.loaded && !loanApplicationCommentsData?.loanApplicationComments?.length"
+       class="cbs-no-data-text slds-text-align--center slds-m-top--medium">{{ 'NO_DATA' | translate }}</p>
+</div>
+
+<div class="slds-grid slds-accordion__section">
+    <div class="comment">
+        <div class="comment-text">
+            <div class="slds-form-element__control">
+                <textarea
+                    class="slds-textarea"
+                    (ngModelChange)="valueText($event)"
+                    (keydown.enter)="sendComment()"
+                    [(ngModel)]="commentText"
+                    [placeholder]="'WRITE_A_COMMENT' | translate"
+                ></textarea>
+                <ng-content></ng-content>
+            </div>
+        </div>
+
+        <button [disabled]="disabledSendButton" (click)="sendComment()"
+                class="comment-button slds-button slds-button--success slds-file__actions-menu slds-m-horizontal--medium"
+                aria-live="assertive">
+            <span class="slds-text-not-selected">
+                <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#arrowup"></use>
+                </svg>
+            </span>
+        </button>
+    </div>
+</div>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!loanApplicationCommentsData?.loaded"></cbs-loading-indicator>

@@ -1,0 +1,115 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'EXCHANGE_RATE' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-row">
+                    <span #dropdown>
+                        <form novalidate [formGroup]="form" class="slds-form--stacked">
+                            <div class="cbs-controls-container">
+                                <cbs-form-date-control
+                                    class="slds-m-right--x-small"
+                                    formControlName="start"
+                                    [hasError]="form.get('start').errors && form.get('start').touched"
+                                    [requiredField]="true"></cbs-form-date-control>
+                                <span class="cbs-long-dash">&#8212;</span>
+                                <cbs-form-date-control
+                                    formControlName="end"
+                                    [hasError]="form.get('end').errors && form.get('end').touched"
+                                    [requiredField]="true"></cbs-form-date-control>
+                                <button class="slds-button slds-button--neutral filter"
+                                        (click)="filter()"
+                                        aria-live="assertive">
+                                    <span class="slds-text-not-selected">
+                                        {{ 'FILTER' | translate }}
+                                    </span>
+                                </button>
+                                <button class="slds-button slds-button--neutral filter"
+                                        (click)="updateExchangeRate()"
+                                        aria-live="assertive">
+                                    <span class="slds-text-not-selected">
+                                        {{ 'UPDATE' | translate }}
+                                    </span>
+                                </button>
+                                <cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>
+                            </div>
+                        </form>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="cbs-body">
+        <div class="cbs-fixed-header">
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                <thead>
+                <tr>
+                    <th>{{ 'DATE' | translate }}</th>
+                    <th>{{ 'RATE' | translate }}</th>
+                    <th>{{ 'FROM_CURRENCY' | translate }}</th>
+                    <th>{{ 'TO_CURRENCY' | translate }}</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="cbs-scrollable-table">
+            <p-dataTable [value]="(exchangeRateData | async)?.transactions"
+                         emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                         [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'">
+                <p-column field="date">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span>{{ row['date'] | cbsDateFormat}} {{ row['date'] | cbsTimeFormat}}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="rate">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span *ngIf="row['rate']; else nodata">{{ row['rate'] | cbsNumberFormat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="fromCurrencyName">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <div class="slds-truncate" [attr.title]="row['fromCurrencyName']">
+                            <span *ngIf="row['fromCurrencyName']; else nodata">{{ row['fromCurrencyName'] }}</span>
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="toCurrencyName">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <div class="slds-truncate" [attr.title]="row['toCurrencyName']">
+                            <span *ngIf="row['toCurrencyName']; else nodata">{{ row['toCurrencyName'] }}</span>
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="!(exchangeRateData | async)?.loaded"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(exchangeRateData | async)?.totalElements > (exchangeRateData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(exchangeRateData | async)?.loaded"
+            [page]="queryObject.page"
+            [total]="(exchangeRateData | async)?.totalElements"
+            limit="5"
+            [perPage]="(exchangeRateData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+</main>
+
+<ng-template #nodata>
+    <span>-</span>
+</ng-template>

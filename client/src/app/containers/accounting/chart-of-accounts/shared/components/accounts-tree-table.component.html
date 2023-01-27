@@ -1,0 +1,69 @@
+<ng-container *ngFor="let node of childrenNodes?.content">
+    <table>
+        <tbody>
+        <tr class="cbs-tr-hover">
+            <td width="auto" [ngStyle]="{'padding-left': node['hasChildren'] ? padding +'rem' : (padding + 2)+'rem'}">
+                <button (click)="toggle(node)" [ngClass]="{'cbs-treetable__toggler--expanded' : node['expanded'] }"
+                        class="slds-button cbs-treetable__toggler slds-button--icon slds-button--icon-x-small slds-m-right--x-small"
+                        aria-controls="expand"
+                        *ngIf="node['hasChildren']">
+                    <svg class="slds-button__icon slds-button__icon--small cbs-treetable__toggler__icon"
+                         aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                    </svg>
+                    <span class="slds-assistive-text">{{ 'TOGGLE' | translate }}</span>
+                </button>
+                <span>{{node['name']}}</span>
+                <div class="slds-p-left--medium options slds-show--inline-block">
+                    <svg *ngIf="node['accountType'] !== 'BALANCE'" (click)="onIconClick.emit({type:'add', node: node})"
+                         class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    <svg *ngIf="!node['hasTransactions']" (click)="onIconClick.emit({type: 'edit', node: node})"
+                         class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    <svg (click)="onIconClick.emit({type: 'show', node: node})"
+                         class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#preview"></use>
+                    </svg>
+                </div>
+            </td>
+            <td width="20%">{{ node['number'] }}</td>
+            <td width="20%">{{ node['branch']?.name }}
+            </td>
+        </tr>
+        <ng-container *ngIf="node['expanded']">
+            <tr>
+                <td colspan="3" style="padding: 0; border-top: none;">
+                    <cbs-accounts-tree-table (onIconClick)="onIconClick.emit($event)" [currentNode]="node"
+                                             [padding]="padding + 2"
+                                             [childrenNodes]="node['data']"></cbs-accounts-tree-table>
+                </td>
+            </tr>
+        </ng-container>
+        </tbody>
+    </table>
+
+</ng-container>
+
+<table>
+    <tbody>
+    <tr *ngIf="childrenNodes?.numberOfElements === 20">
+        <td colspan="3">
+            <div class="slds-grid slds-grid--align-end slds-p-right_x-large">
+                <ngl-pagination [(page)]="page"
+                                [total]="childrenNodes?.totalElements"
+                                [perPage]="childrenNodes?.size"
+                                [previousText]="'PREVIOUS' | translate"
+                                [nextText]="'NEXT' | translate"
+                                limit="5"
+                                boundaryNumbers="1"
+                                (pageChange)="goToPage($event)"
+                                #pagination>
+                </ngl-pagination>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>

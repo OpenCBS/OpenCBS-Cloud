@@ -1,0 +1,163 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ profileType }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'MAKER/CHECKER' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ profileType | cbsCapitalize }}</div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+
+            <div *ngIf="profileType === 'people'" class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <ng-container>
+                    <button
+                        *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['CHECKER_FOR_PEOPLE'] }"
+                        (click)="openApproveModal()"
+                        class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                            {{ 'APPROVE' | translate }}
+                        </span>
+                    </button>
+
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_PEOPLE','CHECKER_FOR_PEOPLE'] }"
+                        (click)="openRejectModal()" class="slds-button slds-button--brand" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                            </svg>
+                            {{ 'REJECT' | translate }}
+                        </span>
+                    </button>
+                </ng-container>
+            </div>
+
+            <div *ngIf="profileType === 'company'" class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <ng-container>
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER', permissions: ['CHECKER_FOR_COMPANY'] }"
+                        (click)="openApproveModal()"
+                        class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                            {{ 'APPROVE' | translate }}
+                        </span>
+                    </button>
+
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER',
+                            permissions: ['MAKER_FOR_COMPANY','CHECKER_FOR_COMPANY'] }"
+                        (click)="openRejectModal()" class="slds-button slds-button--brand" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                            </svg>
+                            {{ 'REJECT' | translate }}
+                        </span>
+                    </button>
+                </ng-container>
+            </div>
+
+            <div *ngIf="profileType === 'group'" class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <ng-container>
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER', permissions: ['CHECKER_FOR_GROUP'] }"
+                        (click)="openApproveModal()"
+                        class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                            {{ 'APPROVE' | translate }}
+                        </span>
+                    </button>
+
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER',
+                            permissions: ['MAKER_FOR_GROUP','CHECKER_FOR_GROUP'] }"
+                        (click)="openRejectModal()" class="slds-button slds-button--brand" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                            </svg>
+                            {{ 'REJECT' | translate }}
+                        </span>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__right" id="scrollable-section">
+
+            <cbs-confirm-popup
+                [confirmText]="'Are you sure you want to approve?'"
+                [opened]="approveRequest"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="approveProfileRequest()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+
+            <cbs-confirm-popup
+                [confirmText]="'Are you sure you want to reject?'"
+                [opened]="rejectRequest"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="rejectProfileRequest()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+
+            <div class="slds-grid slds-grid--align-center">
+                <div class="slds-container--medium">
+
+                    <div *ngIf="(profile | async)?.loaded && !(profile | async)?.error" class="cbs-pull-negative">
+                        <div
+                            *ngFor="let section of profileSections; let i=index; trackBy: section?.id;"
+                            class="slds-p-top--medium slds-p-bottom--large"
+                            [attr.id]="'section_' + section?.id">
+                            <div class="slds-form--horizontal">
+                                <div class="slds-text-heading--small slds-m-bottom--small">{{ section?.caption }}
+                                </div>
+                                <cbs-fields-readonly [fieldsData]="section.values"></cbs-fields-readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p *ngIf="(profile | async)?.loaded && (profile | async)?.error"
+                       class="slds-text-align--center slds-m-top--large">{{ 'NO_DATA' | translate }}</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!(profile | async)?.loaded"></cbs-loading-indicator>

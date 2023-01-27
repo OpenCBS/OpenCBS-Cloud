@@ -1,0 +1,31 @@
+<div class="slds-form-element"
+     [class.slds-has-error]="showError && hasError"
+     [ngClass]="styleClass"
+     [ngStyle]="style">
+    <label class="slds-form-element__label" *ngIf="!!fieldLabel.length">
+        <abbr class="slds-required" title="required" *ngIf="requiredField">*</abbr>
+        {{ fieldLabel }}
+    </label>
+    <div class="slds-form-element__control">
+        <select class="slds-select"
+                [(ngModel)]="value"
+                [disabled]="disabled"
+                (ngModelChange)="inputChange($event)"
+                (blur)="onBlur()"
+                *ngIf="selectData.length"
+        >
+            <option value="" selected disabled>{{ selectPlaceholder | translate }}</option>
+            <option *ngFor="let item of selectData" [ngValue]="item[selectValue]">
+                <span *ngIf="item.name">{{ item.name | translate }}</span>
+                <span *ngIf="!item.name">{{'PLEASE_SELECT' | translate}}</span>
+            </option>
+        </select>
+        <button *ngIf="innerValue && !disabled" type="button" class="cbs-picklist__clear-btn" (click)="remove()">
+            <svg aria-hidden="true">
+                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#clear"></use>
+            </svg>
+        </button>
+        <input *ngIf="!selectData.length" class="slds-input" type="text" value="No data available" disabled>
+        <ng-content></ng-content>
+    </div>
+</div>

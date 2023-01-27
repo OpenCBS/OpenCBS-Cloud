@@ -1,0 +1,63 @@
+:host ::ng-deep {
+  cbs-form-layout {
+    width: 100%;
+  }
+
+  cbs-scrollable-nav {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 155px;
+    width: 200px;
+    z-index: 9;
+    transform: translateX(200%);
+    @media screen and (min-width: 1070px) {
+      display: block;
+    }
+  }
+
+  .slds-container--medium {
+    @media screen and (min-width: 994px) {
+      max-width: 35rem;
+    }
+
+    .cbs-pull-negative {
+      @media screen and (min-width: 994px) {
+        margin-left: -50%;
+      }
+    }
+  }
+
+  #scrollable-section {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .slds-form--horizontal {
+    margin-bottom: 2rem;
+
+    .slds-form-element {
+      margin-bottom: .5rem;
+    }
+
+    cbs-datepicker .slds-form-element__control {
+      width: 100%;
+    }
+
+    .slds-text-heading--small {
+      text-align: center;
+
+      @media screen and (min-width: 768px) {
+        padding-left: 34%;
+      }
+    }
+
+    .slds-form-element > .slds-form-element__legend,
+    .slds-form-element > .slds-form-element__label {
+      @media screen and (min-width: 48em) {
+        top: 0.3rem;
+      }
+    }
+  }
+}

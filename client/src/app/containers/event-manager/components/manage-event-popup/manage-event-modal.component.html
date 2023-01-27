@@ -1,0 +1,176 @@
+<ngl-modal [header]="getEventHeader() | translate" [(open)]="isDialogVisible">
+    <div body class="cbs-schedule__modal">
+        <form novalidate [formGroup]="eventForm" *ngIf="canEditView()">
+            <fieldset class="slds-form--compound">
+                <div class="slds-form-element__group">
+                    <div class="slds-form-element__row">
+                        <cbs-form-input [config]="formConfig[0]" [group]="eventForm"
+                                        [styleClass]="'slds-form-element slds-size--1-of-1'"></cbs-form-input>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <cbs-form-textarea [config]="formConfig[1]" [group]="eventForm"
+                                           [styleClass]="'slds-form-element slds-size--1-of-1'"></cbs-form-textarea>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <cbs-form-checkbox [config]="formConfig[2]" [group]="eventForm"
+                                           [styleClass]="'slds-form-element slds-size--1-of-1'"></cbs-form-checkbox>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <cbs-form-date [enableDropdownPicker]="false" [config]="formConfig[3]" [group]="eventForm"
+                                       [styleClass]="'slds-form-element slds-size--1-of-2'"></cbs-form-date>
+                        <cbs-form-time [config]="formConfig[4]" [group]="eventForm"
+                                       [styleClass]="'slds-form-element slds-size--1-of-2'"></cbs-form-time>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <cbs-form-date [enableDropdownPicker]="false" [config]="formConfig[5]" [group]="eventForm"
+                                       [styleClass]="'slds-form-element slds-size--1-of-2'"></cbs-form-date>
+                        <cbs-form-time [config]="formConfig[6]" [group]="eventForm"
+                                       [styleClass]="'slds-form-element slds-size--1-of-2'"></cbs-form-time>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <cbs-form-date [enableDropdownPicker]="false" [config]="formConfig[7]" [group]="eventForm"
+                                       [styleClass]="'slds-form-element slds-size--1-of-2'"></cbs-form-date>
+                        <cbs-form-time [config]="formConfig[8]" [group]="eventForm"
+                                       [styleClass]="'slds-form-element slds-size--1-of-2'"></cbs-form-time>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <cbs-form-lookup
+                            [config]="formConfig[9]"
+                            [group]="eventForm"
+                            (onSelect)="addParticipant($event,true)"
+                            [selectPlaceholder]="'ADD_PARTICIPANT' | translate"
+                            [styleClass]="'slds-form-element slds-size--1-of-1'"></cbs-form-lookup>
+
+                        <div class="slds-form-element slds-size--1-of-1 slds-p-left--x-small">
+                            <div class="cbs-schedule__list">
+                                <ul>
+                                    <li *ngFor="let user of tempParticipants">
+                                        <span>{{ user?.name }}</span>
+                                        <div (click)="removeParticipant(user)">
+                                            <svg class="slds-icon slds-icon--x-small slds-icon-text-default"
+                                                 aria-hidden="true" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M14.3 11.7l6-6c.3-.3.3-.7 0-1l-.9-1c-.3-.2-.7-.2-1 0l-6 6.1c-.2.2-.5.2-.7 0l-6-6.1c-.3-.3-.7-.3-1 0l-1 1c-.2.2-.2.7 0 .9l6.1 6.1c.2.2.2.4 0 .6l-6.1 6.1c-.3.3-.3.7 0 1l1 1c.2.2.7.2.9 0l6.1-6.1c.2-.2.4-.2.6 0l6.1 6.1c.2.2.7.2.9 0l1-1c.3-.3.3-.7 0-1l-6-6c-.2-.2-.2-.5 0-.7z"/>
+                                            </svg>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <div *ngIf="!canEditView()" class="cbs-schedule__readonly">
+            <fieldset class="slds-form--compound">
+                <div class="slds-form-element__group">
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-1">
+                            <label class="slds-form-element__label">{{ formConfig[0].caption | translate }}</label>
+                            <div class="slds-form-element__control">{{ event.title }}</div>
+                        </div>
+                    </div>
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-1">
+                            <label class="slds-form-element__label">{{ formConfig[0].caption | translate }}</label>
+                            <label class="slds-form-element__label">{{ formConfig[1].caption | translate }}</label>
+                            <div class="slds-form-element__control-textarea">
+                                <p>{{ event.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-1">
+                                <span class="slds-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        [ngModel]="event.allDay"/>
+                                    <label class="slds-checkbox__label">
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-form-element__label">{{ formConfig[2].caption | translate }}</span>
+                                    </label>
+                                </span>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-2">
+                            <label class="slds-form-element__label">{{ formConfig[3].caption | translate }}</label>
+                            <label class="slds-form-element__label">{{ formConfig[0].caption | translate }}</label>
+                            <div class="slds-form-element__control">{{ getDate(event.start) }}</div>
+                        </div>
+                        <div class="slds-form-element slds-size--1-of-2">
+                            <label class="slds-form-element__label">{{ formConfig[4].caption | translate }}</label>
+                            <div class="slds-form-element__control">{{ getTime(event.start) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-2">
+                            <label class="slds-form-element__label">{{ formConfig[5].caption | translate }}</label>
+                            <div class="slds-form-element__control">{{ getDate(event.end) }}</div>
+                        </div>
+                        <div class="slds-form-element slds-size--1-of-2">
+                            <label class="slds-form-element__label">{{ formConfig[6].caption | translate }}</label>
+                            <div class="slds-form-element__control">{{ getTime(event.end) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-2">
+                            <label class="slds-form-element__label">{{ formConfig[7].caption |translate }}</label>
+                            <div class="slds-form-element__control">{{ getDate(event.notify) }}</div>
+                        </div>
+                        <div class="slds-form-element slds-size--1-of-2">
+                            <label class="slds-form-element__label">{{ formConfig[8].caption | translate }}</label>
+                            <div class="slds-form-element__control">{{ getTime(event.notify) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="slds-form-element__row">
+                        <div class="slds-form-element slds-size--1-of-1">
+                            <label class="slds-form-element__label">{{ formConfig[9].caption | translate }}</label>
+                            <div class="slds-form-element__control-textarea">
+                                <p *ngFor="let user of event.participants">{{ user?.name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div [ngSwitch]="isResponseStatusOk">
+            <div *ngSwitchCase="'ok'">
+                <div class="cbs__response-block">
+                    <div class="cbs__response-block__item">
+                        <cbs-tickorcross [isTick]="true"></cbs-tickorcross>
+                        <p class="slds-text-heading--medium">You have successfully created new event!</p>
+                    </div>
+                </div>
+            </div>
+            <div *ngSwitchCase="'error'">
+                <div class="cbs__response-block">
+                    <div class="cbs__response-block__item">
+                        <cbs-tickorcross [isTick]="false"></cbs-tickorcross>
+                        <p class="slds-text-heading--medium">Oops! Something went wrong, please try again.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <ng-template ngl-modal-footer *ngIf="canEditView()">
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{'CANCEL' | translate}}</button>
+        <button class="slds-button slds-button--brand" #submitBtn (click)="submit(eventForm)"
+                [disabled]="eventForm.invalid">{{'SAVE' | translate}}
+        </button>
+    </ng-template>
+</ngl-modal>

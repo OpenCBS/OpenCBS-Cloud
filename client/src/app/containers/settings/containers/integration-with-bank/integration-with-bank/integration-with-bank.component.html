@@ -1,0 +1,30 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'INTEGRATION_WITH_BANK' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="slds-container--fluid">
+        <div class="slds-grid slds-wrap slds-p-top--large" cbsMatchHeight="cbs-config-item">
+            <div class="slds-size--1-of-4 slds-p-horizontal_small slds-m-bottom--large"
+                 *ngFor="let item of list">
+                <span *cbsVisibleByPermission="{ group: 'SEPA', permissions: ['SEPA'] }">
+                     <a [ngClass]="{'disabled': item?.disabled}" [routerLink]="item.link"
+                        class="cbs-config-item slds-text-align--center">
+                    <cbs-icon [iconConfig]="item?.icon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                    <span class="slds-text-heading--small slds-truncate">{{ item.name | translate }}</span>
+                </a>
+                </span>
+            </div>
+        </div>
+    </div>
+</main>

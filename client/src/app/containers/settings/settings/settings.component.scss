@@ -1,0 +1,39 @@
+.cbs-config-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #d8dde6;
+  border-radius: 3px;
+  padding: 1.4rem;
+  text-decoration: none;
+  transition: all .2s ease;
+  background-color: #fff;
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+  }
+
+  &:hover {
+    border-color: darken(#d8dde6, 5%);
+    background: #fafafa;
+  }
+
+  .slds-icon_container {
+    margin-bottom: 1rem;
+  }
+
+  .slds-text-heading--small {
+    text-transform: uppercase;
+    margin-bottom: .3rem;
+  }
+
+  .slds-text-color--weak {
+    color: rgba(84, 105, 141, 0.45);
+  }
+
+  .slds-col {
+    flex: 0 1 auto;
+  }
+}

@@ -1,0 +1,19 @@
+<div class="slds-form-element">
+    <label class="slds-form-element__label">
+        {{ 'ENTRY_FEES' | translate}}
+    </label>
+
+    <div class="slds-form-element__control cbs-entry-fees">
+        <div class="slds-text-align--center" *ngIf="!selectedEntryFees.length">{{ label | translate}}</div>
+        <ul>
+            <li *ngFor="let selectedEntryFee of selectedEntryFees">{{selectedEntryFee.name}}
+                <button (click)="delete(selectedEntryFee)" *ngIf="displayButton">
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">{{'DELETE' | translate}}</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>

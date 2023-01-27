@@ -1,0 +1,115 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{loanState.id ? loanState.code : ''}}"
+                [svgData]="svgData" [badgeLabel]="loanState.status | translate" [badgeTheme]="(loanState.status | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <cbs-loan-info-entity></cbs-loan-info-entity>
+            <a *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['GUARANTOR'] }"
+                [routerLink]="'/loans/' + loanState.id+ '/' + profile.type.toLowerCase() + '/guarantors/new'"
+               class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'ADD' | translate }}</span>
+            </a>
+        </div>
+
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<div class="slds-grid slds-grid--align-center">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-guarantors-table"
+           *ngIf="!loanAppState?.loading && guarantorsData?.length">
+        <thead>
+            <tr class="slds-text-title--caps">
+                <th scope="col" width="5%">
+                    <div class="slds-truncate" title="#">#</div>
+                </th>
+                <th scope="col" width="15%">
+                    <div class="slds-truncate" [title]="'NAME' | translate">{{ 'NAME' | translate }}</div>
+                </th>
+                <th scope="col" width="10%">
+                    <div class="slds-truncate" [title]="'RELATIONSHIP' | translate">{{ 'RELATIONSHIP' | translate }}</div>
+                </th>
+                <th scope="col" width="10%">
+                    <div class="slds-truncate slds-text-align--center" [title]="'AMOUNT' | translate">{{ 'AMOUNT' | translate }}</div>
+                </th>
+                <th scope="col" width="20%">
+                    <div class="slds-truncate" [title]="'DESCRIPTION' | translate">{{ 'DESCRIPTION' | translate }}</div>
+                </th>
+                <th scope="col" width="10%">
+                    <div class="slds-truncate slds-text-align--center" [title]="'OPTIONS' | translate ">{{ 'OPTIONS' | translate }}</div>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let guarantor of guarantorsData; let i = index;" [ngClass]="guarantor.deleted ? 'isDeleted' : ''">
+                <td data-label="Label" scope="row">
+                    <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+                </td>
+                <td data-label="Name" scope="row">
+                    <a (click)="goToViewGuarantor(guarantor.id)" class="slds-truncate"
+                       title="{{guarantor.profile.name}}">{{guarantor.profile.name | uppercase}}</a>
+                </td>
+                <td data-label="Relationship" scope="row">
+                    <div title="{{guarantor.relationship.name}}">{{guarantor.relationship.name | uppercase}}</div>
+                </td>
+                <td data-label="Amount" scope="row">
+                    <div class="slds-text-align--center" title="{{guarantor.amount}}">{{guarantor.amount | cbsNumberFormat}}
+                    </div>
+                </td>
+                <td data-label="Description" class="slds-truncate" scope="row">
+                    <div *ngIf="guarantor.description; else empty">{{guarantor?.description}}</div>
+                    <ng-template #empty>
+                        <div>-</div>
+                    </ng-template>
+                </td>
+
+                <td class="slds-text-align--center" data-label="Options" scope="row">
+                    <button *cbsVisibleByPermission="{ group: 'LOAN_APPLICATIONS', permissions: ['GUARANTOR'] }"
+                            (click)="removeModal(guarantor.id)" class="slds-button slds-button--icon-border"
+                            title="Delete">
+                        <svg class="slds-button__icon" aria-hidden="true">
+                            <use
+                                xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                        </svg>
+                        <span class="slds-assistive-text">Delete</span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p *ngIf="loanAppState?.loaded && !guarantorsData?.length"
+       class="slds-text-align--center slds-m-top--large">{{ 'NO_DATA' | translate }}</p>
+</div>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidePanel]="false">
+        <div cbs-loan-layout="right">
+            <cbs-confirm-popup
+                [confirmText]="'ARE_YOU_SURE_YOU_WANT_TO_DELETE' | translate"
+                [opened]="opened"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="removeGuarantor()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="loanAppState?.loading"></cbs-loading-indicator>

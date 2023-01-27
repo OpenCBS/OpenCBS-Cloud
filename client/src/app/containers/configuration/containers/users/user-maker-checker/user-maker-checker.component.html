@@ -1,0 +1,49 @@
+<div class="slds-grid slds-grid--align-center cbs-user">
+
+    <div class="slds-form--horizontal slds-container--medium">
+        <div class="slds-dl--horizontal__detail slds-m-bottom--medium slds-text-title--caps">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <div class="slds-comment__content slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'ACTIVE_USER' | translate }}
+            </label>
+            <div class="slds-form-element__control slds-app-launcher__header slds-app-launcher__tile-figure_small">
+                <span class="slds-form-element__static slds-accordion__section">{{ user?.statusType | translate }}</span>
+            </div>
+        </div>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'FIRSTNAME' | translate }}"
+            [value]="user?.firstName"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'LASTNAME' | translate }}"
+            [value]="user?.lastName"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'USERNAME' | translate }}"
+            [value]="user?.username"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'BRANCH' | translate }}"
+            [value]="user?.branch?.name"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'ROLE' | translate }}"
+            [value]="user?.role?.name"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'EMAIL' | translate }}"
+            [value]="user?.email"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'PHONE_NUMBER' | translate }}"
+            [value]="user?.phoneNumber"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'ADDRESS' | translate }}"
+            [value]="user?.address"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'ID_NUMBER' | translate }}"
+            [value]="user?.idNumber"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'POSITION' | translate }}"
+            [value]="user?.position"></cbs-form-readonly-control>
+
+    </div>
+</div>
+
+<!--<cbs-loading-indicator [showLoader]="!user?.loaded"></cbs-loading-indicator>-->

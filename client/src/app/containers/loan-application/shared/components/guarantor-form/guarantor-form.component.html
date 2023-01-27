@@ -1,0 +1,56 @@
+<cbs-form-layout *ngIf="loanAppId">
+    <div class="slds-form-element__label slds-text-title--caps cbs-guarantor-heading">
+        <strong>{{ 'GUARANTOR' | translate }}</strong>
+    </div>
+    <form novalidate [formGroup]="form">
+        <div class="slds-form-element cbs-guarantor-name">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'NAME' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <cbs-picklist [config]="configs.profileLookupUrl"
+                              [filterType]="'name'"
+                              searchPlaceholder="{{ 'SEARCH' | translate }}"
+                              selectPlaceholder="{{ selectLabel | translate }}"
+                              (onSelect)="setLookupValue($event)"
+                ></cbs-picklist>
+            </div>
+        </div>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'RELATIONSHIP' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <div class="slds-select_container">
+                    <select class="slds-select" formControlName="relationshipId">
+                        <option *ngFor="let relationship of (relationshipsSub | async)?.relationships"
+                                [ngValue]="relationship.id">{{relationship.name | translate}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="slds-form-element" [class.slds-has-error]="
+            (form.get('amount').errors?.required && form.get('amount').touched)
+            || (form.get('amount').invalid && form.get('amount').touched)">
+            <label class="slds-form-element__label">
+                {{ 'AMOUNT' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <input [onlyNumber]="true" type="number" id="guarantor-amount" class="slds-input"
+                       formControlName="amount"/>
+            </div>
+        </div>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'DESCRIPTION' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <textarea type="text" id="guarantor-description" class="slds-input cbs-textarea"
+                          formControlName="description"></textarea>
+            </div>
+        </div>
+    </form>
+</cbs-form-layout>

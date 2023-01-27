@@ -1,0 +1,13 @@
+:host ::ng-deep {
+
+  table {
+    tr {
+      height: 2.5rem;
+    }
+  }
+
+  .isDeleted {
+    background: #ececec;
+  }
+
+}

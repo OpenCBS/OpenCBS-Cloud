@@ -1,0 +1,42 @@
+:host {
+  .cbs-profiles {
+    .slds-icon-action-user {
+      position: relative;
+      height: 32px;
+      width: 32px;
+      vertical-align: middle;
+      margin-right: 4px;
+      .slds-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cbs-profiles-search {
+    width: 300px;
+
+    @media screen and (max-width: 670px) {
+      width: auto;
+    }
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .cbs-dropdown--full-width {
+    width: 200px;
+  }
+}

@@ -1,0 +1,28 @@
+:host ::ng-deep {
+  ngl-modal .dropdown__list {
+    max-height: 6.5rem;
+  }
+
+  .cbs-expanded-modal {
+    .slds-modal__content {
+      min-height: 17rem;
+    }
+  }
+
+  table {
+    table-layout: fixed;
+  }
+
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

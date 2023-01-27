@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .cbs-repayment-preview,
+  .cbs-repayment-reset {
+    margin-top: 8px;
+    width: 100%;
+    text-transform: uppercase;
+  }
+
+  .text-error {
+    font-weight: bold;
+    padding: 0 4px;
+  }
+}

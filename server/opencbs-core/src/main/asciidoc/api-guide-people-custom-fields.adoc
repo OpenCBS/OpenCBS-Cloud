@@ -1,0 +1,63 @@
+== PEOPLE: CUSTOM FIELDS
+
+=== List custom fields
+
+As of now, there is no separate endpoint to list custom fields for the personal profile. However, you
+can get all custom fields listed when you fetch custom field sections. Please refer to
+<<people-custom-field-sections-list,the corresponding section>> above.
+
+=== Retrieve a custom field
+
+As of now, you cannot fetch the details of a single custom field. As a workaround you can fetch all custom fields
+as described above and then locate the one you are looking for in the returned collection.
+
+=== Create a custom field
+
+A `POST` request will create a new custom field for the personal profile.
+
+The new custom field will be placed at the end of the section and the `order` value will be automatically assigned.
+
+==== Request fields
+
+include::{snippets}/people-custom-fields-create-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/people-custom-fields-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/people-custom-fields-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/people-custom-fields-create-example/http-response.adoc[]
+
+=== Update a custom field
+
+A `PUT` request will update the details of a custom field for the personal profile.
+
+==== Request fields
+
+Changing the `sectionId` value will reassign the custom field to a different section.
+
+Changing the `order` value will rearrange the fields in the section by moving the field closer to the
+top or the bottom of the section.
+
+Please note that you cannot do both reassign and re-order the custom field in one request. When you are placing
+the custom field into a different section, it will added to the end. The `order` value is ignored. If you still
+want to re-arrange it, you have to issue a separate request with a new `order` value and the same `sectionId`.
+
+include::{snippets}/people-custom-fields-update-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/people-custom-fields-update-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/people-custom-fields-update-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/people-custom-fields-update-example/http-response.adoc[]

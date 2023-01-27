@@ -1,0 +1,27 @@
+package com.opencbs.core.domain.enums;
+
+public enum ModuleType {
+
+    AUDIT_TRAIL,
+    PROFILES,
+    LOAN_APPLICATIONS,
+    LOANS,
+    GENERAL_LEDGER,
+    CHART_OF_ACCOUNTS,
+    TRIAL_BALANCES,
+    REPORTS,
+    CONFIGURATIONS,
+    TASKS_MANAGEMENT,
+    DAY_CLOSURE,
+    TELLER_MANAGEMENT,
+    SAVINGS,
+    TERM_DEPOSITS,
+    BORROWINGS,
+    BONDS,
+    ACCOUNTING,
+    SETTINGS,
+    MAKER_CHECKER,
+    TRANSFERS,
+    SEPA,
+    OXUS
+}

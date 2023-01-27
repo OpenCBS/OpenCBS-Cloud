@@ -1,0 +1,108 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'LOANS' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="clearSearch()"
+                (onSearch)="search($event)"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <p-dataTable
+        emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+        [value]="loans"
+        [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+        [selectionMode]="'single'"
+        (onRowSelect)="goToLoan($event)"
+    >
+        <p-column field="profileName" header="{{ 'PROFILE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['profileName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="profileName" header="{{ 'CREDIT_LINE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['creditLine'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="profileName" header="{{ 'LOAN_PRODUCT_NAME' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['productName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="amount" header="{{ 'AMOUNT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['amount'] | cbsNumberFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="amount" header="{{ 'CREDIT_LINE_OUTSTANDING_AMOUNT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['creditLineOutstandingAmount'] | cbsNumberFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="interestRate" header="{{ 'INTEREST_RATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['interestRate'] + '%'}}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="disbursementDate" header="{{ 'DISBURSEMENT_DATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['disbursementDate'] | cbsDateFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdAt" header="{{ 'MATURITY_DATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['maturityDate'] | cbsDateFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="currency" header="{{ 'CURRENCY' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['currency'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdBy" header="{{ 'LOAN_OFFICER' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['loanOfficer']['firstName'] + ' ' + row['loanOfficer']['lastName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="status" header="{{ 'STATUS' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <ngl-badge [type]="(row['status'] | statusBadge)">
+                    {{ row['status'] | translate }}
+                </ngl-badge>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="loanState?.loading"></cbs-loading-indicator>
+
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(loansData | async)?.totalElements > (loansData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(loansData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(loansData | async)?.totalElements"
+            limit="5"
+            [perPage]="(loansData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+
+</main>
+<!-- ./cbs-main -->

@@ -1,0 +1,203 @@
+<form novalidate [formGroup]="form" [hidden]="isHidden" class="slds-form--horizontal slds-m-top--medium" cbsFormFocus>
+
+    <cbs-form-input-control
+        [requiredField]="true"
+        [fieldLabel]="'NAME' | translate"
+        [hasError]="hasError('name')"
+        [formControlName]="'name'">
+    </cbs-form-input-control>
+
+    <cbs-form-date-control
+        formControlName="startDate"
+        fieldLabel="{{ 'START_DATE' | translate }}"
+        [requiredField]="true"
+        [errorMessage]="'START_DATE_ERROR'"
+        [weekendDisabled]="true"
+    ></cbs-form-date-control>
+
+    <cbs-form-date-control
+        formControlName="lastDisbursementDate"
+        fieldLabel="{{ 'LAST_DISBURSEMENT_DATE' | translate }}"
+        [hasError]="form.get('lastDisbursementDate').errors && form.get('lastDisbursementDate').touched"
+        [requiredField]="true"
+        [weekendDisabled]="true"
+    ></cbs-form-date-control>
+
+    <cbs-form-date-control
+        formControlName="maturityDate"
+        fieldLabel="{{ 'MATURITY_DATE' | translate }}"
+        [hasError]="form.get('maturityDate').errors && form.get('maturityDate').touched"
+        [requiredField]="true"
+    ></cbs-form-date-control>
+
+    <cbs-form-input-control
+        formControlName="committedAmount"
+        fieldLabel="{{ 'COMMITTED_AMOUNT' | translate }}"
+        [inputType]="'number'"
+        [requiredField]="true"
+        [hasError]="(form.get('committedAmount').errors && form.get('committedAmount').touched)">
+    </cbs-form-input-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'DISBURSEMENT_AMOUNT_ALLOWED' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+          hasError('disbursementAmountMin') || isValid('disbursementAmountMin')">
+                <label class="cbs-compound-form__label" for="amount-min">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" id="amount-min" [onlyNumber]="true" class="slds-input" formControlName="disbursementAmountMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            hasError('disbursementAmountMax') || isValid('disbursementAmountMax')">
+                <label class="cbs-compound-form__label" for="amount-max">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" id="amount-max" [onlyNumber]="true" class="slds-input" formControlName="disbursementAmountMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        formControlName="loanProductId"
+        fieldLabel="{{ 'LOAN_PRODUCT' | translate }}"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [hasError]="form.get('loanProductId').errors && form.get('loanProductId').touched"
+        [picklistDataUrl]="formConfig.loanProductLookupUrl"
+        [requiredField]="true"
+    ></cbs-form-lookup-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'INTEREST_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+           hasError('interestRateMin') || isValid('interestRateMin')">
+                <label class="cbs-compound-form__label" for="interest-rate-minimum">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="interest-rate-minimum" class="slds-input"
+                           formControlName="interestRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            hasError('interestRateMax') || isValid('interestRateMax')">
+                <label class="cbs-compound-form__label" for="interest-rate-maximum">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number" [onlyNumber]="true" id="interest-rate-maximum" class="slds-input"
+                           formControlName="interestRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <cbs-penalties-selected [selectedPenalties]="selectedPenalties"
+                                [label]="'PENALTIES_NO_SELECTED'"
+                                (onPenaltyDelete)="deletePenalty($event)"></cbs-penalties-selected>
+        <cbs-penalty-picklist [selectDataLabel]="'SELECT_PENALTY'" [penalties]="allPenalties"
+                              (onPenaltySelect)="selectedPenalty($event)"></cbs-penalty-picklist>
+    </div>
+
+    <cbs-form-input-control
+        formControlName="structuringFees"
+        fieldLabel="{{ 'STRUCTURING_FEES' | translate }}"
+        [inputType]="'number'"
+        [requiredField]="true"
+        [hasError]="(form.get('structuringFees').errors && form.get('structuringFees').touched)">
+        <span class="cbs-hint-icon">%</span>
+    </cbs-form-input-control>
+
+    <cbs-form-input-control
+        formControlName="entryFees"
+        fieldLabel="{{ 'ENTRY_FEES' | translate }}"
+        [inputType]="'number'"
+        [requiredField]="true"
+        [hasError]="(form.get('entryFees').errors && form.get('entryFees').touched)">
+        <span class="cbs-hint-icon">%</span>
+    </cbs-form-input-control>
+
+    <div class="early-partial-repayment-fee">
+        <div class="slds-text-title--caps account-title">
+            <strong>{{ 'EARLY_PARTIAL_REPAYMENT_FEES' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row" [class.slds-has-error]="
+            (form.get('earlyPartialRepaymentFeeValue').errors && form.get('earlyPartialRepaymentFeeValue').touched)
+            || (form.get('earlyPartialRepaymentFeeValue').invalid && form.get('earlyPartialRepaymentFeeValue').touched)">
+            <label class="slds-form-element__label slds-cell-fixed">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'VALUE' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="earlyPartialRepaymentFeeValue"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+
+        <cbs-form-select-control
+            [formControlName]="'earlyPartialRepaymentFeeType'"
+            [requiredField]="true"
+            [selectData]="earlyPartialRepaymentFeeType"
+            [hasError]="form.get('earlyPartialRepaymentFeeType').errors && form.get('earlyPartialRepaymentFeeType').touched"
+            fieldLabel="{{ 'TYPE' | translate }}"
+        ></cbs-form-select-control>
+    </div>
+
+    <div class="early-total-repayment-fee">
+        <div class="slds-text-title--caps account-title">
+            <strong>{{ 'EARLY_TOTAL_REPAYMENT_FEES' | translate }}</strong>
+        </div>
+
+        <div class="slds-form-element cbs-compound-form__row" [class.slds-has-error]="
+            (form.get('earlyTotalRepaymentFeeValue').errors && form.get('earlyTotalRepaymentFeeValue').touched)
+            || (form.get('earlyTotalRepaymentFeeValue').invalid && form.get('earlyTotalRepaymentFeeValue').touched)">
+            <label class="slds-form-element__label slds-cell-fixed">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ 'VALUE' | translate }}
+            </label>
+            <div class="cbs-compound-form__r">
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="earlyTotalRepaymentFeeValue"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+
+        <cbs-form-select-control
+            [formControlName]="'earlyTotalRepaymentFeeType'"
+            [requiredField]="true"
+            [selectData]="earlyTotalRepaymentFeeType"
+            [hasError]="form.get('earlyTotalRepaymentFeeType').errors && form.get('earlyTotalRepaymentFeeType').touched"
+            fieldLabel="{{ 'TYPE' | translate }}"
+        ></cbs-form-select-control>
+    </div>
+
+</form>

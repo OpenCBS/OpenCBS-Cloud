@@ -1,0 +1,105 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ loanPayee?.id ? this.loanPayee?.payeeName : '' }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+
+                <div class="slds-m-left--x-small refund-button" *ngIf="showRefund">
+                    <button (click)="refund(payeeId)" *ngIf="loanPayee?.status === 'DISBURSED'"
+                            class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>{{ 'REFUND' | translate }}</span>
+                    </button>
+                </div>
+                <button (click)="disbursePayee(loanPayee)"
+                        *ngIf="loanPayee?.status === 'PENDING' || loanPayee?.status === 'REFUNDED'"
+                        class="slds-button slds-button--success" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'DISBURSE' | translate }}</span>
+                </button>
+
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<ngl-modal [header]="'DISBURSE' | translate" [(open)]="openedDisburse">
+    <div body>
+        <form novalidate [formGroup]="form">
+            <cbs-form-date-control
+                [formControlName]="'disbursementDate'"
+                [validateDate]="true"
+                [enableDropdownPicker]="false"
+                fieldLabel="{{ 'DISBURSEMENT_DATE' | translate }}"
+                [hasError]="form.get('disbursementDate').errors && form.get('disbursementDate').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'CHEQUE_NUMBER' | translate"
+                [hasError]="form.get('chequeNumber').errors && form.get('chequeNumber').touched"
+                [formControlName]="'chequeNumber'">
+            </cbs-form-input-control>
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success"
+                [disabled]="form.invalid"
+                (click)="submitDisburse(); isLoading = true;">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<ngl-modal [header]="'REFUND' | translate" [(open)]="openedRefund">
+    <div body>
+        <form novalidate [formGroup]="formRefund">
+            <cbs-form-date-control
+                [formControlName]="'disbursementDate'"
+                [enableDropdownPicker]="false"
+                fieldLabel="{{ 'REFUND_DATE' | translate }}"
+                [hasError]="form.get('disbursementDate').errors && form.get('disbursementDate').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+            <cbs-form-textarea-control
+                [hasError]="formRefund.get('description').errors && formRefund.get('description').touched"
+                formControlName="description"
+                fieldLabel="{{ 'DESCRIPTION' | translate }}"
+                [requiredField]="true"
+            ></cbs-form-textarea-control>
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success"
+                [disabled]="formRefund.invalid"
+                (click)="submitRefund(); isLoading = true;">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="true" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="loanPayeeNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right">
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+<!-- ./cbs-main -->
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

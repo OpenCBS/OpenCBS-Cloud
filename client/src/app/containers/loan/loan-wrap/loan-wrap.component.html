@@ -1,0 +1,74 @@
+<cbs-header *ngIf="showHeader">
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ loan?.id ? this.loan['code'] : '' }}"
+                               [svgData]="svgData"
+                               [badgeLabel]="loanStatus | translate"
+                               [badgeTheme]="(loanStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <cbs-loan-info-entity></cbs-loan-info-entity>
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <div class="slds-m-left--x-small" *ngIf="showRollback">
+                    <button class="slds-button slds-button--neutral" (click)="rollBack()"
+                            *cbsVisibleByPermission="{group: 'MAKER_CHECKER', permissions: 'MAKER_FOR_LOAN_ROLLBACK'}"
+                            [disabled]="loan?.status === !loanLoaded || readOnly">{{'ROLLBACK' | translate}}
+                    </button>
+                </div>
+
+                <div *ngIf="showRollback" class="filter-events">
+                    <span class="slds-checkbox">
+                        <input type="checkbox" id="checkbox-deleted" [checked]="checkedShowDeletedEvents"
+                               (click)="showDeletedEvents()"/>
+                        <label class="slds-checkbox__label" for="checkbox-deleted">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{'SHOW_DELETED' | translate}}</span>
+                        </label>
+                    </span>
+                    <br>
+                    <span class="slds-checkbox">
+                        <input type="checkbox" id="checkbox-system" [checked]="checkedShowSystemEvents"
+                               (click)="showSystemEvents()"/>
+                        <label class="slds-checkbox__label" for="checkbox-system">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{'SHOW_SYSTEM' | translate}}</span>
+                        </label>
+                    </span>
+                </div>
+
+                <span *cbsVisibleByPermission="{group: 'LOANS', permissions: 'TOP_UP'}">
+                    <button (click)="submitTopUpForm()" [disabled]="topUpFormStatus" *ngIf="showTopUpBtn"
+                            class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>
+                            {{ 'TOP_UP' | translate }}</span>
+                    </button>
+                </span>
+
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm sidebar">
+    <cbs-loan-layout [sidebar]="true" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="loanNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right">
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+<!-- ./cbs-main -->
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="isLoading"></cbs-loading-indicator>

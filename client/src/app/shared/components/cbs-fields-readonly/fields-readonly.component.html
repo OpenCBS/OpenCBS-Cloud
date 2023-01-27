@@ -1,0 +1,81 @@
+<div class="slds-form-element" *ngFor="let field of fieldsData; let i = index;"
+     [title]="field['description'] ? field['description'] : field['caption']">
+    <span class="slds-form-element__label">{{ field['caption'] | translate }}</span>
+    <div class="slds-form-element__control"
+         [ngClass]="{'slds-form-element__control--textarea': field?.fieldType === 'TEXT_AREA'}">
+
+        <span *ngIf="field['fieldType'] !== 'CHECKBOX' && field['fieldType'] !== 'DATE' && field['fieldType'] !== 'AGE'"
+              class="slds-form-element__static"
+              [ngClass]="{'textarea': field['fieldType'] === 'TEXT_AREA'}">
+            {{ field['fieldType'] === 'LOOKUP' ? getLookupValue(field['value']) : ((field['value'] | translate) || ' - ') }}
+        </span>
+
+        <span *ngIf="field['fieldType'] === 'DATE' || field['fieldType'] === 'AGE'" class="slds-form-element__static"
+              [ngClass]="{'textarea': field['fieldType'] === 'TEXT_AREA'}">
+            {{ field['value'] | cbsDateFormat }}
+        </span>
+
+        <span *ngIf="field['fieldType'] === 'CHECKBOX'" class="slds-form-element__static">
+             <label class="slds-checkbox">
+                <input type="checkbox"
+                       [disabled]="true"
+                       [checked]="field['value'] === 'TRUE'">
+                <span class="slds-checkbox--faux" style="background-color: #94989e"></span>
+            </label>
+        </span>
+
+        <ng-container *ngIf="field['fieldType'] === 'LOOKUP' && showProfileInfoLink && isProfileFieldType(field)">
+            <button class="slds-button details-button" (click)="onShowProfileInfoLinkClick.emit(field)">
+                <svg class="slds-button__icon slds-button__icon_left slds-button__icon--small">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                         xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info_alt"></use>
+                </svg>
+                {{'INFO' | translate}}
+            </button>
+        </ng-container>
+
+        <ng-container *ngIf="field['fieldType'] === 'AGE'" class="cbs-age">
+            <span class="cbs-age">
+                {{'AGE' | translate}}: {{ yearsFromNow }}
+            </span>
+        </ng-container>
+
+        <ng-container *ngIf="field['fieldType'] === 'GRID'" class="slds-form-element__control"
+                      style="border: none; height: auto">
+            <p-table [columns]="gridHeaders" [value]="gridValues">
+                <ng-template pTemplate="header" let-columns>
+                    <tr class="slds-border--bottom">
+                        <th *ngFor="let col of columns"
+                            class="slds-app-launcher__header-search slds-border--left slds-border--right
+              slds-border--top slds-box--small slds-text-title--caps">
+                            {{col.value}}
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr class="slds-border--bottom">
+                        <td pEditableColumn *ngFor="let col of columns"
+                            class="slds-border--left slds-border--right slds-border--top slds-app-launcher__header-search">
+                            {{rowData[col.value]}}
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="footer" let-rowData>
+                    <tr class="slds-avatar--small">
+                        <td class="p-text-right slds-border--left slds-border--right slds-border--top slds-border--bottom
+                     slds-app-launcher__header-search slds-text-title_caps">
+                            Total
+                        </td>
+                        <td *ngFor="let row of rowData.slice(1, rowData.length)"
+                            class="slds-border--left slds-border--right slds-border--top slds-border--bottom
+              slds-app-launcher__header-search slds-text-title_caps">
+                            {{calculateTotal(row['value'])}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-container>
+    </div>
+</div>

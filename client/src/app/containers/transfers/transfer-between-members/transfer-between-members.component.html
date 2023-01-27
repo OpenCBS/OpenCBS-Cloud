@@ -1,0 +1,153 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                [isMainPage]="true"
+                headingTitle="{{ 'TRANSFER_BETWEEN_MEMBERS' | translate }}"
+                [svgData]="svgData"
+            ></cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <div class="cbs-new-profile__submit-btn">
+                <a
+                    routerLink="/transfers"
+                    class="slds-button slds-button--neutral slds-not-selected"
+                    aria-live="assertive"
+                >
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>
+                        {{ 'CANCEL' | translate }}
+                    </span>
+                </a>
+                <button
+                    (click)="handleConfirmModalVisibility(true)" #submitButton
+                    class="slds-button slds-button--success slds-not-selected"
+                    aria-live="assertive"
+                    [disabled]="form.invalid"
+                >
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>
+                        {{ 'TRANSFER' | translate}}
+                    </span>
+                </button>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+
+        <form
+            novalidate
+            [formGroup]="form"
+            class="slds-form--horizontal slds-m-top--medium"
+            cbsFormFocus
+        >
+            <cbs-form-lookup-control
+                [formControlName]="'sourceAccountId'"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'SOURCE_ACCOUNT' | translate"
+                [hasError]="form.get('sourceAccountId').errors && form.get('sourceAccountId').touched"
+                [requiredField]="true"
+                [code]="true"
+                [picklistDataUrl]="accountFilterConfig"
+                (onSelect)="markSelectedFieldLabel($event, 'sourceAccountId')"
+            ></cbs-form-lookup-control>
+
+            <cbs-form-readonly-control
+                *ngIf="hasBalance"
+                fieldLabel="{{ 'BALANCE' | translate }}"
+                [value]="balance | cbsNumberFormat">
+            </cbs-form-readonly-control>
+
+            <cbs-form-lookup-control
+                [formControlName]="'destinationAccountId'"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'DESTINATION_ACCOUNT' | translate"
+                [hasError]="form.get('destinationAccountId').errors && form.get('destinationAccountId').touched"
+                [requiredField]="true"
+                [code]="true"
+                [picklistDataUrl]="accountFilterConfig"
+                (onSelect)="markSelectedFieldLabel($event, 'destinationAccountId')"
+            ></cbs-form-lookup-control>
+
+            <cbs-form-input-control
+                [formControlName]="'amount'"
+                [fieldLabel]="'AMOUNT' | translate"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('amount').errors && form.get('amount').touched"
+            ></cbs-form-input-control>
+
+            <cbs-form-date-control
+                formControlName="date"
+                fieldLabel="{{ 'DATE' | translate }}"
+                [hasError]="form.get('date').errors && form.get('date').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+
+            <cbs-form-readonly-control
+                fieldLabel="{{ 'CURRENCY' | translate }}"
+                [value]="sourceAccountCurrency">
+            </cbs-form-readonly-control>
+
+            <cbs-form-textarea-control
+                [requiredField]="true"
+                [hasError]="form.get('description').errors && form.get('description').touched"
+                [formControlName]="'description'"
+                [fieldLabel]="'DESCRIPTION' | translate"
+            ></cbs-form-textarea-control>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label cbs-compound-form__checkbox-label checkbox">
+                    {{ 'AUTO_PRINT' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <label class="slds-checkbox" for="auto-print">
+                        <input type="checkbox"
+                               name="autoPrint"
+                               id="auto-print"
+                               formControlName="autoPrint"/>
+                        <span class="slds-checkbox--faux"></span>
+                    </label>
+                </div>
+            </div>
+        </form>
+
+    </cbs-form-layout>
+
+    <cbs-loading-indicator
+        [isFixed]="true"
+        [showLoader]="isSubmittingTransfer"
+    ></cbs-loading-indicator>
+</main>
+
+<cbs-confirm-popup
+    [opened]="showConfirmModal"
+    (onSubmitClick)="submit(form)"
+    (openedChange)="handleConfirmModalVisibility(false)"
+    [leftButtonLabel]="'NO' | translate"
+    [rightButtonLabel]="'YES' | translate"
+    [popupLabel]="'CONFIRMATION' | translate"
+>
+    Please, review and confirm transfer details:<br>
+    <div class="confirmation-review-data">
+        {{ 'SOURCE_ACCOUNT' | translate }}: <b>{{ selectedFormFieldLabels['sourceAccountId'] }}</b><br>
+        {{ 'DESTINATION_ACCOUNT' | translate }}: <b>{{ selectedFormFieldLabels['destinationAccountId'] }}</b><br>
+        {{ 'AMOUNT' | translate }}: <b>{{ form.value.amount }}</b><br>
+        {{ 'DESCRIPTION' | translate }}: <b>{{ form.value.description }}</b><br>
+    </div>
+</cbs-confirm-popup>

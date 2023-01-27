@@ -1,0 +1,56 @@
+<div class="cbs-repayment-form">
+    <form novalidate [formGroup]="repaymentForm" class="slds-form--stacked">
+        <cbs-form-date-control
+            [formControlName]="'date'"
+            [validateDate]="true"
+            [requiredField]="true"
+            [hasError]="repaymentForm.get('date').errors && repaymentForm.get('date').touched"
+            fieldLabel="{{ 'DATE' | translate }}"
+        ></cbs-form-date-control>
+
+        <cbs-form-select-control
+            [formControlName]="'repaymentType'"
+            [selectData]="repaymentTypeList"
+            [requiredField]="true"
+            [hasError]="repaymentForm.get('repaymentType').errors && repaymentForm.get('repaymentType').touched"
+            fieldLabel="{{ 'REPAYMENT_TYPE' | translate }}"
+        ></cbs-form-select-control>
+
+        <cbs-form-input-control
+            [formControlName]="'total'"
+            [requiredField]="true"
+            [inputType]="'number'"
+            [hasError]="repaymentForm.get('total').errors && repaymentForm.get('total').touched"
+            fieldLabel="{{ 'TOTAL' | translate }}"
+            (onChange)="markAsEdited()">
+            <div class="maxAmount">
+                MAX: <a (click)="onSetMaxAmount.emit()">{{ maxAmount }}</a>
+            </div>
+        </cbs-form-input-control>
+
+        <cbs-form-input-control
+            [formControlName]="'principal'"
+            [requiredField]="true"
+            [inputType]="'number'"
+            [hasError]="repaymentForm.get('principal').errors && repaymentForm.get('principal').touched"
+            fieldLabel="{{ 'PRINCIPAL' | translate }}"
+        ></cbs-form-input-control>
+
+        <cbs-form-input-control
+            [formControlName]="'interest'"
+            [requiredField]="true"
+            [inputType]="'number'"
+            [hasError]="repaymentForm.get('interest').errors && repaymentForm.get('interest').touched"
+            fieldLabel="{{ 'INTEREST' | translate }}"
+        ></cbs-form-input-control>
+
+        <cbs-form-input-control
+            [formControlName]="'penalty'"
+            [requiredField]="true"
+            [inputType]="'number'"
+            [hasError]="repaymentForm.get('penalty').errors && repaymentForm.get('penalty').touched"
+            fieldLabel="{{ 'PENALTY' | translate }}"
+        ></cbs-form-input-control>
+
+    </form>
+</div>

@@ -1,0 +1,23 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{'TELLER_MANAGEMENT' | translate}} {{ '#' + tillId}}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right"  class="teller-management-repay">
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="true" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="tellerNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right">
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<cbs-loading-indicator [showLoader]="isLoading" [isFixed]="true"></cbs-loading-indicator>

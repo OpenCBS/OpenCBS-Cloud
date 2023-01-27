@@ -1,0 +1,33 @@
+:host {
+  table {
+    table-layout: fixed
+  }
+
+  .cbs-bold {
+    font-weight: bold;
+    height: 2.55rem;
+  }
+
+  .cbs-border-right {
+    border-right: 1px solid #d8dde6;
+    margin-top: -1px;
+  }
+
+  .cbs-currency-list {
+    width: 50%;
+    margin: 0 1rem 0 1rem;
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .slds-truncate {
+    overflow: hidden;
+  }
+
+  .cbs-balance-config {
+    padding: 17px 20px;
+  }
+}

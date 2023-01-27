@@ -1,0 +1,54 @@
+<cbs-form-layout *ngIf="termDepositLoaded?.loaded">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PROFILE' | translate }}"
+        [value]="termDeposits?.profileName">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'TERM_DEPOSIT_PRODUCT' | translate }}"
+        [value]="termDeposits?.termDepositProductName">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'TERM_DEPOSIT_OFFICER' | translate }}"
+        [value]="termDeposits?.serviceOfficerFirstName + ' ' + termDeposits?.serviceOfficerLastName">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CREATED_AT' | translate }}"
+        [value]="termDeposits?.createdAt | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        *ngIf="termDepositStatus === 'OPEN'"
+        fieldLabel="{{ 'OPEN_DATE' | translate }}"
+        [value]="termDeposits?.openDate | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        [value]="termDeposits?.interestRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DURATION_MONTH' | translate }}"
+        [value]="termDeposits?.termAgreement">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'EARLY_CLOSE_FEE_RATE' | translate }}"
+        [value]="termDeposits?.earlyCloseFeeRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'EARLY_CLOSE_FEE_FLAT' | translate }}"
+        [value]="termDeposits?.earlyCloseFeeFlat">
+    </cbs-form-readonly-control>
+</cbs-form-layout>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!termDepositLoaded?.loaded"
+></cbs-loading-indicator>

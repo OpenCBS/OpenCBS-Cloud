@@ -1,0 +1,20 @@
+<cbs-header></cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm cbs-schedule__wrap">
+    <cbs-schedule
+        *ngIf="currentUser?.id"
+        [events]="events"
+        [header]="scheduleConfigHeader"
+        [firstDay]="1"
+        [eventLimit]="4"
+        [timeFormat]="'HH:mm'"
+        [editable]="false"
+        [weekNumbers]="true"
+        [options]="calendarExtraOptions"
+        (onViewRender)="onViewRender($event)"
+        (onDayClick)="handleDayClick($event)"
+        (onEventClick)="handleEventClick($event)"></cbs-schedule>
+
+    <cbs-manage-event-modal (eventChanged)="onEventChanged($event)"></cbs-manage-event-modal>
+
+</main>

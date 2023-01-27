@@ -1,0 +1,16 @@
+:host {
+  display: inline-block;
+  vertical-align: middle;
+  .slds-dropdown {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .slds-dropdown--right {
+    transform: translateX(8px);
+    margin-top: 0.3rem;
+  }
+  .slds-global-header__item {
+    padding: 0 1rem 0 .3rem;
+  }
+}

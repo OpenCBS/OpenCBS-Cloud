@@ -1,0 +1,14 @@
+:host {
+  .cbs-user-update {
+    padding: 20px 15px;
+
+    &__heading {
+      display: block;
+      text-align: center;
+    }
+
+    .slds-button {
+      margin-top: 1rem;
+    }
+  }
+}

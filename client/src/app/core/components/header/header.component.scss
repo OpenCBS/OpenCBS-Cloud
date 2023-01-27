@@ -1,0 +1,152 @@
+:host ::ng-deep {
+  .cbs-header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+
+    &__logo-text {
+      text-decoration: none;
+      color: #01415E;
+
+      &:hover,
+      &:focus,
+      &:active,
+      &:visited {
+        text-decoration: none;
+        color: #01415E;
+      }
+    }
+  }
+
+  .slds-modal__container {
+    width: 25%;
+  }
+
+  .slds-context-bar {
+    border-top: none;
+    padding: 0 0 0 .75rem;
+    @media screen and (min-width: 48rem) {
+      padding: 0 0 0 1rem;
+    }
+  }
+  .slds-global-header_container {
+    z-index: 100;
+  }
+  .slds-comment {
+    align-items: center;
+  }
+
+  .slds-avatar--medium {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .slds-button--icon-more {
+    border: none;
+
+    .slds-button__icon:not(.slds-button__icon--small) {
+      width: 1rem;
+      height: 1rem;
+      margin-top: -3px;
+    }
+
+    .slds-button__icon--small {
+      margin-top: -2px;
+    }
+  }
+
+  .slds-dropdown__item > a {
+    justify-content: flex-start;
+  }
+
+  .slds-context-bar__icon-action {
+    .slds-icon-waffle_container {
+      width: 40px;
+      margin-right: 0;
+      padding-top: 4px;
+    }
+  }
+
+  .cbs-auth {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 360px;
+    border-radius: 0.5rem;
+    @media only screen and (max-height: 1200px) {
+      padding-top: 180px;
+    }
+    @media only screen and (max-height: 1000px) {
+      padding-top: 140px;
+    }
+    @media only screen and (max-height: 900px) {
+      padding-top: 100px;
+    }
+    @media only screen and (max-height: 736px) {
+      padding-top: 60px;
+    }
+    @media only screen and (max-height: 670px) {
+      padding-top: 40px;
+    }
+    @media only screen and (max-height: 610px) {
+      padding-top: 20px;
+    }
+    &-form-wrap {
+      border-radius: 4px;
+      border: 1px solid #D8DDE6;
+      padding: 20px;
+    }
+    &-logo {
+      margin-bottom: 25px;
+      width: 200px;
+      height: 121px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    input {
+      padding: 12px;
+      line-height: 1;
+      &[type="submit"] {
+        width: 100%;
+        margin-top: 20px;
+        margin-bottom: 16px;
+        height: 44px;
+      }
+    }
+    &__spinner {
+      position: relative;
+      margin-top: 20px;
+      margin-bottom: 16px;
+      height: 44px;
+    }
+    .slds-text-color--error {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .slds-button--brand {
+      background-color: #1E97CE;
+      border: 1px solid #1E97CE;
+      &[disabled] {
+        background: #e0e5ee;
+        border-color: transparent;
+      }
+    }
+  }
+  .title {
+    border-top: 1px solid grey;
+    padding-top: 10px;
+    font-size: 15px;
+    span {
+      font-weight: bold;
+    }
+  }
+  .system_version {
+    span {
+      font-weight: bold;
+    }
+  }
+  .lang-label {
+    width: 20px;
+  }
+}

@@ -1,0 +1,61 @@
+:host ::ng-deep {
+
+  table {
+    table-layout: fixed;
+  }
+
+  tbody tr {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .cbs-expanded-modal {
+    .slds-modal__content {
+      min-height: 12rem;
+    }
+  }
+
+  .cbs-picklist {
+    &__list {
+      max-height: 5rem !important;
+    }
+  }
+
+  .cbs-readonly-account > div {
+    margin-bottom: 1rem;
+  }
+
+  .cbs-readonly-account > div > label {
+    margin-top: 8px;
+  }
+
+  .cbs-readonly-account .slds-form-element__control {
+    width: 92%;
+    float: right;
+  }
+
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .slds-truncate {
+    overflow: hidden;
+  }
+  .slds-table--cell-buffer tr > th:first-child {
+    width: 40px;
+  }
+
+  @media screen and (max-width: 1230px) {
+    .slds-table--cell-buffer tr > th:first-child {
+      padding-left: 0.5rem;
+      width: 30px;
+    }
+
+    .slds-table--cell-buffer tr > td:first-child {
+      padding-left: 0.5rem;
+      width: 30px;
+    }
+  }
+}

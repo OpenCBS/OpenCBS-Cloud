@@ -1,0 +1,27 @@
+create table bonds (
+  id                  bigserial           primary key,
+  isin                varchar(32)         not null unique,
+  number              integer             not null,
+  amount              numeric(12, 2)      not null,
+  equivalent_amount   numeric(12, 2)      not null,
+  currency_id         bigint              not null,
+  interest_rate       numeric(8,4)        not null,
+  created_at          timestamp           not null,
+  value_date          date                not null,
+  expire_date         date                not null,
+  coupon_date         date                not null,
+  frequency           varchar(32)         not null,
+  maturity            integer             not null,
+  interest_scheme     varchar(200)        not null,
+  status              varchar(32)         not null,
+  created_by_id       bigint default 1    not null,
+  profile_id          bigint              not null,
+  bank_account_id     bigint              not null,
+  product_id          bigint              not null,
+
+  foreign key (currency_id)  references currencies (id),
+  foreign key (created_by_id) references users (id),
+  foreign key (profile_id) references profiles (id),
+  foreign key (bank_account_id) references accounts (id),
+  foreign key (product_id) references bonds_product (id)
+);

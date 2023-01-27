@@ -1,0 +1,60 @@
+== PAGING
+
+Some resources support paging. By default, the first page of the results is fetched.
+
+=== Retrieve a page
+
+A `GET` request will retrieve a page of resources.
+
+If you want to specify which page to retrieve you have to add the `page` parameter to the resource URL
+and assign a zero-based index of the page you want to fetch. Thus, `page=0` will return the first page,
+`page=1` - the second, and so on.
+
+The response includes a bunch of useful metadata that allow you to flip back and forth between the pages.
+
+==== Response structure
+
+|===
+|Path|Type|Description
+
+|`data`
+|Object
+|Payload data
+
+|`data.content`
+|Array
+| The actual payload data
+
+|`data.totalElements`
+|Number
+|The total number of items in the given resource
+
+|`data.totalPages`
+|Number
+|The total number of pages
+
+|`data.last`
+|Boolean
+|`true` if it is the last page, `false` otherwise
+
+|`data.size`
+|Number
+|The size of the page
+
+|`data.number`
+|Number
+|The number of the page
+
+|`data.sort`
+|?
+|?
+
+|`data.first`
+|Boolean
+|`true` if it the first page, `false` otherwise
+
+|`data.numberOfElements`
+|Number
+|The actual number of items returned on the page
+
+|===

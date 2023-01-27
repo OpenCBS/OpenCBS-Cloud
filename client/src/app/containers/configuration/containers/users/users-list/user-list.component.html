@@ -1,0 +1,120 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'USERS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <a class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-checkbox">
+                    <input type="checkbox" id="show-all" (click)="showAllUsers()"/>
+                    <label class="slds-checkbox__label" for="show-all">
+                        <span class="slds-checkbox--faux"></span>
+                        <span class="slds-box--x-small">{{'SHOW_ALL' | translate}}</span>
+                    </label>
+                </span>
+            </a>
+            <a *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_USER'] }"
+               routerLink="/configuration/users/new" class="slds-button slds-button--neutral" aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'CREATE' | translate }}
+                </span>
+            </a>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Full Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Username">{{ 'USERNAME' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Role">{{ 'ROLE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Branch">{{ 'BRANCH' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Status">{{ 'STATUS' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Email">{{ 'EMAIL' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Phone Number">{{ 'PHONE_NUMBER' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Address">{{ 'ADDRESS' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of (users | async)?.users; let i = index" (click)="goToUserDetails(user)"
+            [ngClass]="rowStyleClass(user)">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Full name" scope="row">
+                <div class="slds-truncate" title="">
+                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-user"
+                                  title="{{ user?.firstName }} {{ user?.lastName }} avatar">
+                                <svg aria-hidden="true" class="slds-icon slds-icon--x-small">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         xlink:href="/assets/icons/action-sprite/svg/symbols.svg#user"></use>
+                                </svg>
+                                <span
+                                    class="slds-assistive-text">{{ user?.firstName }} {{ user?.lastName }} avatar</span>
+                            </span>
+                    {{ user?.firstName }} {{ user?.lastName }}
+                </div>
+            </th>
+            <td data-label="Username">
+                <div class="slds-truncate" title="username">{{ user?.username }}</div>
+            </td>
+            <td data-label="Role">
+                <ngl-badge type="info">{{ user?.role?.name }}</ngl-badge>
+            </td>
+            <td data-label="Branch">
+                <div class="slds-truncate" title="branch">{{ user?.branch?.name }}</div>
+            </td>
+            <td data-label="Status">
+                <ngl-badge type="status">{{ user?.statusType | translate }}</ngl-badge>
+            </td>
+            <td data-label="Email">
+                <div class="slds-truncate" title="email">{{ user?.email }}</div>
+            </td>
+            <td data-label="PhoneNumber">
+                <div class="slds-truncate" title="phoneNumber">{{ user?.phoneNumber }}</div>
+            </td>
+            <td data-label="Address">
+                <div class="slds-truncate" title="Address">{{ user?.address }}</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(users | async)?.loading"></cbs-loading-indicator>
+
+</main>
+<!-- ./cbs-main -->
+
+

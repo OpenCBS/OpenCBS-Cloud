@@ -1,0 +1,103 @@
+<cbs-form-layout *ngIf="loanApp?.loaded">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <cbs-form-readonly-control
+        fieldLabel="{{ profileType === 'groups' ? 'GROUP' : 'PROFILE' | translate }}"
+        [value]="loanApp?.data?.profile?.name" (onFieldClick)="goToProfile()"
+        [showLink]="true"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        *ngIf="loan?.code"
+        fieldLabel="{{ 'LOAN_CODE' | translate }}"
+        [value]="loan?.code" (onFieldClick)="goToLoan()" [showLink]="true"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'LOAN_APPLICATION_CODE' | translate }}"
+        [value]="loanApp?.data?.code"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'LOAN_PRODUCT' | translate }}"
+        [value]="loanApp?.loanProduct?.name"></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CURRENCY' | translate }}"
+        [value]="loanApp?.currencyName"></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'SCHEDULE_TYPE' | translate }}"
+        [value]="loanApp?.loanProduct?.scheduleType | translate"></cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'SCHEDULE_BASED_TYPE' | translate }}"
+        [value]="loanApp?.loanProduct?.scheduleBasedType | translate"></cbs-form-readonly-control>
+
+    <cbs-payees-block-control
+        *ngIf="loanApp?.loanProduct?.hasPayees"
+        [payeesData]="loanApp?.payees"
+        [isCollapsed]="false"
+        [readonly]="true"
+    ></cbs-payees-block-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'AMOUNT' | translate }}"
+        value="{{ netAmount | cbsNumberFormat }}"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        [value]="loanApp?.data?.interestRate"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'GRACE_PERIOD' | translate }}"
+        [value]="loanApp?.data?.gracePeriod"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        *ngIf="loanApp?.loanProduct?.scheduleBasedType === 'BY_INSTALLMENT'"
+        fieldLabel="{{ 'NUMBER_OF_INSTALMENTS' | translate }}"
+        [value]="loanApp?.data?.maturity"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        *ngIf="loanApp?.loanProduct?.scheduleBasedType === 'BY_MATURITY'"
+        fieldLabel="{{ 'MATURITY_DATE' | translate }}"
+        [value]="loanApp?.data?.maturityDate | cbsDateFormat"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DISBURSEMENT_DATE' | translate }}"
+        [value]="loanApp?.data?.disbursementDate | cbsDateFormat"></cbs-form-readonly-control>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PREFERRED_REPAYMENT_DATE' | translate }}"
+        [value]="loanApp?.data?.preferredRepaymentDate | cbsDateFormat"></cbs-form-readonly-control>
+    <cbs-entry-fees-block
+        *ngIf="!!loanApp?.entryFees?.length"
+        [isValidToCalculate]="true"
+        [entryFeesData]="loanApp?.entryFees"
+        (onDetailsClick)="openEntryFees()"
+    ></cbs-entry-fees-block>
+    <div *ngIf="this.loanApp.data.profile.type === 'GROUP'"
+         class="slds-text-title--caps slds-m-bottom--medium member-title">
+        <strong>{{ 'MEMBERS' | translate }}</strong>
+    </div>
+    <div *ngIf="this.loanApp.data.profile.type === 'GROUP'">
+        <div *ngFor="let member of loanApp?.data?.amounts">
+            <cbs-form-readonly-control
+                fieldLabel="{{ member?.name | translate }}"
+                [value]="member?.amount">
+            </cbs-form-readonly-control>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'TOTAL' | translate }}"
+        value="{{ total | cbsNumberFormat }}"></cbs-form-readonly-control>
+
+</cbs-form-layout>
+
+<ngl-modal header="{{ 'ENTRY_FEES' | translate }}" [(open)]="isOpen">
+    <div body>
+        <cbs-form-readonly-control
+            *ngFor="let fee of loanApp?.entryFees"
+            [fieldLabel]="fee.name"
+            value="{{ fee.amount | cbsNumberFormat}}"></cbs-form-readonly-control>
+        <cbs-form-readonly-control
+            fieldLabel="{{ 'TOTAL' | translate }}"
+            value="{{ totalEntryFees  | cbsNumberFormat }}"></cbs-form-readonly-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpen = false">{{ 'CLOSE' | translate }}</button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!loanApp?.loaded || !loanAppState?.loaded"
+></cbs-loading-indicator>

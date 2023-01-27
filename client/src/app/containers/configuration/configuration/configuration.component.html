@@ -1,0 +1,35 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'CONFIGURATION' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="searchQuery = ''"
+                (onSearch)="searchQuery = $event"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+        <!-- /cbs-page-header-layout = center -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="slds-container--fluid">
+        <div class="slds-grid slds-wrap slds-gutters" cbsMatchHeight="cbs-config-item">
+            <div
+                class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+                *ngFor="let item of list | cbsFilter : searchQuery | sort">
+                <a [routerLink]="item.link" class="cbs-config-item slds-text-align--center">
+                    <cbs-icon [iconConfig]="item.icon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                    <span class="slds-text-heading--small">{{ item.name | translate }}</span>
+                    <span class="slds-text-color--weak">{{ item.description | translate }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>

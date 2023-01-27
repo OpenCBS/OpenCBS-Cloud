@@ -1,0 +1,19 @@
+== PROFILES
+
+The Profiles resource is used to list all profiles.
+
+=== Retrieve a profile
+
+A `GET` request will retrieve the details of a profiles.
+
+==== Response fields
+
+include::{snippets}/profile-get-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/profile-get-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/profile-get-example/http-response.adoc[]

@@ -1,0 +1,54 @@
+:host {
+  .slds-form-element__control {
+    border: 1px solid #e4e4e4;
+    border-radius: .25rem;
+    padding: 0 1rem 0 .75rem;
+    height: 2rem;
+    background: #fff;
+
+    .slds-form-element__static {
+      height: 30px;
+      line-height: 31px;
+      padding: 0;
+      min-height: 30px;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &--textarea {
+      height: auto;
+      min-height: 76px;
+      max-height: 250px;
+      overflow: auto;
+    }
+
+    &--disabled {
+      background-color: #f5f6f9;
+      border-color: #eeeff3;
+      cursor: auto;
+      user-select: auto;
+      color: #16325c;
+    }
+    &--readonly {
+      cursor: auto;
+      user-select: auto;
+      color: #16325c;
+      &--warning {
+        background: #e0e5ee;
+        border: 2px solid #ffae42;
+      }
+      &--standard {
+        background: #e0e5ee;
+        border-color: #a8b7c7;
+      }
+    }
+    .slds-button {
+      float: right;
+    }
+    .slds-button:focus {
+      box-shadow: none;
+    }
+  }
+}

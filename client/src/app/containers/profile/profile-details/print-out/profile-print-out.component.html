@@ -1,0 +1,125 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ (profile |
+                            async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'PRINT_OUT' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                        <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                              *ngIf="attachment?.pinned"
+                              (click)="openAttachment(attachment)">
+                            <span>
+                                <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                                     [attr.title]="attachment?.originalFilename" *ngIf="testIfImage(attachment?.contentType)"/>
+                                <span class="cbs-profile__avatar__file">
+                                    <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                                      [fileType]="getFileExtension(attachment?.originalFilename)"
+                                                      [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <div class="slds-grid slds-grid--align-center">
+
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer"
+                       *ngIf="forms.length">
+                    <thead>
+                    <tr class="slds-text-title--caps">
+                        <th scope="col" width="3%">
+                            <div class="slds-truncate" title="#">#</div>
+                        </th>
+                        <th scope="col" width="77%">
+                            <div class="slds-truncate" title="Code">{{ 'NAME' | translate }}</div>
+                        </th>
+                        <th scope="col" width="20%">
+                            <div class="slds-truncate" title="Currency">{{ 'DOWNLOAD' | translate }}</div>
+                        </th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let form of forms; let i = index;">
+                        <td data-label="#" scope="row">
+                            {{i + 1}}
+                        </td>
+                        <td data-label="Title" scope="row">
+                            {{ form?.label}}
+                        </td>
+                        <td data-label="Form" scope="row">
+                            <ngl-icon *ngIf="!form?.fields" (click)="downLoad(form)" icon="word" category="doctype"
+                                      size="large"></ngl-icon>
+                            <ngl-icon *ngIf="form?.fields" (click)="downLoad(form)" icon="excel" category="doctype"
+                                      size="large"></ngl-icon>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p *ngIf="!forms.length" class="slds-text-align--center slds-m-top_large">
+                    {{ 'NO_DATA' | translate }}
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<ngl-modal header="{{ reportName | translate }}" *ngIf="isOpen" [(open)]="isOpen">
+    <div body>
+        <cbs-loading-indicator [showLoader]="fieldsReady"></cbs-loading-indicator>
+        <form novalidate [formGroup]="reportForm" class="slds-form--stacked">
+            <div [hidden]="fieldsReady" formArrayName="fieldValues" class="cbs-collateral-form__fields">
+                <ng-container
+                    *ngFor="let field of customFields; let ind=index;"
+                    cbsDynamicField
+                    [config]="field"
+                    [group]="reportForm.controls['fieldValues'].controls[ind]">
+                </ng-container>
+            </div>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button *ngIf="!fieldsReady" class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate
+            }}
+        </button>
+        <button [disabled]="reportForm.invalid" *ngIf="!fieldsReady" class="slds-button slds-button--success"
+                (click)="submit()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

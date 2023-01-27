@@ -1,0 +1,74 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'BONDS' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="clearSearch()"
+                (onSearch)="search($event)"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <p-dataTable
+        emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+        [value]="(bondData | async)?.bond"
+        [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+        [selectionMode]="'single'"
+        (onRowSelect)="goToBond($event)">
+        <p-column field="profile" header="{{ 'PROFILE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['profileName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="isin" header="{{ 'ISIN' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['isin'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="amount" header="{{ 'AMOUNT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['amount'] | cbsNumberFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="interestRate" header="{{ 'INTEREST_RATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['interestRate'] + '%'}}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdBy" header="{{ 'CREATED_BY' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['createdBy'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="status" header="{{ 'STATUS' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <ngl-badge [type]="(row['status'] | statusBadge)">{{ row['status'] }}</ngl-badge>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(bondData | async)?.loading"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(bondData | async)?.totalElements > (bondData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(bondData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(bondData | async)?.totalElements"
+            limit="5"
+            [perPage]="(bondData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToNextPage($event)" #pagination></ngl-pagination>
+    </div>
+</main>

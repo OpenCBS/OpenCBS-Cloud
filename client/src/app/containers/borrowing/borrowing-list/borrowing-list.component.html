@@ -1,0 +1,94 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'BORROWINGS' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="clearSearch()"
+                (onSearch)="search($event)"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+        <!-- /cbs-page-header-layout = center -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <p-dataTable
+        emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+        [value]="(borrowingData | async)?.borrowings"
+        [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+        [selectionMode]="'single'"
+        (onRowSelect)="goToBorrowing($event)">
+        <p-column field="profile" header="{{ 'PROFILE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['profileName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="code" header="{{ 'CODE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['code'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="amount" header="{{ 'AMOUNT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['amount'] | cbsNumberFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="interestRate" header="{{ 'INTEREST_RATE' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['interestRate'] + '%'}}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="loanProduct" header="{{ 'BORROWING_PRODUCTS' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['loanProductName'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdBy" header="{{ 'CREATED_BY' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['createdBy'] }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="createdAt" header="{{ 'CREATED_AT' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <span>{{ row['createdAt'] | cbsDateFormat }} {{ row['createdAt'] | cbsTimeFormat }}</span>
+            </ng-template>
+        </p-column>
+        <p-column field="status" header="{{ 'STATUS' | translate }}">
+            <ng-template let-row="rowData" pTemplate="body">
+                <ngl-badge [type]="(row['status'] | statusBadge)">
+                    {{ row['status'] === 'IN_PROGRESS' ? 'IN PROGRESS' : row['status'] }}
+                </ngl-badge>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(borrowingData | async)?.loading"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(borrowingData | async)?.totalElements > (borrowingData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(borrowingData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(borrowingData | async)?.totalElements"
+            limit="5"
+            [perPage]="(borrowingData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToNextPage($event)" #pagination></ngl-pagination>
+    </div>
+
+</main>
+<!-- ./cbs-main -->
+

@@ -1,0 +1,213 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps"><a routerLink="/profiles">{{
+                        'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ (profile | async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'ATTACHMENTS' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                        <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                              *ngIf="attachment?.pinned"
+                              (click)="openAttachment(attachment)">
+                            <span>
+                                <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                                     [attr.title]="attachment?.originalFilename"
+                                     *ngIf="testIfImage(attachment?.contentType)"/>
+                                <span class="cbs-profile__avatar__file">
+                                    <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                                      [fileType]="getFileExtension(attachment?.originalFilename)"
+                                                      [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+
+                </div>
+                <div *cbsVisibleByPermission="{group: 'PROFILES', permissions: ['MAKER_FOR_PROFILE'] }">
+                    <button (click)="openUploadModal()" class="slds-button slds-button--neutral" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                            </svg>{{ 'ADD' | translate }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <div class="slds-grid">
+
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer"
+                       *ngIf="(profile | async)?.attachments.length">
+                    <thead>
+                    <tr class="slds-text-title--caps">
+                        <th scope="col" width="25%">
+                            <div class="slds-truncate" title="#">{{ 'NAME' | translate }}</div>
+                        </th>
+                        <th scope="col" width="20%">
+                            <div class="slds-truncate" title="Relationship">{{ 'DATE' | translate }}</div>
+                        </th>
+                        <th scope="col" width="20%">
+                            <div class="slds-truncate" title="Amount">{{ 'AUTHOR' | translate }}</div>
+                        </th>
+                        <th scope="col" width="20%">
+                            <div class="slds-truncate" title="Comment">{{ 'COMMENT' | translate }}</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Options">{{ 'OPTIONS' | translate }}</div>
+                        </th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let attachment of (profile | async)?.attachments; let i = index;">
+                        <td data-label="Label" scope="row">
+                            <ul class="slds-list--horizontal slds-has-dividers--right">
+                                <li class="slds-media__figure">
+                                    <cbs-doctype-icon [fileType]="getFileExtension(attachment.originalFilename)"
+                                                      [fileName]="attachment.originalFilename"></cbs-doctype-icon>
+                                </li>
+                                <li class="slds-item"><h3 class="slds-truncate"
+                                                          title="{{attachment?.originalFilename}}"><a
+                                    [attr.href]="getUrl(attachment?.id)">{{ attachment?.originalFilename }}</a></h3>
+                                </li>
+                            </ul>
+                        </td>
+                        <td data-label="Relationship" scope="row">
+                            {{ attachment?.createdAt | cbsDateFormat }} {{ attachment?.createdAt | cbsTimeFormat }}
+                        </td>
+                        <td data-label="Amount" scope="row">
+                            {{ attachment?.createdBy?.originalFilename }} {{ attachment?.createdBy?.firstName + ' ' +
+                            attachment?.createdBy?.lastName }}
+                        </td>
+                        <td data-label="Comment" scope="row" class="slds-truncate">
+                            {{ attachment?.comment }}
+                        </td>
+                        <td>
+                            <div class="slds-m-top--xxx-small slds-grid">
+                                <div class="slds-button-group" role="group">
+                                    <button
+                                        (click)="pin(attachment)"
+                                        class="slds-button slds-button--icon-border"
+                                        [ngClass]="{'cbs-icon-pin-is-selected': attachment?.pinned, 'cbs-icon-pin-not-selected': !attachment?.pinned}"
+                                        [attr.title]="attachment?.pinned ? 'Unpin' : 'Pin'">
+                                        <svg class="slds-button__icon cbs-icon-pin" aria-hidden="true"
+                                             viewBox="0 0 32 32">
+                                            <path
+                                                d="M 20.53125 2.5625 L 19.84375 3.5 L 14.9375 10.1875 C 12.306897 9.7319347 9.5276177 10.472382 7.5 12.5 L 6.78125 13.1875 L 7.5 13.90625 L 12.09375 18.5 L 4 26.59375 L 4 28 L 5.40625 28 L 13.5 19.90625 L 18.09375 24.5 L 18.8125 25.21875 L 19.5 24.5 C 21.527618 22.472382 22.268065 19.693103 21.8125 17.0625 L 28.5 12.15625 L 29.4375 11.46875 L 28.625 10.65625 L 21.34375 3.375 L 20.53125 2.5625 z M 20.78125 5.625 L 26.375 11.21875 L 20.15625 15.78125 L 19.59375 16.1875 L 19.78125 16.84375 C 20.263326 18.677254 19.73729 20.586311 18.59375 22.1875 L 9.8125 13.40625 C 11.413689 12.262708 13.322746 11.736674 15.15625 12.21875 L 15.8125 12.40625 L 16.21875 11.84375 L 20.78125 5.625 z"></path>
+                                        </svg>
+                                        <svg class="slds-button__icon cbs-icon-pinned" aria-hidden="true"
+                                             viewBox="0 0 19.11 24.68">
+                                            <path
+                                                d="M7,0,6.88,1.15,5.75,9.37A8.41,8.41,0,0,0,.31,14.94L0,15.89l1,.29L7.2,18,5.39,24.11l.88.57h1L9.11,18.6l6.23,1.86,1,.29.26-1a8.41,8.41,0,0,0-1.5-7.64l3.55-7.5.5-1.05L18,3.27,8.14.33Z"/>
+                                        </svg>
+                                        <svg class="slds-button__icon cbs-icon-pin cbs-icon--focus"
+                                             aria-hidden="true" viewBox="0 0 32 32">
+                                            <path
+                                                d="M 3.71875 2.28125 L 2.28125 3.71875 L 28.28125 29.71875 L 29.71875 28.28125 L 21.75 20.3125 C 21.988678 19.231627 22.072023 18.111911 21.875 17 L 29.4375 11.46875 L 20.53125 2.5625 L 15 10.125 C 13.889037 9.9274235 12.764228 10.013944 11.6875 10.25 L 3.71875 2.28125 z M 20.78125 5.625 L 26.375 11.21875 L 19.59375 16.1875 L 19.78125 16.84375 C 19.930164 17.410929 20.006357 17.989892 20 18.5625 L 13.4375 12 C 14.010039 11.993776 14.588137 12.069369 15.15625 12.21875 L 15.8125 12.40625 L 20.78125 5.625 z M 8.21875 11.84375 C 7.96575 12.04475 7.732 12.269 7.5 12.5 L 6.78125 13.1875 L 12.09375 18.5 L 4 26.59375 L 4 28 L 5.40625 28 L 13.5 19.90625 L 18.8125 25.21875 L 19.5 24.5 C 19.731 24.269 19.95625 24.03425 20.15625 23.78125 L 8.21875 11.84375 z"></path>
+                                        </svg>
+                                        <span class="slds-assistive-text">Download</span>
+                                    </button>
+                                    <button (click)="download(attachment?.id)"
+                                            class="slds-button slds-button--icon-border" title="Download">
+                                        <svg class="slds-button__icon" aria-hidden="true">
+                                            <use
+                                                xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#download"></use>
+                                        </svg>
+                                        <span class="slds-assistive-text">Download</span>
+                                    </button>
+                                    <button (click)="confirmDelete(attachment)"
+                                            class="slds-button slds-button--icon-border"
+                                            title="Delete">
+                                        <svg class="slds-button__icon" aria-hidden="true">
+                                            <use
+                                                xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                                        </svg>
+                                        <span class="slds-assistive-text">Delete</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                <cbs-loading-indicator [isFixed]="true"
+                                       [showLoader]="(profile | async)?.loading"></cbs-loading-indicator>
+
+
+                <ngl-modal header="{{ 'UPLOAD_NEW_FILE' | translate }}" [(open)]="isOpen">
+                    <div body>
+                        <cbs-file-upload
+                            name="file"
+                            [url]="url"
+                            (onUpload)="onUpload($event)"
+                            (onError)="onError($event)"
+                            (onClear)="onClear()"
+                            [hasComments]="true"
+                            includeToken="true"
+                            multiple="false"
+                            accept="*/*"
+                            chooseLabel="{{ 'CHOOSE_FILE' | translate }}"
+                            uploadLabel="{{ 'UPLOAD' | translate }}"
+                            cancelLabel="{{ 'CANCEL' | translate }}"
+                            dropLabel="{{ 'DROP_LABEL' | translate }}"
+                            maxFileSize="100000000">
+                        </cbs-file-upload>
+                    </div>
+                </ngl-modal>
+
+
+            </div>
+            <p *ngIf="(profile | async)?.loaded && !(profile | async)?.attachments?.length"
+               class="slds-text-align--center slds-m-top--large"> {{ 'NO_DATA' | translate }}
+                <span class="slds-m-top--medium" style="display: block;"></span>
+            </p>
+        </div>
+    </div>
+</main>
+
+<cbs-confirm-popup [opened]="isVisible"
+                   (onSubmitClick)="delete($event)"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'CANCEL' | translate"
+                   [rightButtonLabel]="'CONFIRM' | translate"
+                   [popupLabel]="'CONFIRMATION' | translate"
+                   [confirmText]="'DELETE_ATTACHMENT_TEXT' | translate"></cbs-confirm-popup>
+
+<ngl-modal [(open)]="opened" (openChange)="resetModal()">
+    <div body>
+        <img [src]="imageUrl" alt="">
+    </div>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!(profile | async)?.attachments"></cbs-loading-indicator>

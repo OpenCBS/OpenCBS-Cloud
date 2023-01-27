@@ -1,0 +1,416 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'CHART_OF_ACCOUNTS' | translate }}"
+                               [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <div cbs-page-header-layout="right">
+            <div class="cbs-branches-lookup-block">
+                <span class="cbs-branch-lookup-label slds-p-right_small">{{'BRANCH' | translate}}</span>
+                <cbs-picklist
+                    class="cbs-branches-lookup"
+                    [config]="branchConfig"
+                    [filterType]="'name'"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ selectLabel | translate }}"
+                    (onSelect)="setLookupValue($event)"></cbs-picklist>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<main class="cbs-main cbs-main--pt-sm" [ngClass]="{'remove-overflow': openedModal}">
+    <table class="slds-table slds-table--bordered slds-tree slds-table--tree slds-no-row-hover">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th width="auto" style="padding-left: 2.5rem">{{'NAME' | translate}}</th>
+            <th width="20%">{{'NUMBER' | translate}}</th>
+            <th width="20%">{{'BRANCH' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let node of nodes">
+            <tr class="cbs-tr-hover">
+                <td [ngStyle]="{'padding-left': !node.hasChildren ? 2.5+'rem' : ''}">
+                    <button (click)="toggle(node)" [ngClass]="{'cbs-treetable__toggler--expanded' : node.expanded }"
+                            class="slds-button cbs-treetable__toggler slds-button--icon slds-button--icon-x-small slds-m-right--x-small"
+                            aria-controls="expand"
+                            *ngIf="node.hasChildren">
+                        <svg class="slds-button__icon slds-button__icon--small cbs-treetable__toggler__icon">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                        </svg>
+                        <span class="slds-assistive-text">{{'TOGGLE' | translate}}</span>
+                    </button>
+                    <span>{{node?.name}}</span>
+                    <div *ngIf="node?.accountType !== 'BALANCE'"
+                         class="slds-p-left--medium options slds-show--inline-block">
+                        <svg (click)="show({type: 'add', node: node})"
+                             class="slds-button__icon slds-button__icon--left"
+                             aria-hidden="true">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>
+                        <svg *ngIf="!node?.hasTransactions" (click)="show({type: 'edit', node: node})"
+                             class="slds-button__icon slds-button__icon--left"
+                             aria-hidden="true">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                        </svg>
+                        <svg (click)="show({type: 'show', node: node})"
+                             class="slds-button__icon slds-button__icon--left"
+                             aria-hidden="true">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#preview"></use>
+                        </svg>
+                    </div>
+                </td>
+                <td>{{ node?.number }}</td>
+                <td>{{ node?.branch?.name }}</td>
+            </tr>
+            <tr *ngIf="node.expanded">
+                <td colspan="3" style="padding: 0; border-top: none;">
+                    <cbs-accounts-tree-table (onIconClick)="show($event)" [padding]="2" [currentNode]="node"
+                                             [childrenNodes]="node?.data"
+                                             [branchId]="branchId"></cbs-accounts-tree-table>
+                </td>
+            </tr>
+
+        </ng-container>
+        </tbody>
+    </table>
+
+    <ngl-modal [header]="headerTitle | translate" [(open)]="openedModal">
+        <div body>
+            <form novalidate [formGroup]="form" #formFocus>
+                <cbs-form-input-control
+                    [formControlName]="'name'"
+                    [requiredField]="true"
+                    [hasError]="form.get('name').errors && form.get('name').touched"
+                    fieldLabel="{{ 'NAME' | translate }}"
+                ></cbs-form-input-control>
+
+                <div
+                    *ngIf="currentNode?.accountType !== 'CATEGORY' || currentNode?.accountType === 'CATEGORY' && isNew; else rootNode"
+                    class="slds-p-top--x-small slds-p-bottom--x-small">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        <abbr class="slds-required" title="required">*</abbr>
+                        {{ 'NUMBER' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <cbs-form-readonly-control
+                                    *ngIf="!isNew; else parentNumber"
+                                    [value]="currentNode?.parentAccountNumber">
+                                </cbs-form-readonly-control>
+
+                                <ng-template #parentNumber>
+                                    <cbs-form-readonly-control
+                                        *ngIf="currentNode.parentAccountNumber; else noParent"
+                                        [value]="currentNode?.number">
+                                    </cbs-form-readonly-control>
+
+                                    <ng-template #noParent>
+                                        <cbs-form-readonly-control
+                                            [value]="currentNode?.number">
+                                        </cbs-form-readonly-control>
+                                    </ng-template>
+                                </ng-template>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <cbs-form-input-control
+                                    [formControlName]="'childNumber'"
+                                    [requiredField]="true"
+                                    [inputType]="'number'"
+                                    [hasError]="form.get('childNumber').errors && form.get('childNumber').touched"
+                                ></cbs-form-input-control>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #rootNode>
+                    <cbs-form-input-control
+                        [formControlName]="'childNumber'"
+                        [requiredField]="true"
+                        [inputType]="'number'"
+                        [fieldLabel]="'NUMBER' | translate"
+                        [hasError]="form.get('childNumber').errors && form.get('childNumber').touched"
+                    ></cbs-form-input-control>
+                </ng-template>
+
+
+                <cbs-form-lookup-control
+                    [hasError]="form.get('branchId').errors && form.get('branchId').touched"
+                    [requiredField]="true"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [formControlName]="'branchId'"
+                    [fieldLabel]="'BRANCH' | translate"
+                    [picklistDataUrl]="branchConfig">
+                </cbs-form-lookup-control>
+
+                <cbs-form-lookup-control
+                    *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType === 'add' || currentNode?.accountType === 'BALANCE'"
+                    [hasError]="form.get('currencyId').errors && form.get('currencyId').touched"
+                    [requiredField]="true"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [formControlName]="'currencyId'"
+                    [fieldLabel]="'CURRENCY' | translate"
+                    [picklistDataUrl]="currencyConfig">
+                </cbs-form-lookup-control>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        <abbr class="slds-required" title="required">*</abbr>
+                        {{ 'ACCOUNT_TYPE' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-3" name="isDebit"
+                                           [value]="true"
+                                           formControlName="isDebit"/>
+                                    <label class="slds-radio__label" for="radio-3">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Debit</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-4" name="isDebit"
+                                           [value]="false"
+                                           formControlName="isDebit"/>
+                                    <label class="slds-radio__label" for="radio-4">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Credit</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small"
+                     *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType === 'add' || currentNode?.accountType === 'BALANCE'">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'ALLOWED_TRANSFER_FROM' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-5" name="allowedTransferFrom"
+                                           [value]="true"
+                                           formControlName="allowedTransferFrom"/>
+                                    <label class="slds-radio__label" for="radio-5">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-6" name="allowedTransferFrom"
+                                           [value]="false"
+                                           formControlName="allowedTransferFrom"/>
+                                    <label class="slds-radio__label" for="radio-6">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small"
+                     *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType === 'add' || currentNode?.accountType === 'BALANCE'">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'ALLOWED_TRANSFER_TO' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-7" name="allowedTransferTo"
+                                           [value]="true"
+                                           formControlName="allowedTransferTo"/>
+                                    <label class="slds-radio__label" for="radio-7">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-8" name="allowedTransferTo"
+                                           [value]="false"
+                                           formControlName="allowedTransferTo"/>
+                                    <label class="slds-radio__label" for="radio-8">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small"
+                     *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType === 'add' || currentNode?.accountType === 'BALANCE'">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'ALLOWED_CASH_DEPOSIT' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-9" name="allowedCashDeposit"
+                                           [value]="true"
+                                           formControlName="allowedCashDeposit"/>
+                                    <label class="slds-radio__label" for="radio-9">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-10" name="allowedCashDeposit"
+                                           [value]="false"
+                                           formControlName="allowedCashDeposit"/>
+                                    <label class="slds-radio__label" for="radio-10">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small"
+                     *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType === 'add' || currentNode?.accountType === 'BALANCE'">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'ALLOWED_CASH_WITHDRAWAL' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-11" name="allowedCashWithdrawal"
+                                           [value]="true"
+                                           formControlName="allowedCashWithdrawal"/>
+                                    <label class="slds-radio__label" for="radio-11">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-12" name="allowedCashWithdrawal"
+                                           [value]="false"
+                                           formControlName="allowedCashWithdrawal"/>
+                                    <label class="slds-radio__label" for="radio-12">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small"
+                     *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType === 'add' || currentNode?.accountType === 'BALANCE'">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'ALLOWED_MANUAL_TRANSACTION' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-13" name="allowedManualTransaction"
+                                           [value]="true"
+                                           formControlName="allowedManualTransaction"/>
+                                    <label class="slds-radio__label" for="radio-13">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-14" name="allowedManualTransaction"
+                                           [value]="false"
+                                           formControlName="allowedManualTransaction"/>
+                                    <label class="slds-radio__label" for="radio-14">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-p-top--x-small slds-p-bottom--x-small"
+                     *ngIf="currentNode?.accountType === 'SUBGROUP' && dataType !== 'add' && dataType !== 'edit'  || currentNode?.accountType === 'BALANCE'">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'LOCKED' | translate }}
+                    </label>
+                    <div class="slds-form-element cbs-compound-form__row slds-p-top--xx-small">
+                        <div class="cbs-compound-form__r">
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-15" name="locked"
+                                           [value]="true"
+                                           formControlName="locked"/>
+                                    <label class="slds-radio__label" for="radio-15">
+                                      <span class="slds-radio_faux"></span>
+                                      <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                 </span>
+                            </div>
+                            <div class="cbs-compound-form__1-of-2">
+                                <span class="slds-radio">
+                                    <input type="radio" id="radio-16" name="locked"
+                                           [value]="false"
+                                           formControlName="locked"/>
+                                    <label class="slds-radio__label" for="radio-16">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <ng-template ngl-modal-footer>
+
+            <button class="slds-button slds-button--neutral"
+                    (click)="cancel()">{{ 'CANCEL' | translate }}
+            </button>
+
+            <button *ngIf="!showAccount"
+                    class="slds-button slds-button--success"
+                    (click)="submit()"
+                    #submitButton
+                    [disabled]="form.invalid">{{ 'SAVE' | translate }}
+            </button>
+
+        </ng-template>
+    </ngl-modal>
+</main>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!chartOfAccountsData?.loaded || isLoading"
+></cbs-loading-indicator>

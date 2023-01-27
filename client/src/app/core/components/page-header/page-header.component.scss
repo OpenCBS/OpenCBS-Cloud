@@ -1,0 +1,40 @@
+:host {
+  .cbs-page-header {
+    &--l {
+      width: 40%;
+    }
+
+    &--c {
+      width: 20%;
+    }
+
+    &--r {
+      width: 40%;
+      text-align: right;
+    }
+  }
+
+  .slds-page-header {
+    height: 68px;
+    @media (min-width: 48em) {
+      padding: 1rem 1rem 1rem 1.25rem;
+    }
+  }
+
+  .cbs-two-column {
+    .cbs-page-header {
+      &--l {
+        width: 60%;
+      }
+
+      &--c {
+        width: 0%;
+      }
+
+      &--r {
+        width: 40%;
+        text-align: right;
+      }
+    }
+  }
+}

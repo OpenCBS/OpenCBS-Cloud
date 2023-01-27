@@ -1,0 +1,78 @@
+<div class="slds-grid slds-grid--align-center">
+    <div class="slds-container--medium">
+        <div class="slds-align--absolute-center slds-text-title--caps">
+            <strong>{{ 'CURRENT_NUMBER_FORMAT' | translate }}</strong>
+        </div>
+        <div class="slds-form-element slds-accordion__section">
+            <div class="slds-form-element__control slds-app-launcher__header">
+                            <span class="slds-form-element__static">
+                                {{ currentNumberFormat }}
+                            </span>
+            </div>
+        </div>
+
+        <div class="slds-align--absolute-center slds-text-title--caps">
+            <strong>{{ 'SELECTED_NUMBER_FORMAT' | translate }}</strong>
+        </div>
+        <div class="slds-form-element slds-accordion__section">
+            <div class="slds-form-element__control slds-app-launcher__header">
+                            <span class="slds-form-element__static">
+                                {{ selectedNumberFormat }}
+                            </span>
+            </div>
+        </div>
+
+        <div class="slds-align--absolute-center slds-text-title--caps">
+            <strong>{{ 'REGIONAL_NUMBER_FORMATS' | translate }}</strong>
+        </div>
+        <form novalidate [formGroup]="numberFormatSettingForm">
+            <div *ngFor="let format of numberFormats; let i = index;"
+                 class="slds-form-element slds-accordion__section">
+                <div class="slds-form-element__control"
+                     (click)="selectedFormatValue(format.value)">
+                                    <span class="slds-form-element__static">
+                                        {{ format['value'] | cbsSettingNumberFormat }}
+                                    </span>
+                    <svg *ngIf="selectedFormat !== format['value']"
+                         class="icon slds-avatar--x-small slds-button--small slds-button__icon--hint slds-float--right">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#record"></use>
+                    </svg>
+                    <svg *ngIf="selectedFormat === format['value']"
+                         class="slds-avatar--x-small slds-button--small slds-button__icon icon slds-float--right">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="slds-form-element slds-accordion__section">
+                <label class="slds-form-element__label cbs-compound-form__checkbox-label checkbox">
+                    {{ 'USE_DECIMAL' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <label class="slds-checkbox" for="use-decimal">
+                        <input type="checkbox"
+                               name="useDecimal"
+                               id="use-decimal"
+                               [ngModel]="useDecimal"
+                               [ngModelOptions]="{standalone: true}"
+                               (click)="useDecimalSelect()"/>
+                        <span class="slds-checkbox--faux"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div *ngIf="useDecimal" class="slds-form-element slds-accordion__section">
+                <input type="number"
+                       class="slds-input"
+                       [min]="0"
+                       [max]="4"
+                       [(ngModel)]="decimalValue"
+                       (focusout)="inputChange($event.target['value'])"
+                       [ngModelOptions]="{standalone: true}">
+            </div>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<ngl-modal [header]="headerTitle" [(open)]="isOpen">
+    <div body>
+
+        <form novalidate [formGroup]="entryFeesForm" class="slds-form--stacked" cbsFormFocus *ngIf="formGenerated">
+            <ng-container
+                *ngFor="let field of feeFields; let ind=index;"
+                cbsDynamicField
+                [config]="field"
+                [styleClass]="{'cbs-field--edited': field.edited }"
+                [group]="entryFeesForm.controls['fees'].controls[ind]">
+                <div class="form-control-range">
+                    <span *ngIf="field?.percentage">({{'PERCENTAGE' | translate}})</span>
+                    <span *ngIf="!field?.percentage">({{'FLAT' | translate}})</span>
+                    {{'MIN' | translate}}: <span>{{ field?.minValue | cbsNumberFormat }}</span>
+                    {{'MAX' | translate}}: <span>{{ field?.maxValue | cbsNumberFormat }}</span>
+                </div>
+            </ng-container>
+
+            <cbs-form-input-control
+                formControlName="total"
+                fieldLabel="{{ 'TOTAL' | translate }}"
+                [inputType]="'number'">
+            </cbs-form-input-control>
+        </form>
+        <p class="slds-text-body--small slds-text-color--weak slds-m-top--small slds-text-align--right"
+           *ngIf="hasEditedField()">
+            <i>The orange highlighted entry fees are set by user.</i>
+            <button class="slds-button" (click)="resetFeeCalculation.emit()">Reset fee calculation</button>
+        </p>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpen = false">
+            {{ 'CANCEL' | translate }}
+        </button>
+        <button [disabled]="entryFeesForm.invalid" class="slds-button slds-button--success"
+                (click)="saveNewEntryFees()">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

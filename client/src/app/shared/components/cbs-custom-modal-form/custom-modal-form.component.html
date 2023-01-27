@@ -1,0 +1,19 @@
+<ngl-modal [header]="headerTitle" [(open)]="opened">
+    <div body>
+        <form novalidate [formGroup]="customForm" #formFocus>
+            <div formArrayName="fields">
+                <div *ngIf="customForm.controls['fields']['controls'].length > 0">
+                    <div *ngFor="let field of customForm.controls['fields']['controls']; trackBy: field;">
+                        <cbs-form-field [fieldForm]="field" [fieldData]="customFields"></cbs-form-field>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success" (click)="submit(customForm)" #submitButton
+                [disabled]="customForm.invalid || !formChanged">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

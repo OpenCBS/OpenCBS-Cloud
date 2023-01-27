@@ -1,0 +1,8 @@
+<ul *ngIf="navData.length > 1">
+    <li
+        *ngFor="let item of navData; trackBy: item?.id;"
+        [ngClass]="{'active': activeItemId === item?.id}"
+        (click)="scrollTo(selectorName + '_' + item?.id)">
+        <span class="slds-truncate">{{ item?.title }}</span>
+    </li>
+</ul>

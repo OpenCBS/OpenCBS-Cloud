@@ -1,0 +1,106 @@
+<ngl-modal [header]="headerTitle" [(open)]="isOpen">
+    <div body>
+        <form novalidate #f="ngForm" class="slds-form--stacked" #formFocus>
+
+            <div class="slds-form-element" [class.slds-has-error]="name.errors?.required && name.touched">
+                <label class="slds-form-element__label" for="text-input-01">{{'NAME' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="text-input-01" class="slds-input" name="name" minlength="3" #name="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+
+            <div class="slds-form-element"
+                 [class.slds-has-error]="beginPeriodDay.errors?.required && beginPeriodDay.touched || fieldTouched">
+                <label class="slds-form-element__label" for="text-input-02">{{'START_DATE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input [onlyNumber]="true" type="number" id="text-input-02"
+                           class="slds-input" name="beginPeriodDay" #beginPeriodDay="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+
+            <div class="slds-form-element"
+                 [class.slds-has-error]="endPeriodDay.errors?.required && endPeriodDay.touched || fieldTouched">
+                <label class="slds-form-element__label" for="text-input-03">{{'END_DATE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input [onlyNumber]="true" type="number" id="text-input-03"
+                           class="slds-input" name="endPeriodDay" #endPeriodDay="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+
+            <cbs-form-select-control
+                [requiredField]="true"
+                name="penaltyType"
+                #penaltyType="ngModel" ngModel
+                fieldLabel="{{ 'PENALTY_TYPE' | translate }}"
+                [selectData]="configPenaltyType"
+            ></cbs-form-select-control>
+
+            <div class="slds-form-element"
+                 [class.slds-has-error]="penalty.errors?.required && penalty.touched || fieldTouched">
+                <label class="slds-form-element__label" for="text-input-04">{{'PENALTY_VALUE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input [onlyNumber]="true" type="number" id="text-input-04"
+                           class="slds-input" name="penalty" #penalty="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+
+            <div class="slds-form-element"
+                 [class.slds-has-error]="gracePeriod.errors?.required && gracePeriod.touched || fieldTouched">
+                <label class="slds-form-element__label" for="text-input-05">{{'GRACE_PERIOD' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input [onlyNumber]="true" type="number" id="text-input-05"
+                           class="slds-input" name="gracePeriod" #gracePeriod="ngModel"
+                           ngModel required/>
+                </div>
+            </div>
+
+            <cbs-form-lookup-control
+                #accrualAccount
+                [requiredField]="true"
+                [code]="true"
+                name="accrualAccountId"
+                #accrualAccountId="ngModel" ngModel
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'ACCRUAL_ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+
+            <cbs-form-lookup-control
+                #incomeAccount
+                [requiredField]="true"
+                [code]="true"
+                name="incomeAccountId"
+                #incomeAccountId="ngModel" ngModel
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'INCOME_ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+
+            <cbs-form-lookup-control
+                #writeOffAccount
+                [requiredField]="true"
+                [code]="true"
+                name="writeOffAccountId"
+                #writeOffAccountId="ngModel" ngModel
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'PENALTY_WRITE_OFF_ACCOUNT' | translate"
+                [picklistDataUrl]="config" required>
+            </cbs-form-lookup-control>
+
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success" #submitButton
+                [disabled]="f.invalid || !formChanged || fieldTouched" (click)="submit(f)">{{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

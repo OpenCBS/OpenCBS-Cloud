@@ -1,0 +1,221 @@
+<cbs-form-layout *ngIf="termDepositProductState?.loaded && termDepositProductState?.success">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'ACTIVE_PRODUCT' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ termDepositProduct?.statusType | translate }}</span>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'NAME' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static">{{ termDepositProduct?.name }}</span>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CODE' | translate }}"
+        [value]="termDepositProduct?.code">
+    </cbs-form-readonly-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'AVAILABILITY' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                    <span class="slds-checkbox">
+                        <input
+                            type="checkbox"
+                            [checked]="checkAvailability('PERSON')"/>
+                        <label class="slds-checkbox__label">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">{{ 'PROFILE_PERSON' | translate }}</span>
+                        </label>
+                    </span>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                    <span class="slds-checkbox">
+                        <input
+                            type="checkbox"
+                            [checked]="checkAvailability('COMPANY')"/>
+                        <label class="slds-checkbox__label">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">
+                                {{ (currentInstance === 'rwanda' ? 'COMPANY_GROUP' : 'PROFILE_COMPANY') | translate }}
+                            </span>
+                        </label>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">
+            {{ 'CURRENCY' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <span class="slds-form-element__static"
+                  *ngIf="termDepositProduct?.currency">{{termDepositProduct?.currency?.name}}</span>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.amountMin | cbsNumberFormat }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.amountMax | cbsNumberFormat }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'INTEREST_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.interestRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.interestRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'DURATION_MONTH' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.termAgreementMin }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.termAgreementMax }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_ACCRUAL_FREQUENCY' | translate }}"
+        [value]="termDepositProduct?.interestAccrualFrequency | translate">
+    </cbs-form-readonly-control>
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'EARLY_CLOSE_FEE_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'EARLY_CLOSE_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.earlyCloseFeeRateMin }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.earlyCloseFeeRateMax }}</span>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            {{ 'EARLY_CLOSE_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.earlyCloseFeeFlatMin }}</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2">
+                <label class="cbs-compound-form__label">
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ termDepositProduct?.earlyCloseFeeFlatMax }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-text-title--caps slds-m-bottom--medium account-title">
+        <strong>{{ 'ACCOUNTS' | translate }}</strong>
+    </div>
+
+    <div *ngFor="let account of termDepositProduct?.accounts">
+        <cbs-form-readonly-control
+            fieldLabel="{{ account?.accountRuleType | translate }}"
+            [value]="account?.accountDto?.number + ' | ' + account?.accountDto?.name">
+        </cbs-form-readonly-control>
+    </div>
+
+
+</cbs-form-layout>
+
+<p *ngIf="termDepositProductState?.loaded && !termDepositProductState?.error"
+   class="slds-text-align--center slds-m-top--large">{{ termDepositProductState?.errorMessage }}</p>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="termDepositProductState?.loading"></cbs-loading-indicator>

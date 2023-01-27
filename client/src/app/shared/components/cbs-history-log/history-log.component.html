@@ -1,0 +1,46 @@
+<span class="slds-assistive-text">History log</span>
+<div class="slds-media">
+    <div class="slds-media__body">
+        <div class="slds-media slds-media--timeline slds-timeline__media--task">
+            <div class="slds-media__figure slds-timeline__icon">
+                <div class="slds-icon_container">
+                    <svg aria-hidden="true" class="slds-icon slds-icon--small slds-icon-standard-task">
+                        <use xlink:href="assets/icons/standard-sprite/svg/symbols.svg#task"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="slds-media__body">
+                <h3 class="slds-truncate" [title]="'FIELD_CHANGE' | translate">
+                    <a href="javascript:void(0);">{{'FIELD_CHANGE' | translate}}</a>
+                </h3>
+                <p *ngIf="logData?.changed?.length" class="slds-truncate" [title]="'FIELD_WAS_CHANGED' | translate">
+                    <span *ngFor="let field of logData?.changed"> {{'FIELD' | translate}}
+                        <strong *ngIf="logData?.changed?.length">{{ field?.fieldName | uppercase }}</strong>
+                        {{ 'WAS_CHANGED' | translate}}
+                        <ul class="slds-list--horizontal slds-wrap">
+                            <li class="slds-m-right--large">
+                                <span class="slds-text-title">{{'FROM' | translate}}:</span>
+                                <span class="slds-text-body--small">{{field?.prefValue}}</span>
+                            </li>
+                            <li class="slds-m-right--large">
+                                <span class="slds-text-title">{{'TO' | translate}}:</span>
+                                <span class="slds-text-body--small">{{field?.value}}</span>
+                            </li>
+                        </ul>
+                    </span>
+                </p>
+                <ul class="slds-list--horizontal slds-wrap">
+                    <li class="slds-m-right--large">
+                        <span class="slds-text-title">{{'DATE' | translate}}:</span>
+                        <span class="slds-text-body--small">
+                            {{logData?.date | cbsDateFormat}} {{logData?.date | cbsTimeFormat}}</span>
+                    </li>
+                    <li class="slds-m-right--large">
+                        <span class="slds-text-title">{{'CHANGED_BY' | translate}}:</span>
+                        <span class="slds-text-body--small"><a href="javascript:void(0);">{{logData?.username}}</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

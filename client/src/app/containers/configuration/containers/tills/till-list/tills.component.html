@@ -1,0 +1,74 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'TELLER_MANAGEMENT' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" routerLink="create">
+                <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                </svg>
+                {{ 'CREATE' | translate }}
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="25%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Name">{{ 'BRANCH' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let till of (tills | async)?.data?.content" (click)="goToTillDetails(till)">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{till.id}}">{{ till.id}}</div>
+            </th>
+            <th data-label="Range" scope="row">
+                <div class="slds-truncate" title="">
+                    {{ till.name }}
+                </div>
+            </th>
+            <th data-label="Roles" scope="row">
+                <div class="slds-truncate" title="">
+                    {{till?.branchName}}
+                </div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="slds-grid slds-grid--align-center" *ngIf="(tills | async)?.totalElements > (tills | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(tills | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(tills | async)?.totalElements"
+            limit="5"
+            [perPage]="(tills | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(tills | async)?.loading"></cbs-loading-indicator>
+
+</main>

@@ -1,0 +1,51 @@
+:host ::ng-deep {
+  .slds-container--medium {
+    @media screen and (min-width: 994px) {
+      max-width: 35rem;
+    }
+  }
+
+  .cbs-edit-branch {
+    padding-bottom: 2rem;
+    overflow: auto;
+    flex: 1 0 auto;
+    height: 100%;
+    @media screen and (max-width: 768px) {
+      padding-left: .5rem;
+      padding-right: .5rem;
+    }
+
+    .slds-container--medium {
+      width: 100%;
+    }
+
+    &__heading {
+      margin: 1rem 0;
+      padding-left: 34%;
+    }
+
+    .slds-form--horizontal {
+      margin-bottom: 2rem;
+
+      .slds-form-element {
+        margin-bottom: .5rem;
+      }
+
+      .slds-picklist {
+        width: 100%;
+      }
+
+      cbs-datepicker .slds-form-element__control {
+        width: 100%;
+      }
+
+      .slds-text-heading--small {
+        text-align: center;
+
+        @media screen and (min-width: 768px) {
+          padding-left: 34%;
+        }
+      }
+    }
+  }
+}

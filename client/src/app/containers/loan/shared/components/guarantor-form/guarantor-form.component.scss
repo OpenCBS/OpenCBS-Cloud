@@ -1,0 +1,27 @@
+:host {
+
+  .slds-text-title--caps {
+    @media screen and (min-width: 994px) {
+      width: 65%;
+    }
+    display: block;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .cbs-guarantor-name {
+    margin-top: 1rem;
+  }
+
+  .slds-form-element__label {
+    top: 0.4rem;
+  }
+
+  .slds-form-element__control {
+    padding-bottom: 5px;
+  }
+
+  .cbs-textarea {
+    height: 75px;
+  }
+}

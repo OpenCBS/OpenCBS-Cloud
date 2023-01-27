@@ -1,0 +1,26 @@
+<div class="slds-form-element"
+     [class.slds-has-error]="showError && hasError"
+     [ngClass]="styleClass"
+     [ngStyle]="style">
+    <label class="slds-form-element__label" *ngIf="!!fieldLabel.length">
+        <abbr class="slds-required" title="required" *ngIf="requiredField">*</abbr>
+        {{ fieldLabel }}
+    </label>
+    <div class="slds-form-element__control">
+        <div class="slds-input-has-icon slds-input-has-icon--right">
+            <svg *ngIf="showIconPreview" class="slds-input__icon slds-icon-text-default cbs-user-create__preview"
+                 aria-hidden="true" (mousedown)="inputType = 'text'" (mouseup)="inputType = 'password'">
+                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#preview"></use>
+            </svg>
+            <input [onlyNumber]="inputType === 'number'"
+                   [type]="inputType" class="slds-input"
+                   [ngModel]="value"
+                   (ngModelChange)="inputChange($event)"
+                   [ngClass]="{'disabled': disabled}"
+                   [disabled]="disabled"
+                   (blur)="onBlur()"
+            >
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ collateralState?.collateral?.name | uppercase }} - {{ 'EDIT' | translate }}"
+                [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="cbs-new-profile__submit-btn">
+                <a [routerLink]="'/loans/' + loan.id + '/' + profile.type.toLowerCase() + '/collateral/' + collateralState?.collateral?.id"
+                   class="slds-button slds-button--neutral slds-not-selected" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>{{ 'CANCEL' | translate }}</span>
+                </a>
+                <button (click)="submit()" class="slds-button slds-button--success slds-not-selected"
+                        aria-live="assertive" [disabled]="formComponent?.collateralForm?.invalid || !formChanged">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                        </svg>{{ 'SAVE' | translate}}</span>
+                </button>
+            </div>
+        </div>
+
+    </cbs-page-header>
+</cbs-header>
+
+<div class="slds-grid slds-grid--align-center">
+    <div class="slds-container--medium"
+         [ngStyle]="{'visibility': (collateralState && collateralState?.success) ? 'visible': 'hidden' }">
+        <cbs-loan-collateral-form></cbs-loan-collateral-form>
+    </div>
+</div>
+
+<cbs-confirm-popup [opened]="isOpen"
+                   (onSubmitClick)="goToNextRoute()"
+                   (openedChange)="closeConfirmPopup()"
+                   [leftButtonLabel]="'NO' | translate"
+                   [rightButtonLabel]="'YES' | translate"
+                   [popupLabel]="'WARNING' | translate"
+                   [confirmText]="'UNSAVED_CHANGES' | translate"></cbs-confirm-popup>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!collateralState"></cbs-loading-indicator>

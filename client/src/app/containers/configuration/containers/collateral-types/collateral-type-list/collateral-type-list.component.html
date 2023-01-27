@@ -1,0 +1,65 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'COLLATERAL_TYPES' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="openCreateModal()">
+        <span class="slds-text-not-selected">
+        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+        </svg>{{ 'CREATE' | translate }}
+        </span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let collateralType of (collateralTypes | async)?.collateralTypes; let i = index;"
+            (click)="goToCollateral(collateralType)">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Name" scope="row">
+                <div class="slds-truncate" title="{{ collateralType?.caption }}">
+                    {{ collateralType?.caption }}
+                </div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(collateralTypes | async)?.loading"></cbs-loading-indicator>
+
+</main>
+<!-- ./cbs-main -->
+
+<cbs-custom-modal-form
+    headerTitle="{{ 'COLLATERAL_TYPE_NEW_TITLE' | translate }}"
+    (submitForm)="submitCollateralType($event)"></cbs-custom-modal-form>
+
+
+
+

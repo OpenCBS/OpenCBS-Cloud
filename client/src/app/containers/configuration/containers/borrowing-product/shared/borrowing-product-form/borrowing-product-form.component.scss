@@ -1,0 +1,85 @@
+:host {
+  .cbs-compound-form {
+    &__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-direction: column;
+
+      @media (min-width: 48em) {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .slds-form-element__label {
+        margin-top: 6px;
+        margin-bottom: 0;
+      }
+    }
+
+    &__label {
+      color: rgba(84, 105, 141, 0.7);
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+
+    &__r {
+      width: 100%;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+
+      @media (min-width: 48em) {
+        width: 66%;
+      }
+
+      .slds-form-element__control {
+        position: relative;
+        width: 100%;
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+    }
+
+    &__1-of-2 {
+      width: 49%;
+    }
+
+    &__1-of-3 {
+      width: 31.33%;
+    }
+
+    &__checkbox-label {
+      top: 0 !important;
+      margin: 0 !important;
+    }
+  }
+
+  .slds-form-element > .slds-form-element__legend,
+  .slds-form-element > .slds-form-element__label {
+    @media screen and (min-width: 48em) {
+      top: 0.3rem;
+    }
+  }
+
+  .cbs-hint-icon {
+    position: absolute;
+    right: 8px;
+    top: 6px;
+  }
+
+  .slds-form--horizontal .slds-form-element + .slds-form-element {
+    @media (min-width: 30em) {
+      margin-top: .8rem;
+    }
+  }
+
+  .account-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}

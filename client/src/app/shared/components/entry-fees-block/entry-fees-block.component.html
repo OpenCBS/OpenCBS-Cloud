@@ -1,0 +1,35 @@
+<div class="slds-form-element">
+    <label class="slds-form-element__label">
+        {{ 'ENTRY_FEES' | translate }}
+    </label>
+    <div class="slds-form-element__control">
+        <div class="entry-fees-block">
+            <div class="slds-grid slds-grid--align-spread slds-grid--vertical-align-center">
+                <div *ngIf="isValidToCalculate; else warning">
+                    <span *ngFor="let entryFee of entryFeesData">
+                        <span
+                            class="slds-text-color--weak">{{ entryFee.name ? entryFee.name : entryFee['entryFee'].name}}
+                        </span>:
+                        <strong>{{ entryFee.amount | cbsNumberFormat }}</strong><br>
+                    </span>
+                    <hr style="margin: 3px 0 10px 0">
+                    <span class="slds-text-title_caps">{{ 'ENTRY_FEES_TOTAL_AMOUNT' | translate }}</span>: <strong>{{
+                    getTotal() | cbsNumberFormat }}</strong>
+                </div>
+                <button class="slds-button details-button"
+                        *ngIf="isValidToCalculate"
+                        (click)="onDetailsClick.emit()">
+                    <svg class="slds-button__icon slds-button__icon_left slds-button__icon--small">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info_alt"></use>
+                    </svg>
+                    {{'DETAILS' | translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #warning>
+    <span class="slds-text-title_caps">{{ 'NO_VALID_DATA_TO_CALCULATE' | translate }}</span>
+</ng-template>

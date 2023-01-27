@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .slds-table {
+    tbody tr {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .is-deleted {
+    background-color: #ececec;
+  }
+}

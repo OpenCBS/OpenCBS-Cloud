@@ -1,0 +1,85 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'TRANSACTION_TEMPLATES' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <span nglDropdown [(open)]="open">
+                <button class="slds-button slds-button--neutral" nglDropdownTrigger>
+                    <span class="slds-truncate">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>
+                        {{ 'CREATE' | translate }}
+                    </span>
+                    <ngl-icon icon="down" type="default" size="x-small"></ngl-icon>
+                </button>
+                <div class="slds-dropdown slds-dropdown--right cbs-dropdown cbs-dropdown--full-width">
+                    <ul class="dropdown__list" role="menu">
+                        <li class="slds-dropdown__item">
+                            <a (click)="gotToCreateTransactionTemplate('MULTIPLE_DEBIT_TEMPLATES')" role="menuitem" nglDropdownItem>
+                                <p class="slds-truncate">{{ 'MULTIPLE_DEBIT_TEMPLATES' | translate }}</p>
+                            </a>
+                        </li>
+                        <li class="slds-dropdown__item">
+                            <a (click)="gotToCreateTransactionTemplate('MULTIPLE_CREDIT_TEMPLATES')" role="menuitem" nglDropdownItem>
+                                <p class="slds-truncate">{{ 'MULTIPLE_CREDIT_TEMPLATES' | translate }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </span>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="25%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let transactionTemplate of transactionTemplatesList?.transaction_templates; let i = index"
+            (click)="goToTransactionTemplatesDetails(transactionTemplate)">
+            <th scope="row" class="slds-truncate">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Name" scope="row" class="slds-truncate">
+                <div>
+                    {{ transactionTemplate['name'] }}
+                </div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="transactionTemplatesList?.loading"></cbs-loading-indicator>
+    <div class="slds-grid slds-grid--align-center" *ngIf="transactionTemplatesList?.totalElements > transactionTemplatesList?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="transactionTemplatesList?.loaded"
+            [(page)]="queryObject.page"
+            [total]="transactionTemplatesList?.totalElements"
+            limit="5"
+            [perPage]="transactionTemplatesList?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+</main>

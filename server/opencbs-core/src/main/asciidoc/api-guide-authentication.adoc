@@ -1,0 +1,75 @@
+== AUTHENTICATION
+
+Anonymous requests are not allowed in the API and thus every request should be carried out on behalf
+of a user registered in the database. This is achieved by adding the `Authorization` header and supplying a valid `TOKEN`.
+
+[source,http,options="nowrap"]
+----
+GET /api/profiles/people/1 HTTP/1.1
+Authorization: Bearer TOKEN // <1>
+----
+
+<1> The `TOKEN` should be obtained beforehand as explained in the section below.
+
+=== Obtain a token
+
+A `POST` request will return an authentication token in exchange for a valid pair of username and password.
+
+==== Request structure
+
+|===
+|Path|Type|Description
+
+|`username`
+|`String`
+|A valid username
+
+|`password`
+|`String`
+|The valid password for the given username
+
+|===
+
+
+==== Response structure
+
+|===
+|Path|Type|Description
+
+|`data`
+|`Object`
+| Payload
+
+|`data.token`
+|`String`
+|The token that can be used to authentication further requests
+
+|===
+
+==== Example request
+
+[source,http,options="nowrap"]
+----
+POST /api/login HTTP/1.1
+Content-Type: application/json
+Host: localhost:8080
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+----
+
+==== Example response
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type application/json/charset=UTF-8
+
+{
+  "data": {
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6ImNvbS5vcGVuY2JzLmtpdCJ9.pjB2AIjmVqcX5yRFD2FIyD5DLHiBNrOcqvOzB37onyOZet8kNjQzjxar-TTGOoJxovAYJtqZNB_xGoX2l6LWEA"
+  }
+}
+----

@@ -1,0 +1,52 @@
+:host {
+  .cbs-reschedule-button {
+    background: orange;
+    color: white;
+  }
+
+  .slds-button {
+    &[disabled] {
+      color: white;
+      background-color: #e0e5ee;
+      cursor: not-allowed;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+  }
+}
+
+.filter-events {
+  text-align: left;
+  margin-left: 8px;
+  margin-top: -5px;
+}
+
+.loan-info-entity {
+  position: absolute;
+  bottom: 5px;
+  right: 25em;
+
+  .balance-info {
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.8125rem;
+  }
+}
+
+.loan-info-entity-unallocated {
+  position: absolute;
+  bottom: 2px;
+  right: 17em;
+
+  .balance-info-unallocated {
+    text-align: left;
+    font-weight: bold;
+    font-size: 0.7080rem;
+  }
+}
+
+.sidebar {
+  position: relative;
+}

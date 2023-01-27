@@ -1,0 +1,20 @@
+:host ::ng-deep {
+
+  ngl-picklist > div {
+    width: 66%;
+
+    button {
+      width: 100%;
+    }
+
+    .slds-dropdown {
+      max-width: 100%;
+      width: 100%;
+
+      input {
+        display: none;
+      }
+    }
+  }
+
+}

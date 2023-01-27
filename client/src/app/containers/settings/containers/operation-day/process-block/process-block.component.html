@@ -1,0 +1,23 @@
+<div class="slds-grid" *ngIf="statusData?.status === 'DONE'">
+    <div style="padding-left: 136px">{{statusData?.title}}</div>
+</div>
+
+<div class="slds-m-top--medium slds-m-bottom--medium" *ngIf="statusData?.status === 'IN_PROGRESS'">
+    <div class="slds-grid slds-grid--align-spread slds-m-bottom--x-small">
+        <div class="slds-text-title_caps slds-text-color--weak">{{ statusData?.title }}</div>
+        <div class="slds-text-title_caps slds-text-color--weak">{{ statusData?.progress + ' %' }}</div>
+    </div>
+    <div class="slds-progress-bar slds-progress-bar_medium slds-progress-bar_circular" aria-valuemin="0"
+         aria-valuemax="100" aria-valuenow="25" role="progressbar">
+            <span class="slds-progress-bar__value"
+                  [style.width.%]="statusData?.progress"
+                  [style.background]="statusData?.progress === 100 ? 'green' : null">
+                <span class="slds-assistive-text">{{'Progress: ' + statusData?.progress + ' %'}}</span>
+            </span>
+    </div>
+    <div class="slds-grid slds-grid--align-spread slds-m-top--x-small">
+        <span>Current process: {{statusData?.progressName}}</span>
+    </div>
+</div>
+
+

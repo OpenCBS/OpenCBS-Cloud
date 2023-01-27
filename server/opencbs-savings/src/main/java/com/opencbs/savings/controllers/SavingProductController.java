@@ -1,0 +1,104 @@
+package com.opencbs.savings.controllers;
+
+import com.opencbs.core.domain.enums.ModuleType;
+import com.opencbs.core.dto.audit.HistoryDto;
+import com.opencbs.core.exceptions.ResourceNotFoundException;
+import com.opencbs.core.request.domain.Request;
+import com.opencbs.core.request.domain.RequestType;
+import com.opencbs.core.request.dto.RequestDto;
+import com.opencbs.core.request.serivce.MakerCheckerWorker;
+import com.opencbs.core.security.permissions.PermissionRequired;
+import com.opencbs.savings.dto.SavingProductDetailsDto;
+import com.opencbs.savings.dto.SavingProductDto;
+import com.opencbs.savings.mappers.SavingProductMapper;
+import com.opencbs.savings.services.SavingProductService;
+import com.opencbs.savings.validators.SavingProductValidator;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/api/saving-products")
+@SuppressWarnings("unused")
+@RequiredArgsConstructor
+public class SavingProductController {
+
+    private final SavingProductService savingProductService;
+    private final SavingProductMapper savingProductMapper;
+    private final SavingProductValidator savingProductValidator;
+    private final MakerCheckerWorker makerCheckerWorker;
+    private final ModelMapper mapper;
+
+
+    @GetMapping
+    public Page<SavingProductDto> get(@RequestParam(value = "search", required = false) String searchString,
+                                      @RequestParam(name = "show_all", defaultValue = "false") Boolean showAll,
+                                      Pageable pageable) {
+        if (showAll) {
+            return this.savingProductService.findAll(pageable).map(x -> mapper.map(x, SavingProductDto.class));
+        }
+        return this.savingProductService.searchActiveProductsByString(pageable, searchString)
+                .map(x -> this.savingProductMapper.entityToDto(x));
+    }
+
+    @GetMapping(value = "/{id}")
+    public SavingProductDetailsDto get(@PathVariable Long id) throws ResourceNotFoundException {
+        return this.savingProductService
+                .getOne(id)
+                .map(this.savingProductMapper::entityToDetailDto)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Saving product not found (ID=%d).", id)));
+    }
+
+    @PermissionRequired(name = "MAKER_FOR_SAVING_PRODUCT", moduleType = ModuleType.MAKER_CHECKER, description = "")
+    @PostMapping
+    public RequestDto create(@RequestBody SavingProductDto savingProductDto) throws Exception {
+        this.savingProductValidator.validateOnCreate(savingProductDto);
+        Request request = this.makerCheckerWorker.create(RequestType.SAVING_PRODUCT_CREATE, savingProductDto);
+        RequestDto detailsDto = new RequestDto();
+        detailsDto.setId(request.getId());
+        return detailsDto;
+    }
+
+    @PermissionRequired(name = "MAKER_FOR_SAVING_PRODUCT", moduleType = ModuleType.MAKER_CHECKER, description = "")
+    @PutMapping(value = "/{id}")
+    public RequestDto update(@PathVariable Long id,
+                             @RequestBody SavingProductDto savingProductDto) throws Exception {
+        this.savingProductService.getOne(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Saving product not found (ID=%d)", id)));
+
+        savingProductDto.setId(id);
+        this.savingProductValidator.validateOnUpdate(savingProductDto, id);
+        Request request = this.makerCheckerWorker.create(RequestType.SAVING_PRODUCT_EDIT, savingProductDto);
+        RequestDto detailsDto = new RequestDto();
+        detailsDto.setId(request.getId());
+        return detailsDto;
+    }
+
+    @GetMapping(value = "/{id}/history")
+    public List<HistoryDto> getHistory(@PathVariable Long id) throws Exception {
+        this.savingProductService.getOne(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Saving Product not found(ID=%d).", id)));
+
+        return this.savingProductService.getAllRevisions(id);
+    }
+
+    @GetMapping(value = "/{id}/history/last_change")
+    public HistoryDto getLastChange(@PathVariable Long id, @RequestParam(value = "dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime) throws Exception {
+        this.savingProductService.getOne(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Saving Product not found(ID=%d).", id)));
+        return this.savingProductService.getRevisionByDate(id, dateTime);
+    }
+}

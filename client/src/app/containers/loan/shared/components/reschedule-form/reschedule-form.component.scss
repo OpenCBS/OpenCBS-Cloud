@@ -1,0 +1,26 @@
+:host ::ng-deep {
+  .cbs-reschedule-form {
+    padding: 1rem;
+
+    &__range {
+      color: #bbb;
+      font-size: 10px;
+      text-align: right;
+      text-transform: uppercase;
+
+      span {
+        color: #54698d;
+        font-weight: bold;
+        margin-right: .85rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .slds-form-element {
+      margin-bottom: 5px;
+    }
+  }
+}

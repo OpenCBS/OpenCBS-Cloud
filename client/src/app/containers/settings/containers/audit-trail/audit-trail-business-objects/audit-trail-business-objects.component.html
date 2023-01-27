@@ -1,0 +1,125 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'AUDIT_TRAIL_BUSINESS_OBJECTS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right" class="slds-accordion__summary-action">
+            <form novalidate [formGroup]="form" class="slds-form--stacked">
+                <div class="cbs-controls-container">
+                    <cbs-form-date-control
+                        (onChange)="valid()"
+                        class="slds-m-right--x-small"
+                        formControlName="start"
+                        [hasError]="form.get('start').errors && form.get('start').touched"
+                        [requiredField]="true"
+                        [maxDate]="toDate"></cbs-form-date-control>
+                    <span class="cbs-long-dash">&#8212;</span>
+                    <cbs-form-date-control
+                        formControlName="end"
+                        [hasError]="form.get('end').errors && form.get('end').touched"
+                        [requiredField]="true"
+                        [minDate]="fromDate">
+                    </cbs-form-date-control>
+                    <button class="slds-button slds-button--neutral filter"
+                            (click)="filter()"
+                            aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            {{ 'FILTER' | translate }}
+                        </span>
+                    </button>
+                    <button class="slds-button slds-button--neutral filter"
+                            (click)="download()"
+                            aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            {{ 'PRINT' | translate }}
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<main class="cbs-main cbs-main--pt-sm">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer" id="contentToPDF">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col">
+                <div class="slds-truncate" title="Date">{{ 'DATE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="User">{{ 'USER' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Action">{{ 'ACTION' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Description">{{ 'DESCRIPTION' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Details">{{ 'DETAILS' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let audit of (auditTrailData | async)?.auditTrailObjects; let i = index;">
+            <td data-label="Date" scope="row" class="slds-truncate">
+                {{ audit['dateTime'] | cbsDateFormat }} {{ audit['dateTime'] | cbsTimeFormat }}
+            </td>
+            <td data-label="User Name" scope="row" class="slds-truncate">
+                <b>{{ audit['username'] }}</b>
+            </td>
+            <td data-label="Schedule type" scope="row" class="slds-truncate">
+                {{ getActionValue(audit) | translate }}
+            </td>
+            <td data-label="Description" scope="row" class="slds-truncate">
+                <div>{{ getValueDescription(audit) }}</div>
+            </td>
+            <td data-label="Show more" scope="row" class="slds-truncate">
+                <div>
+                    <span class="slds-truncate">
+                        <a href="javascript:void(0);" (click)="showMore(audit)" title="Show more">{{
+                            'SHOW_MORE' | translate }}</a>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(auditTrailData | async)?.totalElements > (auditTrailData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(auditTrailData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(auditTrailData | async)?.totalElements"
+            limit="5"
+            [perPage]="(auditTrailData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+</main>
+<cbs-loading-indicator [isFixed]="true" [showLoader]="auditTrailObjects?.loading || isLoading"></cbs-loading-indicator>
+
+<ngl-modal [header]="'HISTORY_LOG' | translate" [(open)]="isOpen">
+    <div body class="slds-col_padded-around">
+        <div class="cbs-cc-activity-list" *ngIf="historyList">
+            <span><strong>{{'HISTORY_LOG' | translate | uppercase }}</strong></span>
+            <ul class="slds-accordion__section slds-timeline__title-content">
+                <cbs-history-log [logData]="historyList"></cbs-history-log>
+            </ul>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpen = false">{{ 'CANCEL' | translate }}</button>
+    </ng-template>
+</ngl-modal>

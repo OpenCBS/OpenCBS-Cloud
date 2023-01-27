@@ -1,0 +1,83 @@
+<cbs-form-layout *ngIf="savingLoaded?.loaded">
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'PROFILE' | translate }}"
+        [value]="savings?.profileName">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'SAVING_PRODUCT' | translate }}"
+        [value]="savings?.savingProductName">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'SAVING_OFFICER' | translate }}"
+        [value]="savings?.savingOfficerName">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'OPEN_DATE' | translate }}"
+        [value]="savings?.openDate | cbsDateFormat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+        [value]="savings?.interestRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DEPOSIT_FEE_RATE' | translate }}"
+        [value]="savings?.depositFeeRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'DEPOSIT_FEE_FLAT' | translate }}"
+        [value]="savings?.depositFeeFlat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'WITHDRAWAL_FEE_RATE' | translate }}"
+        [value]="savings?.withdrawalFeeRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'WITHDRAWAL_FEE_FLAT' | translate }}"
+        [value]="savings?.withdrawalFeeFlat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'ENTRY_FEES_RATE' | translate }}"
+        [value]="savings?.entryFeeRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'ENTRY_FEES_FLAT' | translate }}"
+        [value]="savings?.entryFeeFlat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CLOSE_FEE_RATE' | translate }}"
+        [value]="savings?.closeFeeRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'CLOSE_FEE_FLAT' | translate }}"
+        [value]="savings?.closeFeeFlat">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MANAGEMENT_FEE_RATE' | translate }}"
+        [value]="savings?.managementFeeRate">
+    </cbs-form-readonly-control>
+
+    <cbs-form-readonly-control
+        fieldLabel="{{ 'MANAGEMENT_FEE_FLAT' | translate }}"
+        [value]="savings?.managementFeeFlat">
+    </cbs-form-readonly-control>
+</cbs-form-layout>
+
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="!savingLoaded?.loaded"
+></cbs-loading-indicator>

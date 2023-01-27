@@ -1,0 +1,15 @@
+<div class="cbs-cc-page" *ngIf="(historyList| async)?.loaded && !loanProductHistoryState?.loading">
+    <div class="cbs-cc-activity-list" *ngIf="(historyList | async)?.loanProductHistory?.length">
+        <span><strong>{{'HISTORY_LOG' | translate | uppercase }}</strong></span>
+        <ul>
+            <li *ngFor="let log of (historyList | async)?.loanProductHistory; let i = index; trackBy: log?.id">
+                <cbs-history-log [logData]="log"></cbs-history-log>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<p *ngIf="(historyList| async)?.loaded && !(historyList | async)?.loanProductHistory?.length"
+   class="slds-text-align--center slds-m-top--large">{{ 'NO_DATA' | translate }}</p>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="loanProductHistoryState?.loading"></cbs-loading-indicator>

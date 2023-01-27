@@ -1,0 +1,79 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ loanApplication?.id ? loanApplication?.code : '' }}"
+                               [svgData]="svgData"
+                               [badgeLabel]="loanAppStatus | translate"
+                               [badgeTheme]="(loanAppStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <ng-container>
+                    <button
+                        *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['CHECKER_FOR_LOAN_DISBURSEMENT'] }"
+                        (click)="openApproveModal()"
+                        class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                            {{ 'APPROVE' | translate }}
+                        </span>
+                    </button>
+
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER',
+                            permissions: ['MAKER_FOR_LOAN_DISBURSEMENT','CHECKER_FOR_LOAN_DISBURSEMENT'] }"
+                        (click)="openDeleteModal()" class="slds-button slds-button--brand" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                            </svg>
+                            {{ 'REJECT' | translate }}
+                        </span>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="false" [sidePanel]="false">
+        <div cbs-loan-layout="right">
+
+            <cbs-confirm-popup
+                [confirmText]="'Are you sure you want to approve?'"
+                [opened]="approveRequest"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="approveLoanProductRequest()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+
+            <cbs-confirm-popup
+                [confirmText]="'Are you sure you want to reject?'"
+                [opened]="deleteRequest"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="deleteLoanProductRequest()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+<!-- ./cbs-main -->
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

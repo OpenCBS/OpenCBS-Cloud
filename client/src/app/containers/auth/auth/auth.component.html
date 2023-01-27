@@ -1,0 +1,109 @@
+<div class="cbs-auth">
+    <div class="cbs-auth-logo">
+        <cbs-logo-svg></cbs-logo-svg>
+    </div>
+    <div class="cbs-auth-form-wrap">
+        <p class="slds-text-color--error cbs-auth__error-message" *ngIf="(currentUser | async)?.error">{{ (currentUser |
+            async)?.errorMessage }}</p>
+        <form class="cbs-auth-form" novalidate #f="ngForm" (ngSubmit)="submitForm(f)">
+            <div class="slds-form--stacked">
+                <div class="slds-form-element" [class.slds-has-error]="userName.errors && userName.touched">
+                    <label class="slds-form-element__label" for="username-id">
+                        <abbr class="slds-required" title="required"
+                              *ngIf="userName.errors && userName.touched">*</abbr>
+                        {{ 'USERNAME' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <input id="username-id" class="slds-input" type="text" placeholder="Chris" name="username"
+                               #userName="ngModel" ngModel required/>
+                    </div>
+                </div>
+                <div class="slds-form-element" [class.slds-has-error]="password.errors && password.touched">
+                    <label class="slds-form-element__label" for="password-id">
+                        <abbr class="slds-required" title="required"
+                              *ngIf="password.errors && password.touched">*</abbr>
+                        {{ 'PASSWORD' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <input id="password-id" class="slds-input" type="password" placeholder="*********"
+                               name="password"
+                               #password="ngModel" ngModel required/>
+                    </div>
+                </div>
+                <input type="submit" *ngIf="!(currentUser | async)?.loading" class="slds-button slds-button--brand"
+                       [disabled]="f.invalid || disabled" value="{{ 'SIGN_IN' | translate }}">
+                <div class="cbs-auth__spinner" *ngIf="(currentUser | async)?.loading">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner--brand slds-spinner slds-spinner--small" role="alert">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-clearfix">
+                    <div class="slds-float--right">
+
+                        <a (click)="recoverOpenModal()" class="">{{ 'FORGET' | translate }}</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<ngl-modal header="{{ 'CHANGE_PASSWORD' | translate }}" *ngIf="openModal" [(open)]="openModal">
+    <div body>
+        <form novalidate [formGroup]="changePasswordForm">
+            <cbs-form-input-control
+                [class.slds-has-error]="passwordNotMatch"
+                [requiredField]="true"
+                [fieldLabel]="'PASSWORD' | translate"
+                [hasError]="changePasswordForm.get('password').errors && changePasswordForm.get('password').touched"
+                [formControlName]="'password'"
+                [inputType]="'password'"
+                [showIconPreview]="true">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [class.slds-has-error]="passwordNotMatch"
+                [requiredField]="true"
+                [fieldLabel]="'CONFIRM_PASSWORD' | translate"
+                [hasError]="changePasswordForm.get('confirmPassword').errors && changePasswordForm.get('confirmPassword').touched"
+                [formControlName]="'confirmPassword'"
+                [inputType]="'password'"
+                [showIconPreview]="true">
+            </cbs-form-input-control>
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="changePasswordForm.invalid || passwordNotMatch" class="slds-button slds-button--success"
+                (click)="submit()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+
+</ngl-modal>
+
+<ngl-modal header="{{ 'RECOVER' | translate }}" *ngIf="openRecoverModal" [(open)]="openRecoverModal">
+    <div body>
+        <form novalidate [formGroup]="recoverPasswordForm">
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'USERNAME_OR_EMAIL' | translate"
+                [hasError]="recoverPasswordForm.get('username').errors && recoverPasswordForm.get('username').touched"
+                [formControlName]="'username'"
+                [inputType]="'username'">
+            </cbs-form-input-control>
+        </form>
+    </div>
+
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="recoverPasswordForm.invalid || passwordNotMatch" class="slds-button slds-button--success"
+                (click)="submitRecover()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+
+</ngl-modal>
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

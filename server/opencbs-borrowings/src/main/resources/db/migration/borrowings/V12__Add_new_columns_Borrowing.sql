@@ -1,0 +1,2 @@
+alter table borrowing_events add column rolled_back_by_id integer constraint borrowing_events_rolled_back_by_id_fkey references users;
+alter table borrowing_events add column rolled_back_date timestamp;

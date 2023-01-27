@@ -1,0 +1,63 @@
+:host {
+  display: flex;
+  height: 100%;
+  align-items: stretch;
+  overflow: hidden;
+
+  .cbs-loan-layout {
+    &__sidebar {
+      width: 40px;
+      min-width: 40px;
+      background: #f7f9fb;
+      border-right: 1px solid #d8dde6;
+    }
+
+    &__l {
+      width: 20rem;
+      min-width: 20rem;
+      overflow: hidden;
+      border-right: 1px solid #d8dde6;
+      position: relative;
+      padding-bottom: 50px;
+
+      [cbs-loan-layout] {
+        height: 100%;
+      }
+
+      & ::ng-deep [cbs-loan-layout='left'] {
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
+
+    &__toolbar {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 50px;
+      width: 100%;
+      border-top: 1px solid #d8dde6;
+      padding: 0 1rem;
+      background: #fff;
+    }
+
+    &__r {
+      position: relative;
+      width: calc(100% - 20rem);
+      overflow: hidden;
+    }
+
+    &--scrollable {
+      overflow-y: auto;
+    }
+
+    &--full-width {
+      width: 100%;
+    }
+  }
+
+  ::ng-deep .cbs-loan-layout__r > [cbs-loan-layout] {
+    height: 100%;
+    overflow: auto;
+  }
+}

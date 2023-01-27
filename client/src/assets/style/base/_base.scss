@@ -1,0 +1,217 @@
+$green: #32c24d;
+$blue: #005fb2;
+$red: #c23934;
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.cbs-main {
+  height: 100%;
+  position: relative;
+
+  &--pt-xs {
+    padding-top: 40px;
+  }
+
+  &--pt-sm {
+    padding-top: 107px;
+
+    @media screen and (max-width: 768px) {
+      padding-top: 104px;
+    }
+  }
+
+  &--pt-lg {
+    padding-top: 105px;
+  }
+
+  .slds-icon-action-user {
+    position: relative;
+    height: 32px;
+    width: 32px;
+    vertical-align: middle;
+    margin-right: 4px;
+    .slds-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.slds-button--success {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: center;
+  vertical-align: middle;
+  background-color: $green;
+  border: 1px solid $green;
+  color: #fff;
+
+  &:hover, &:focus {
+    color: #fff;
+  }
+
+  &[disabled] {
+    background: #e0e5ee;
+    border-color: transparent;
+    color: white;
+  }
+}
+
+.delete_application{
+  background-color: #d75b5b;
+  border: 1px solid #d75b5b;
+  float: right;
+  top: -32px;
+  left: -136px;
+
+  &:hover, &:active, &:focus{
+    background-color: #d72913;
+    border: 1px solid #d72913;
+    color: #fff;
+  }
+}
+
+.slds-badge {
+  &--orange {
+    background-color: #ffb75d;
+  }
+  &--cyan {
+    background-color: #3ce2e2;
+  }
+  &--pink {
+    background-color: #c57886;
+    color: #ffffff;
+  }
+  &--blue {
+    background-color: #2e6cf7;
+    color: #ffffff;
+  }
+  &--purple {
+    background-color: #ab09ab;
+    color: #ffffff;
+  }
+  &--almond {
+    background-color: #bccede;
+  }
+  &--gold {
+    background-color: #e7ea18;
+  }
+  &--aqua {
+    background-color: #4de6e6;
+  }
+  &--yellow {
+    background-color: #d4fb00;
+  }
+}
+
+.slds-dropdown {
+  &.slds-dropdown--top {
+    top: auto;
+    bottom: 110%;
+  }
+}
+
+.cbs-line-height-1 {
+  line-height: 1;
+}
+
+.slds-notify--toast {
+  min-width: 20rem;
+}
+
+.slds-select_container .slds-select {
+  padding-left: 12px;
+  padding-bottom: 2px;
+}
+
+.slds-container--medium {
+  width: 100%;
+}
+
+.cbs-text {
+  &--success {
+    color: $green;
+  }
+}
+
+.slds-form_horizontal .slds-form-element > .slds-form-element__legend,
+.slds-form_horizontal .slds-form-element > .slds-form-element__label,
+.slds-form--horizontal .slds-form-element > .slds-form-element__legend,
+.slds-form--horizontal .slds-form-element > .slds-form-element__label {
+  @media (min-width: 48em) {
+    top: .35rem;
+  }
+}
+
+.mat-datepicker-popup {
+  .mat-calendar-content,
+  .mat-calendar-table-header th,
+  .mat-calendar-header{
+    padding: 0;
+  }
+
+  .mat-datepicker-content .mat-calendar {
+    height: 310px;
+  }
+
+  .mat-calendar-controls {
+    margin: 1% calc(33% / 7 - 16px);
+  }
+}
+
+// Global picklist/lookup styles
+.cbs-picklist  {
+  &__dropdown {
+    position: static;
+    padding: 2rem 0 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 14rem;
+    max-height: 16rem;
+    overflow: hidden;
+
+    .slds-form-element__control {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  &__list {
+    max-height: 14rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  &__clear-btn {
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 9px;
+    right: 37px;
+    background: none;
+    border: none;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: #54698d;
+      position: relative;
+      top: -4px;
+    }
+  }
+
+  &__clear-search-btn {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,17 @@
+.cbs-status {
+
+  &--approved {
+    background-color: green;
+    color: white;
+  }
+
+  &--declined {
+    background-color: red;
+    color: white;
+  }
+
+  &--review {
+    background-color: orange;
+    color: white;
+  }
+}

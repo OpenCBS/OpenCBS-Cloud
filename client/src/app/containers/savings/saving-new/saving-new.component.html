@@ -1,0 +1,168 @@
+<cbs-form-layout>
+    <div class="slds-text-title--caps slds-m-bottom--medium">
+        <strong>{{ 'DETAILS' | translate }}</strong>
+    </div>
+
+    <div class="cbs-loan-details-form__form">
+        <form novalidate [formGroup]="form" class="slds-form--stacked" *ngIf="!isLoading">
+            <cbs-form-readonly-control
+                fieldLabel="{{ 'PROFILE' | translate }}"
+                [value]="profileName"
+                [disabled]="true">
+            </cbs-form-readonly-control>
+
+            <cbs-form-lookup-control
+                formControlName="savingProductId"
+                fieldLabel="{{ 'SAVING_PRODUCT' | translate }}"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [hasError]="form.get('savingProductId').errors && form.get('savingProductId').touched"
+                [picklistDataUrl]="formConfigSavingProduct.loanProductLookupUrl"
+                [requiredField]="true"
+                (onSelect)="onSavingSelect($event)"
+            ></cbs-form-lookup-control>
+
+            <cbs-form-lookup-control
+                formControlName="savingOfficerId"
+                fieldLabel="{{ 'SAVING_OFFICER' | translate }}"
+                [picklistFilterType]="'name'"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [hasError]="form.get('savingOfficerId').errors && form.get('savingOfficerId').touched"
+                [picklistDataUrl]="formConfigSavingOfficer.savingOfficerLookupUrl"
+                [requiredField]="true"
+            ></cbs-form-lookup-control>
+
+            <cbs-form-date-control
+                formControlName="openDate"
+                fieldLabel="{{ 'OPEN_DATE' | translate }}"
+                [hasError]="form.get('openDate').errors && form.get('openDate').touched"
+                [requiredField]="true">
+            </cbs-form-date-control>
+
+            <cbs-form-input-control
+                formControlName="interestRate"
+                fieldLabel="{{ 'INTEREST_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('interestRate').errors && form.get('interestRate').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="interestRateRange.length">
+                    Min: <span>{{ interestRateRange[0] }}</span> Max: <span>{{ interestRateRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="depositFeeRate"
+                fieldLabel="{{ 'DEPOSIT_FEE_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('depositFeeRate').errors && form.get('depositFeeRate').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="depositFeeRateRange.length">
+                    Min: <span>{{ depositFeeRateRange[0] }}</span> Max: <span>{{ depositFeeRateRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="depositFeeFlat"
+                fieldLabel="{{ 'DEPOSIT_FEE_FLAT' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('depositFeeFlat').errors && form.get('depositFeeFlat').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="depositFeeFlatRange.length">
+                    Min: <span>{{ depositFeeFlatRange[0] }}</span> Max: <span>{{ depositFeeFlatRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="withdrawalFeeRate"
+                fieldLabel="{{ 'WITHDRAWAL_FEE_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('withdrawalFeeRate').errors && form.get('withdrawalFeeRate').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="withdrawalFeeRateRange.length">
+                    Min: <span>{{ withdrawalFeeRateRange[0] }}</span> Max: <span>{{ withdrawalFeeRateRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="withdrawalFeeFlat"
+                fieldLabel="{{ 'WITHDRAWAL_FEE_FLAT' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('withdrawalFeeFlat').errors && form.get('withdrawalFeeFlat').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="withdrawalFeeFlatRange.length">
+                    Min: <span>{{ withdrawalFeeFlatRange[0] }}</span> Max: <span>{{ withdrawalFeeFlatRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+
+            <cbs-form-input-control
+                formControlName="entryFeeRate"
+                fieldLabel="{{ 'ENTRY_FEES_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('entryFeeRate').errors && form.get('entryFeeRate').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="entryFeeRateRange.length">
+                    Min: <span>{{ entryFeeRateRange[0] }}</span> Max: <span>{{ entryFeeRateRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="entryFeeFlat"
+                fieldLabel="{{ 'ENTRY_FEES_FLAT' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('entryFeeFlat').errors && form.get('entryFeeFlat').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="entryFeeFlatRange.length">
+                    Min: <span>{{ entryFeeFlatRange[0] }}</span> Max: <span>{{ entryFeeFlatRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="closeFeeRate"
+                fieldLabel="{{ 'CLOSE_FEE_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('closeFeeRate').errors && form.get('closeFeeRate').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="closeFeeRateRange.length">
+                    Min: <span>{{ closeFeeRateRange[0] }}</span> Max: <span>{{ closeFeeRateRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="closeFeeFlat"
+                fieldLabel="{{ 'CLOSE_FEE_FLAT' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('closeFeeFlat').errors && form.get('closeFeeFlat').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="closeFeeFlatRange.length">
+                    Min: <span>{{ closeFeeFlatRange[0] }}</span> Max: <span>{{ closeFeeFlatRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="managementFeeRate"
+                fieldLabel="{{ 'MANAGEMENT_FEE_RATE' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('managementFeeRate').errors && form.get('managementFeeRate').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="managementFeeRateRange.length">
+                    Min: <span>{{ managementFeeRateRange[0] }}</span> Max: <span>{{ managementFeeRateRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                formControlName="managementFeeFlat"
+                fieldLabel="{{ 'MANAGEMENT_FEE_FLAT' | translate }}"
+                [inputType]="'number'"
+                [requiredField]="true"
+                [hasError]="form.get('managementFeeFlat').errors && form.get('managementFeeFlat').touched">
+                <div class="cbs-loan-details-form__range" *ngIf="managementFeeFlatRange.length">
+                    Min: <span>{{ managementFeeFlatRange[0] }}</span> Max: <span>{{ managementFeeFlatRange[1] }}</span>
+                </div>
+            </cbs-form-input-control>
+
+        </form>
+    </div>
+
+</cbs-form-layout>

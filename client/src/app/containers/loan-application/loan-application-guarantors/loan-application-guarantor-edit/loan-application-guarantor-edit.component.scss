@@ -1,0 +1,9 @@
+:host ::ng-deep {
+  .slds-container--medium {
+    width: 100%;
+  }
+
+  .slds-form-element__control {
+    vertical-align: top;
+  }
+}

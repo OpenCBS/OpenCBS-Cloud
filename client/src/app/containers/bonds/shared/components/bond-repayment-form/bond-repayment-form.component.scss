@@ -1,0 +1,20 @@
+:host ::ng-deep {
+  .cbs-repayment-form {
+    padding: 1rem;
+
+    .slds-form-element {
+      margin-bottom: .5rem;
+    }
+  }
+
+  .maxAmount {
+    color: #9E9E9E;
+    font-size: 10px;
+    text-align: right;
+
+    a {
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+}

@@ -1,0 +1,74 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'OPERATION_DAY_TITLE' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="slds-container_medium slds-container--center slds-p-top--xx-large">
+
+        <div class="block">
+            <div class="slds-grid">
+                <div class="slds-size--1-of-2 slds-text-align--right">
+                    <span *ngIf="inProgress" class="slds-p-right--x-small">Days left: {{leftDay}}</span>
+                    <cbs-form-date-control class="slds-m-right--small"
+                                           [ngModel]="dayClosureDate"
+                                           [hasError]="!(dayClosureDate | validateDate)"
+                                           (ngModelChange)="dayClosureDate = $event"></cbs-form-date-control>
+                </div>
+                <div class="slds-size--1-of-2">
+                    <button [disabled]="inProgress" class="slds-button slds-button--brand slds-m-left--small"
+                            (click)="dayClose(dayClosureDate)">{{ 'DAY_CLOSURE' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div *ngFor="let process of processes">
+            <cbs-process-block
+                [statusData]="process"
+                [title]="'Calculating interest'"></cbs-process-block>
+        </div>
+
+    </div>
+    <!--<cbs-loading-indicator [isFixed]="true" [showLoader]="inProgress"></cbs-loading-indicator>-->
+    <cbs-confirm-popup [opened]="isOpen"
+                       (onSubmitClick)="start()"
+                       (onClose)="closeAndLogOut()"
+                       [leftButtonLabel]="'NO' | translate"
+                       [rightButtonLabel]="'YES' | translate"
+                       [popupLabel]="'WARNING' | translate"
+                       [confirmText]="'DAILY_CLOSURE_NOT_STARTED' | translate"></cbs-confirm-popup>
+
+    <div class="alert-popup" *ngIf="openWarning">
+        <div class="cbs__application-wrap">
+            <div class="cbs__application__note">
+                <div class="cbs__application-block">
+                    <div class="slds-text-heading--large">
+                        {{'Warning' | uppercase}}
+                    </div>
+                    <p class="cbs__application__note-text">
+                        {{"You don't have day closure permission to start end of day process"}}
+                    </p>
+                    <div class="slds-grid slds-m-top--x-large">
+                        <div class="slds-col cbs__application__note-button">
+                            <button (click)="closeAndLogOut()" class="slds-button slds-button--success">{{'OK'}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>
+</main>
+

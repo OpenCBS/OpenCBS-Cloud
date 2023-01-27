@@ -1,0 +1,43 @@
+:host {
+  .cbs-chips {
+    flex-wrap: wrap;
+
+    &--focus {
+      outline: 0;
+      border-color: #1589ee;
+      background-color: white;
+      box-shadow: 0 0 3px #0070D2;
+    }
+
+    &--disabled {
+      background-color: #e0e5ee;
+      border-color: #a8b7c7;
+      cursor: not-allowed;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    &--required {
+      outline: 0;
+      border-color: #c23934;
+      box-shadow: #c23934 0 0 0 1px inset;
+      background-color: white;
+    }
+
+    &__input {
+      border: 0 none;
+      width: 10em;
+      height: 1.6rem;
+      outline: medium none;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      border-radius: 0;
+    }
+  }
+}

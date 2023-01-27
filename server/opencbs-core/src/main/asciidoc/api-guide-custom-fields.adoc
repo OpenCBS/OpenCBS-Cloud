@@ -1,0 +1,59 @@
+[[custom-fields]]
+== Custom fields
+
+Different types of objects in OpenCBS define their properties via _custom fields_. A custom field is a piece of
+metadata attached to a value that determines the behavior of the value. It is also a way to extend the default
+set of properties of a certain type of thing in the system by your own properties.
+For example, the personal profile has a number of default properties like first name, last name, and birth date.
+You can extend this set by additional fields like marital status, education, professional information
+and so on and so forth, all depending on your needs.
+
+In other words, _custom fields is a pretty powerful tool for reshaping the default system configuration
+of the different types of resources provided by the OpenCBS platform._
+
+As with any other type of resource, you can retrieve, create, and update custom fields. But since custom
+fields do not exist on their own and are attached to other resources, the endpoint that you use to perform
+these operations depends on the resource they are attached to. In any case, the response structure is
+the same and looks like this:
+
+[[custom-field-response-structure]]
+=== Response structure
+
+|===
+|Path|Type|Description
+
+|`id`
+|`Number`
+|The ID of the custom field.
+
+|`name`
+|`String`
+|The system name of the custom field. Normally not used by the client,
+but handy for direct manipulations in the database. Should consist of the letters of the English alphabet,
+digits and underscores.
+
+|`caption`
+|`String`
+|The caption that is displayed next to a value.
+
+|`fieldType`
+|`String`
+|One of the following: `TEXT`, `TEXT_AREA`, `DATE`, `LIST`, `LOOKUP`
+
+|`unique`
+|`Boolean`
+| `true` if the values should be unique, `false` otherwise.
+
+|`required`
+|`Boolean`
+|`true` if the values cannot be empty, `false` otherwise.
+
+|`order`
+|`Number`
+|The order in which the values of different custom fields should be sorted.
+
+|`extra`
+|`String`
+|TODO: define extra
+
+|===

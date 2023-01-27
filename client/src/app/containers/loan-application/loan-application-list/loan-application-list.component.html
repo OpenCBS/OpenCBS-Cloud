@@ -1,0 +1,93 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'LOAN_APPLICATIONS' | translate }}"
+                               [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="clearSearch()"
+                (onSearch)="search($event)"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+        <!-- /cbs-page-header-layout = center -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <p-table [columns]="cols"
+             [value]="(loanApplicationData | async)?.loan_applications"
+             [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+             [customSort]="true">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns"
+                    [pSortableColumn]="col.field"
+                    [ngClass]="getClassName()?.colName === col.field ? getClassName()?.className : ''"
+                    (click)="sortValue(col.field);
+                    sortDirection = -sortDirection;">
+                    {{col.header | translate | uppercase}}
+                    <div class="slds-icon_container" *ngIf="col.field === colName">
+                        <svg class="slds-button__icon slds-button__icon--small cbs-treetable__toggler__icon">
+                            <use [attr.xlink:href]="'/assets/icons/utility-sprite/svg/symbols.svg#' + (sortDirection > 0 ? 'up' : 'down')"></use>
+                        </svg>
+                    </div>
+
+                    <div class="slds-icon_container slds-align-middle slds-lookup__pill-container" *ngIf="col.field !== colName">
+                        <svg class="slds-button__icon slds-button__icon--small cbs-treetable__toggler__icon slds-accordion__summary">
+                            <use [attr.xlink:href]="'/assets/icons/utility-sprite/svg/symbols.svg#up'"></use>
+                        </svg>
+                        <svg class="slds-button__icon slds-button__icon--small cbs-treetable__toggler__icon slds-accordion__summary">
+                            <use [attr.xlink:href]="'/assets/icons/utility-sprite/svg/symbols.svg#down'"></use>
+                        </svg>
+                    </div>
+
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr (click)="goToApplication(rowData)">
+                <td>{{rowData['profile']['name']}}</td>
+                <td>{{rowData['profile']['type'] | translate}}</td>
+                <td>{{rowData['code']}}</td>
+                <td>{{rowData['amounts'][0]['amount'] | cbsNumberFormat}}</td>
+                <td>{{rowData['interestRate'] + '%'}}</td>
+                <td>{{rowData['loanProduct']['name']}}</td>
+                <td>{{rowData['createdAt'] | cbsDateFormat}}</td>
+                <td>{{rowData['branch']['name'] | translate}}</td>
+                <td>
+                    <ngl-badge [type]="(rowData['status'] | statusBadge)">
+                        {{ rowData['status'] | translate }}
+                    </ngl-badge>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <cbs-loading-indicator [isFixed]="true"
+                           [showLoader]="(loanApplicationData | async)?.loading"></cbs-loading-indicator>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(loanApplicationData | async)?.totalElements > (loanApplicationData | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(loanApplicationData | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(loanApplicationData | async)?.totalElements"
+            limit="5"
+            [perPage]="(loanApplicationData | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="gotoPage($event)" #pagination></ngl-pagination>
+    </div>
+
+</main>
+<!-- ./cbs-main -->

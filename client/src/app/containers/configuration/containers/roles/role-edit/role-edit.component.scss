@@ -1,0 +1,59 @@
+:host {
+  .cbs-role-update {
+    padding: 20px 15px;
+
+    &__heading {
+      display: block;
+      text-align: center;
+
+    }
+
+    .slds-form-element > .slds-form-element__legend,
+    .slds-form-element > .slds-form-element__label {
+      @media screen and (min-width: 48em) {
+        top: 0.4rem;
+      }
+    }
+
+    &__permissions {
+      .cbs-role-update__heading {
+        @media screen and (min-width: 768px) {
+          padding-left: 34%;
+        }
+      }
+
+      .slds-text-title {
+        text-align: left;
+
+        @media screen and (min-width: 768px) {
+          padding-left: 34%;
+        }
+      }
+    }
+
+    .slds-container--medium {
+      width: 100%;
+    }
+
+    .slds-button {
+      margin-top: 1rem;
+    }
+
+    .slds-text-title {
+      color: #0070d2;
+    }
+
+    .slds-container--medium {
+      width: 100%;
+      @media screen and (min-width: 994px) {
+        max-width: 35rem;
+      }
+
+      .cbs-pull-negative {
+        @media screen and (min-width: 994px) {
+          margin-left: -50%;
+        }
+      }
+    }
+  }
+}

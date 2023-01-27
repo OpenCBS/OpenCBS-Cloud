@@ -1,0 +1,22 @@
+<ul class="slds-grid"
+    [ngClass]="{'slds-grid--vertical': type === 'vertical', 'slds-grid--align-space': align === 'space'}">
+    <li *ngFor="let nav of navConfig" routerLinkActive="active" [ngClass]="{'has-bg-hover': hasBgHover }">
+        <a [routerLink]="nav?.url"
+           [ngStyle]="hrefStyle">
+            <span class="slds-icon_container" title="{{ nav?.name | translate }}">
+                <svg class="slds-icon"
+                     [ngStyle]="iconStyle"
+                     [ngClass]="{'slds-icon--small': size === 'small', 'slds-icon--medium': size === 'medium'}"
+                     aria-hidden="true">
+                    <use [attr.xlink:href]="'/assets/icons/utility-sprite/svg/symbols.svg#' + nav?.iconName"></use>
+                </svg>
+                <span class="slds-assistive-text">{{ nav?.name | translate }}</span>
+            </span>
+        </a>
+        <div class="slds-popover slds-popover--tooltip slds-theme--info" role="tooltip"
+             [ngClass]="{'slds-nubbin--left': type === 'vertical', 'slds-nubbin--bottom': type === 'horizontal'}">
+            <div class="slds-popover__body">{{ nav?.name | translate }}</div>
+        </div>
+        <div class="cbs-circle" *ngIf="nav?.need_approve"></div>
+    </li>
+</ul>

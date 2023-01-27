@@ -1,0 +1,67 @@
+:host {
+  display: block;
+  position: relative;
+  .cbs-auth {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 360px;
+    @media only screen and (max-height: 1200px) {
+      padding-top: 180px;
+    }
+    @media only screen and (max-height: 1000px) {
+      padding-top: 140px;
+    }
+    @media only screen and (max-height: 900px) {
+      padding-top: 100px;
+    }
+    @media only screen and (max-height: 736px) {
+      padding-top: 60px;
+    }
+    @media only screen and (max-height: 670px) {
+      padding-top: 40px;
+    }
+    @media only screen and (max-height: 610px) {
+      padding-top: 20px;
+    }
+    &-form-wrap {
+      border-radius: 4px;
+      border: 1px solid #D8DDE6;
+      padding: 20px;
+    }
+    &-logo {
+      margin-bottom: 25px;
+      width: 200px;
+      height: 121px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    input {
+      padding: 12px;
+      line-height: 1;
+      &[type="submit"] {
+        width: 100%;
+        margin-top: 20px;
+        margin-bottom: 16px;
+        height: 44px;
+      }
+    }
+    &__spinner {
+      position: relative;
+      margin-top: 20px;
+      margin-bottom: 16px;
+      height: 44px;
+    }
+    .slds-text-color--error {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .slds-button--brand {
+      background-color: #1E97CE;
+      border: 1px solid #1E97CE;
+      &[disabled] {
+        background: #e0e5ee;
+        border-color: transparent;
+      }
+    }
+  }
+}

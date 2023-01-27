@@ -1,0 +1,1 @@
+ALTER TABLE loans_penalty_events_accounting_entries ADD COLUMN id BIGSERIAL PRIMARY KEY;

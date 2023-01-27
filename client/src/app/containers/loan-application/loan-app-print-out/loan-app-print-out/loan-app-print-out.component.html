@@ -1,0 +1,66 @@
+<table *ngIf="forms.length" class="slds-table slds-table--bordered slds-table--cell-buffer">
+    <thead>
+    <tr class="slds-text-title--caps">
+        <th scope="col" width="3%">
+            <div class="slds-truncate" title="#">#</div>
+        </th>
+        <th scope="col" width="77%">
+            <div class="slds-truncate" title="Code">{{ 'NAME' | translate }}</div>
+        </th>
+        <th scope="col" width="20%">
+            <div class="slds-truncate" title="Currency">{{ 'DOWNLOAD' | translate }}</div>
+        </th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let form of forms; let i = index;">
+        <td data-label="#" scope="row">
+            {{i + 1}}
+        </td>
+        <td data-label="Title" scope="row">
+            {{ form?.label}}
+        </td>
+        <td data-label="Type" scope="row">
+            <ngl-icon *ngIf="form?.loaderType === 'JASPER_LOADER'" (click)="downLoad(form)" icon="html" category="doctype"
+                      size="large"></ngl-icon>
+            <ngl-icon *ngIf="form?.loaderType === 'EXCEL_LOADER'" (click)="downLoad(form)" icon="excel" category="doctype"
+                      size="large"></ngl-icon>
+            <ngl-icon *ngIf="form?.loaderType === 'WORD_LOADER'" (click)="downLoad(form)" icon="word" category="doctype"
+                      size="large"></ngl-icon>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p *ngIf="!forms.length" class="slds-text-align--center slds-m-top_large">
+    {{ 'NO_DATA' | translate }}
+</p>
+
+
+<ngl-modal header="{{ reportName | translate }}" *ngIf="isOpen" [(open)]="isOpen">
+    <div body>
+        <cbs-loading-indicator [showLoader]="fieldsReady"></cbs-loading-indicator>
+        <form novalidate [formGroup]="reportForm" class="slds-form--stacked">
+            <div [hidden]="fieldsReady" formArrayName="fieldValues" class="cbs-collateral-form__fields">
+                <ng-container
+                    *ngFor="let field of customFields; let ind=index;"
+                    cbsDynamicField
+                    [config]="field"
+                    [group]="reportForm.controls['fieldValues'].controls[ind]">
+                </ng-container>
+            </div>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button *ngIf="!fieldsReady" class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate
+            }}
+        </button>
+        <button [disabled]="reportForm.invalid" *ngIf="!fieldsReady" class="slds-button slds-button--success"
+                (click)="submit()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!forms.length"></cbs-loading-indicator>

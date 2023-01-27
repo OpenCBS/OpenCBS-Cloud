@@ -1,0 +1,45 @@
+<ngl-modal [header]="headerTitle" [(open)]="isOpen">
+    <div body>
+        <form novalidate [formGroup]="form" class="slds-form--stacked">
+            <cbs-form-lookup-control
+                #payee
+                formControlName="payeeId"
+                fieldLabel="{{ 'PAYEE' | translate }}"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [hasError]="form.get('payeeId').errors && form.get('payeeId').touched"
+                [picklistDataUrl]="payeeLookupUrl"
+                [requiredField]="true"
+                (onSelect)="setPayeeDetails($event)"
+            ></cbs-form-lookup-control>
+
+            <cbs-form-date-control
+                formControlName="plannedDisbursementDate"
+                fieldLabel="{{ 'PLANNED_DISBURSEMENT_DATE' | translate }}"
+                [validateDate]="true"
+                [hasError]="form.get('plannedDisbursementDate').errors && form.get('plannedDisbursementDate').touched"
+                [requiredField]="true"></cbs-form-date-control>
+
+            <cbs-form-input-control
+                formControlName="amount"
+                [inputType]="'number'"
+                fieldLabel="{{ 'AMOUNT' | translate }}"
+                [hasError]="form.get('amount').errors?.required && form.get('amount').touched"
+                [requiredField]="true"
+            ></cbs-form-input-control>
+
+            <cbs-form-textarea-control
+                [requiredField]="true"
+                formControlName="description"
+                fieldLabel="{{ 'DESCRIPTION' | translate }}"
+            ></cbs-form-textarea-control>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="form.invalid" class="slds-button slds-button--success" (click)="submit()">{{ 'SAVE' |
+            translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

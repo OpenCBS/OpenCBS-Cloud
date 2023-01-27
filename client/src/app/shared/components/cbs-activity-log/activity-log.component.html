@@ -1,0 +1,41 @@
+<span class="slds-assistive-text">{{'ACTIVITY_LOG' | translate}}</span>
+<div class="slds-media">
+    <div class="slds-media__body">
+        <div class="slds-media slds-media--timeline slds-timeline__media--task">
+            <div class="slds-media__figure slds-timeline__icon">
+                <div class="slds-icon_container">
+                    <svg aria-hidden="true" class="slds-icon slds-icon--small slds-icon-standard-task">
+                        <use xlink:href="assets/icons/standard-sprite/svg/symbols.svg#task"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="slds-media__body">
+                <h3 class="slds-truncate" [title]="'STATE_CHANGE' | translate">
+                    <a href="javascript:void(0);">{{'STATE_CHANGE' | translate}}</a>
+                </h3>
+                <p class="slds-truncate" [title]="'STATE_WAS_CHANGED' | translate">{{'STATE_WAS_CHANGED' | translate}}
+                    <span *ngIf="logData?.oldStatus">
+                        {{'FROM' | translate}} <strong>{{ logData?.oldStatus | translate | uppercase }}</strong>
+                    </span>
+                    {{'TO' | translate}}
+                    <strong>{{ logData?.status | translate | uppercase }}</strong></p>
+                <p class="cbs__application__activity-note" *ngIf="logData?.notes">
+                    <strong>Note: </strong>
+                    {{logData?.notes}}
+                </p>
+                <ul class="slds-list--horizontal slds-wrap">
+                    <li class="slds-m-right--large">
+                        <span class="slds-text-title">{{'TIME' | translate}}:</span>
+                        <span class="slds-text-body--small">
+                            {{logData?.createdAt | cbsDateFormat }} {{logData?.createdAt | cbsTimeFormat }}</span>
+                    </li>
+                    <li class="slds-m-right--large">
+                        <span class="slds-text-title">{{'CHANGED_BY' | translate}}:</span>
+                        <span class="slds-text-body--small"><a href="javascript:void(0);">
+                            {{logData?.changedBy?.firstName}} {{logData?.changedBy?.lastName}}</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="payee">
+    <div class="slds-truncate">
+        <span class="slds-text-title_caps">{{ 'NAME' | translate }}:</span>
+        {{ payee?.payee?.name ? payee?.payee?.name : payee?.payeeName}}
+    </div>
+    <div><span class="slds-text-title_caps">{{ 'AMOUNT' | translate }}:</span> {{ payee?.amount | cbsNumberFormat }}
+    </div>
+    <div>
+        <span class="slds-text-title_caps">{{ 'PLANNED_DISBURSEMENT_DATE' | translate }}:</span>
+        {{ payee?.plannedDisbursementDate }}
+    </div>
+    <div class="slds-truncate">
+        <span class="slds-text-title_caps">{{ 'DESCRIPTION' | translate }}:</span>
+        <span [title]="payee?.description">{{ payee?.description }}</span>
+    </div>
+
+    <div class="payee__action" *ngIf="!readonly">
+        <button *ngIf="showEditBtn" class="slds-button slds-button_icon slds-button_icon-x-small" title="Edit"
+                (click)="edit(payee)">
+            <svg class="slds-button__icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+            </svg>
+            <span class="slds-assistive-text">{{ 'EDIT' | translate }}</span>
+        </button>
+        <button *ngIf="payee.status !== 'DISBURSED'" class="slds-button slds-button_icon slds-button_icon-x-small"
+                title="Delete" (click)="delete(payee)">
+            <svg class="slds-button__icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+            </svg>
+            <span class="slds-assistive-text">{{ 'DELETE' | translate }}</span>
+        </button>
+    </div>
+</div> <!-- .payee -->
+
+<ng-template #description>{{ payee?.description }}</ng-template>

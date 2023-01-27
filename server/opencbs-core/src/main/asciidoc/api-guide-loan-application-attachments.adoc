@@ -1,0 +1,39 @@
+== LOAN APPLICATIONS ATTACHMENTS
+
+The Loan applications attachments resource is used to list, create, and update loan applications attachments.
+
+=== Retrieve a loan application attachment
+
+A `GET` request will retrieve the details of a loan application attachment.
+
+==== Response fields
+
+include::{snippets}/loan-applications-attachment-get-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/loan-applications-attachment-get-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/loan-applications-attachment-get-example/http-response.adoc[]
+
+=== Create a loan  attachment
+
+A `POST` request will create a new loan application attachment.
+
+==== Request fields
+
+include::{snippets}/loan-application-attachment-create-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/loan-application-attachment-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/loan-application-attachment-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/loan-application-attachment-create-example/http-response.adoc[]

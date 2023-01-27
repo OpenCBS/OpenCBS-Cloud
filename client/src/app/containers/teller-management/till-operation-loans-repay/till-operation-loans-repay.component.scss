@@ -1,0 +1,18 @@
+:host {
+  .loan-info-entity {
+    position: absolute;
+    bottom: 5px;
+    right: 15em;
+
+    .balance-info {
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+.cbs-compound-form__checkbox-label {
+  top: 0 !important;
+  margin: 0 !important;
+}

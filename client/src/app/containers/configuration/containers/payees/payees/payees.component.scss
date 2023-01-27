@@ -1,0 +1,18 @@
+:host ::ng-deep {
+  .cbs-pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-expanded {
+    .slds-modal__content {
+      height: 26rem;
+    }
+  }
+
+  .cbs-textarea {
+    textarea {
+      height: 75px !important;
+    }
+  }
+}

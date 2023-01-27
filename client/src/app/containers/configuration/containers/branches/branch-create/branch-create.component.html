@@ -1,0 +1,66 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'BRANCHES' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button type="button" nglButton="neutral" (click)="goToViewCCRules()">
+                <ngl-icon icon="close" align="center" [svgClass]="'slds-button__icon--left'">{{ 'CANCEL' | translate
+                    }}
+                </ngl-icon>
+            </button>
+            <button type="button"
+                    nglButton="success"
+                    [disabled]="form?.invalid"
+                    class="slds-button--success"
+                    #submitButton
+                    (click)="submitForm(form)">
+                <ngl-icon icon="check" align="'center'" [svgClass]="'slds-button__icon--left'">{{ 'SAVE' | translate
+                    }}
+                </ngl-icon>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout class="cbs-new-branch">
+        <div class="slds-text-title--caps slds-m-bottom--medium">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <div class="slds-form--horizontal">
+            <form novalidate [formGroup]="form" class="slds-form--stacked" cbsFormFocus>
+
+                <cbs-form-input-control
+                    [requiredField]="true"
+                    [fieldLabel]="'NAME' | translate"
+                    [hasError]="form.get('name').errors && form.get('name').touched"
+                    [formControlName]="'name'">
+                </cbs-form-input-control>
+
+                <div *ngFor="let section of form?.controls?.fieldSections['controls']; let i=index;"
+                    class="slds-p-top--medium slds-p-bottom--large"
+                    [attr.id]="'section_' + branchCustomFields[i].id">
+                    <div class="slds-text-title--caps slds-m-bottom--medium">
+                        <strong>{{ customFields[i].caption }}</strong>
+                    </div>
+                    <ng-container
+                        *ngFor="let field of customFields[i].values; let ind=index;"
+                        cbsDynamicField
+                        [config]="field"
+                        [group]="section.controls[ind]">
+                    </ng-container>
+                </div>
+
+            </form>
+        </div>
+
+    </cbs-form-layout>
+</main>

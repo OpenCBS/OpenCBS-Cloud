@@ -1,0 +1,16 @@
+:host {
+  button {
+    padding: .7rem 1rem;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px dashed #e4e4e4;
+
+    &:hover {
+      background: rgba(244, 246, 249, 0.5);
+    }
+
+    &:not([disabled]):hover {
+      border-color: #0070d2;
+    }
+  }
+}

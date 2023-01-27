@@ -1,0 +1,151 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ (profile |
+                            async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'Members' }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                      *ngIf="attachment?.pinned"
+                      (click)="openAttachment(attachment)">
+                    <span>
+                        <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                             [attr.title]="attachment?.originalFilename" *ngIf="testIfImage(attachment?.contentType)"/>
+                        <span class="cbs-profile__avatar__file">
+                            <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                              [fileType]="getFileExtension(attachment?.originalFilename)"
+                                              [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                        </span>
+                    </span>
+                </span>
+                    </div>
+
+                </div>
+                <button (click)="openTransactionModal()" class="slds-button slds-button--neutral"
+                        aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>{{ 'Add member' }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <ng-container *ngIf="members">
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Id">{{ 'ID' | translate }}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Full name">{{ 'FULLNAME' | translate }}</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="'Join date'">{{'JOIN_DATE' | translate}}
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="'Info">{{'INFO' | translate}}
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let member of members; let i = index;">
+                            <td scope="row">
+                                <span>{{member?.memberId}}</span>
+                            </td>
+                            <td scope="row">
+                                <span>{{ member?.name }}</span>
+                            </td>
+                            <td scope="row">
+                                <span>{{ member?.joinDate | cbsDateFormat }} {{ member?.joinDate | cbsTimeFormat }}</span>
+                            </td>
+                            <td>
+                                <button class="slds-button details-button" (click)="goToMember(member)">
+                                    <svg class="slds-button__icon slds-button__icon_left slds-button__icon--small">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                             xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#info_alt"></use>
+                                    </svg>Info
+                                </button>
+                            </td>
+                            <td scope="row">
+                                <div class="slds-text-align--right">
+                                    <button (click)="removeModal(member.memberId)" class="slds-button slds-button--neutral">
+                                        <span class="slds-text-selected">
+                                            {{ 'REMOVE' | translate }}
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+        </div>
+    </div>
+</main>
+<ngl-modal [header]="'Add member'" [(open)]="isModalOpened">
+    <div body>
+        <div class="slds-form--stacked">
+            <form novalidate [formGroup]="memberForm">
+                <cbs-form-lookup-control
+                    #lookup
+                    [hasError]="memberForm.get('personId').errors && memberForm.get('personId').touched"
+                    [formControlName]="'personId'"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    [fieldLabel]="'PERSON' | translate"
+                    [picklistDataUrl]="memberConfig">
+                </cbs-form-lookup-control>
+
+            </form>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="memberForm.invalid" class="slds-button slds-button--success" (click)="submit()">{{
+            'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+<cbs-confirm-popup [confirmText]="'Are you sure you want to delete?'" [opened]="opened"
+                   (openedChange)="closeModal()"
+                   (onSubmitClick)="removeMember(memberId)"
+                   [leftButtonLabel]="'CANCEL' | translate"
+                   [rightButtonLabel]="'CONFIRM' | translate"
+                   [popupLabel]="'CONFIRMATION' | translate">
+</cbs-confirm-popup>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

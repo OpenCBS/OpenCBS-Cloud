@@ -1,0 +1,20 @@
+<div class="slds-form-element"
+     [class.slds-has-error]="showError && hasError"
+     [ngClass]="styleClass"
+     [ngStyle]="style">
+    <label class="slds-form-element__label" *ngIf="!!fieldLabel.length">
+        <abbr class="slds-required" title="required" *ngIf="requiredField">*</abbr>
+        {{ fieldLabel }}
+    </label>
+    <div class="slds-form-element__control">
+        <textarea
+            class="slds-textarea"
+            [(ngModel)]="value"
+            (blur)="onBlur()"
+            [disabled]="disabled"
+            [placeholder]="placeholder"
+            [attr.cols]="cols"
+            [attr.rows]="rows"></textarea>
+        <ng-content></ng-content>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'REPORTS' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="searchQuery = ''"
+                (onSearch)="searchQuery = $event"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+        <!-- /cbs-page-header-layout = center -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="slds-m-vertical--large slds-text-align--center slds-text-title--caps">
+        <strong>{{ 'OPERATIONAL' | translate }}</strong>
+    </div>
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="85%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of (reports | filterReports: searchQuery)">
+            <ng-container *ngIf="report.group === 'OPERATIONAL'">
+                <td (click)="openModal(report)">
+                    <span>{{report?.label}}</span>
+                </td>
+                <td class="slds-align--absolute-center">
+                    <ngl-icon icon="gsheet" category="doctype"  (click)="openModal(report)"></ngl-icon>
+                </td>
+            </ng-container>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <div class="slds-m-vertical--large slds-text-align--center slds-text-title--caps">
+        <strong>{{ 'ACCOUNTING' | translate }}</strong>
+    </div>
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="85%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of (reports | filterReports: searchQuery)">
+            <ng-container *ngIf="report.group === 'ACCOUNTING'">
+                <td (click)="openModal(report)">
+                    <span>{{report?.label}}</span>
+                </td>
+                <td class="slds-align--absolute-center">
+                   <ngl-icon icon="gsheet" category="doctype" (click)="openModal(report)"></ngl-icon>
+                </td>
+            </ng-container>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<ngl-modal header="{{ reportName | translate }}" *ngIf="isOpen" [(open)]="isOpen">
+    <div body>
+        <cbs-loading-indicator [showLoader]="fieldsReady"></cbs-loading-indicator>
+        <form novalidate [formGroup]="reportForm" class="slds-form--stacked">
+            <div [hidden]="fieldsReady" formArrayName="fieldValues" class="cbs-collateral-form__fields">
+                <ng-container
+                    *ngFor="let field of customFields; let ind=index;"
+                    cbsDynamicField
+                    [config]="field"
+                    [group]="reportForm.controls['fieldValues']['controls'][ind]">
+                </ng-container>
+            </div>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button *ngIf="!fieldsReady" class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate
+            }}
+        </button>
+        <button [disabled]="reportForm.invalid" *ngIf="!fieldsReady" class="slds-button slds-button--success"
+                (click)="submit()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

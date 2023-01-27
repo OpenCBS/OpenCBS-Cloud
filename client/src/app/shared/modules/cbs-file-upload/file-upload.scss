@@ -1,0 +1,27 @@
+:host {
+  .slds-file-selector__dropzone {
+    max-height: 250px;
+  }
+
+  .slds-file-selector__body {
+    cursor: pointer;
+  }
+
+  .cbs-uploader-spinner {
+    position: relative;
+    height: 56px;
+  }
+
+  .file-comment {
+    width: 100%;
+    height: 50px;
+    margin: 20px 0 20px 0;
+    padding: 5px;
+    border-color: #9E9E9E;
+    border-radius: 6px;
+  }
+
+  ul {
+    padding: 5px;
+  }
+}

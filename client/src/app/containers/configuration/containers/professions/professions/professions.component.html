@@ -1,0 +1,55 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'PROFESSIONS' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="openCreateModal()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>{{ 'CREATE' | translate }}
+                </span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-tree-table [value]="(professions | async)?.professions">
+        <cbs-column field="name" header="{{ 'NAME' | translate }}" width="auto"></cbs-column>
+        <cbs-column field="" header="" width="50%" [style]="{'text-align': 'right', 'padding': '.3rem 1rem'}">
+            <ng-template let-node="rowData" cbsTemplate cbsTemplateName="body">
+                <button class="slds-button slds-button--neutral"
+                        (click)="openCreateModal({ parentId: node.data.id, parentName: node.data.name })">
+                    <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    </svg>
+                    {{ 'ADD' | translate }}
+                </button>
+                <button class="slds-button slds-button--neutral" (click)="openEditModal(node)">
+                    <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}
+                </button>
+            </ng-template>
+        </cbs-column>
+    </cbs-tree-table>
+    <!-- cbs-tree-table -->
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(professions | async)?.loading"></cbs-loading-indicator>
+
+</main>
+
+<cbs-custom-modal-form
+    headerTitle="{{ isNew ? ('PROFESSION_NEW_TITLE' | translate) :  ('EDIT' | translate) }}"
+    (submitForm)="submitProfession($event)"></cbs-custom-modal-form>

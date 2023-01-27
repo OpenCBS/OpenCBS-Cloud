@@ -1,0 +1,108 @@
+.cbs-transaction-type {
+  padding-left: 3rem;
+}
+
+.cbs-tr-hover:hover {
+  background: #f4f6f9;
+  cursor: pointer;
+}
+
+.cbs-branches-lookup {
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+}
+
+.cbs-branch-lookup-label {
+  display: inline-block;
+  margin-top: 6px;
+}
+
+.cbs-treetable__toggler {
+  .slds-button__icon {
+    transform: rotate(0deg);
+    transition: transform 0.175s ease;
+  }
+
+  &--expanded {
+    .slds-button__icon {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.options {
+  display: none;
+}
+
+.cbs-tr-hover:hover {
+  .options {
+    display: inline-block;
+  }
+}
+
+.cbs-compound-form {
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+
+    @media (min-width: 48em) {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .slds-form-element__label {
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    color: rgba(84, 105, 141, 0.7);
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
+  &__r {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+
+    @media (min-width: 48em) {
+      width: 100%;
+    }
+
+    .slds-form-element__control {
+      position: relative;
+      width: 100%;
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+  }
+
+  &__1-of-2 {
+    width: 49%;
+  }
+
+  &__1-of-3 {
+    width: 31.33%;
+  }
+
+  &__checkbox-label {
+    top: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+.cbs-main {
+  &.remove-overflow {
+    overflow: hidden;
+  }
+}

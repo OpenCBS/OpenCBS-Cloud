@@ -1,0 +1,31 @@
+<div class="slds-form-element">
+    <label class="slds-form-element__label">
+        <abbr *ngIf="isRequired" class="slds-required" title="required">*</abbr>
+        {{ listLabel | translate}}
+    </label>
+
+    <div class="slds-form-element__control cbs-entry-fees">
+        <div class="slds-text-align--center" *ngIf="!listData?.length">{{ noDataLabel | translate}}</div>
+        <ul>
+            <li *ngFor="let item of listData">{{item?.name}}
+                <button (click)="delete(item)" *ngIf="displayButton">
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">{{'DELETE' | translate}}</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<ngl-picklist
+    [data]="picklistData"
+    [disabled]="!picklistData?.length"
+    [nglPick]="pick"
+    (nglPickChange)="selectItem($event)"
+    [(open)]="open"
+    filter="value">
+    <span class="slds-truncate">{{ selectDataLabel | translate }}</span>
+    <ng-template nglPicklistItem let-item>{{ item?.name }}</ng-template>
+</ngl-picklist>

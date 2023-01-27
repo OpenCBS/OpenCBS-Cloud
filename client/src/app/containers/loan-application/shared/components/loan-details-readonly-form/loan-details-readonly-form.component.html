@@ -1,0 +1,92 @@
+<div class="cbs-loan-details-form__form">
+    <h3 class="slds-text-heading--medium slds-m-bottom--small">{{ 'LOAN_APPLICATION_DETAILS' | translate }}</h3>
+
+    <div class="slds-form--stacked slds-m-top--medium" *ngIf="formData?.profile">
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'PROFILE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.profile?.name }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'LOAN_PRODUCT' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.loanProduct?.name }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'SCHEDULE_TYPE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.scheduleType }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'AMOUNT' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.amount }}</span>
+                <span class="cbs-hint-icon">$</span>
+            </div>
+        </div>
+
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'INTEREST_RATE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.interestRate }}</span>
+                <span class="cbs-hint-icon">$</span>
+            </div>
+        </div>
+
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'GRACE_PERIOD' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.gracePeriod }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'NUMBER_OF_INSTALMENTS' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.maturity }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'DISBURSEMENT_DATE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.disbursementDate }}</span>
+            </div>
+        </div>
+
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                {{ 'PREFERRED_REPAYMENT_DATE' | translate }}
+            </label>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ formData?.preferredRepaymentDate }}</span>
+            </div>
+        </div>
+    </div>
+
+    <cbs-loading-indicator [showLoader]="!formData?.profile" [isFixed]="false"></cbs-loading-indicator>
+</div>

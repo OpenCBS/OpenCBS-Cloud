@@ -1,0 +1,185 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'TELLER_MANAGEMENT' | translate }}" [svgData]="svgData">
+            </cbs-heading-block>
+        </div>
+
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="center">
+            <cbs-search-input
+                [searchQuery]="searchQuery"
+                (onClear)="clearSearch()"
+                (onSearch)="search($event)"
+                placeholder="{{ 'SEARCH' | translate }}"></cbs-search-input>
+        </div>
+        <!-- /cbs-page-header-layout = center -->
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-tills">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="10%">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col" width="10%">
+                <div class="slds-truncate" title="Teller">{{ 'TELLER' | translate }}</div>
+            </th>
+            <th scope="col" width="10%">
+                <div class="slds-truncate" title="Open time">{{ 'OPEN_TIME' | translate }}</div>
+            </th>
+            <th scope="col" width="11%">
+                <div class="slds-truncate" title="Close time">{{ 'CLOSE_TIME' | translate}}</div>
+            </th>
+            <th scope="col" width="20%">
+                <div class="slds-truncate" title="Close time">{{ 'ACCOUNT' | translate}}</div>
+            </th>
+            <th scope="col" width="11%">
+                <div class="slds-truncate" title="Close time">{{ 'BALANCE' | translate}}</div>
+            </th>
+            <th scope="col" width="35%" *ngIf="isHeadTeller">
+                <div class="slds-truncate" title="Options">{{ 'OPTIONS' | translate}}</div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let till of (tills | async)?.data?.content; let i = index;">
+            <td scope="row" (click)="goToTill(till)">
+                <div class="slds-truncate" title="ID">{{i + 1}}</div>
+            </td>
+            <td scope="row" (click)="goToTill(till)">
+                <div>
+                    <div class="slds-truncate">{{till?.name}}</div>
+                </div>
+            </td>
+            <td scope="row" (click)="goToTill(till)">
+                <div class="slds-truncate" *ngIf="till?.teller; else dash">{{till?.teller?.firstName + ' '}}
+                    {{till?.teller?.lastName}}
+                </div>
+                <ng-template #dash>-</ng-template>
+            </td>
+            <td scope="row" (click)="goToTill(till)">
+                {{till?.openedAt | cbsDateFormat}} {{till?.openedAt | cbsTimeFormat}}
+                <span *ngIf="!till?.openedAt">-</span>
+            </td>
+            <td scope="row" (click)="goToTill(till)">
+                {{till?.closedAt | cbsDateFormat}} {{till?.closedAt | cbsTimeFormat}}
+                <span *ngIf="!till?.closedAt">-</span>
+            </td>
+            <td scope="row" (click)="goToTill(till)">
+                {{till?.accounts[0].number}} | {{ till?.accounts[0].name}}
+            </td>
+            <td scope="row" (click)="goToTill(till)">
+                {{till?.balance}}
+            </td>
+            <td scope="row" *ngIf="isHeadTeller">
+                <button *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['OPEN_TILL'] }"
+                        [disabled]="till.status != 'CLOSED'" (click)="openTill(till)"
+                        class="slds-button slds-button--success slds-not-selected"
+                        aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'OPEN' | translate }}
+                    </span>
+                </button>
+                <button *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['TRANSFER_FROM_VAULT'] }"
+                        [disabled]="till.status == 'CLOSED'" [routerLink]="till.id + '/transfer/from-vault' "
+                        class="slds-button slds-button--neutral slds-not-selected" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'TRANSFER_FROM_VAULT' | translate}}
+                    </span>
+                </button>
+                <button *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['TRANSFER_TO_VAULT'] }"
+                        [disabled]="till.status == 'CLOSED'" [routerLink]="till.id + '/transfer/to-vault'"
+                        class="slds-button slds-button--neutral slds-not-selected" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'TRANSFER_TO_VAULT' | translate}}
+                    </span>
+                </button>
+
+                <button *cbsVisibleByPermission="{ group: 'TELLER_MANAGEMENT', permissions: ['CLOSE_TILL'] }"
+                        [disabled]="till.status == 'CLOSED'" (click)="closeTill(till)"
+                        class="slds-button slds-button--destructive slds-not-selected" aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'CLOSE' | translate }}
+                    </span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p *ngIf="!(tills | async)?.data?.content?.length" class="slds-text-align--center slds-m-top_large">
+        {{ 'NO_DATA' | translate }}
+    </p>
+
+    <div class="slds-grid slds-grid--align-center" *ngIf="(tills | async)?.totalElements > (tills | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(tills | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(tills | async)?.totalElements"
+            limit="5"
+            [perPage]="(tills | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+</main>
+
+
+<ngl-modal [header]="'OPEN_TILL' | translate" [(open)]="opened" [ngClass]="{'cbs-expanded-modal' : expanded}">
+    <div body>
+        <form novalidate [formGroup]="openTillForm">
+            <cbs-form-lookup-control
+                [picklistFilterType]="'name'"
+                (onOpenPicklist)="changeSize(true)"
+                (onClosePicklist)="changeSize(false)"
+                [hasError]="openTillForm.get('tellerId').errors && openTillForm.get('tellerId').touched"
+                [requiredField]="true"
+                [formControlName]="'tellerId'"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'TELLER' | translate"
+                [picklistDataUrl]="config">
+            </cbs-form-lookup-control>
+
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success"
+                [disabled]="openTillForm.invalid"
+                (click)="submit(openTillForm)">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<ngl-modal [header]="'CLOSE_TILL' | translate" *ngIf="isOpened" [(open)]="isOpened">
+    <div body>
+        <cbs-loading-indicator [showLoader]="!balance.length"></cbs-loading-indicator>
+
+        <cbs-form-readonly-control class="cbs-readonly-account" *ngFor="let account of balance"
+                                   [value]="account?.balance"
+                                   [fieldLabel]="account?.account?.currency?.name">
+        </cbs-form-readonly-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="hideCloseModal()">{{ 'CANCEL' | translate }}
+        </button>
+        <button class="slds-button slds-button--success"
+                [disabled]="!balance.length"
+                (click)="submit()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!(tills | async)?.loaded"></cbs-loading-indicator>

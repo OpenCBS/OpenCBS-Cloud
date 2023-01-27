@@ -1,0 +1,219 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ type | uppercase | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button (click)="handleConfirmModalVisibility(true)" class="slds-button slds-button--success"
+                    aria-live="assertive"
+                    [disabled]="form.invalid">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>
+                    {{ labelButton | translate }}</span>
+            </button>
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+<main class="cbs-main">
+    <cbs-form-layout>
+        <div class="slds-form-element__label slds-text-title--caps cbs-user-update__heading">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <form novalidate [formGroup]="form" class="slds-m-top_large">
+
+            <cbs-form-date-control
+                [formControlName]="'date'"
+                [validateDate]="true"
+                [requiredField]="true"
+                [hasError]="form.get('date').errors && form.get('date').touched"
+                fieldLabel="{{ 'DATE' | translate }}"
+            ></cbs-form-date-control>
+
+            <cbs-form-lookup-control
+                (onSelect)="setLookupValue($event)"
+                [formControlName]="customerControlName"
+                [hasError]="form.get(customerControlName).errors
+                && form.get(customerControlName).touched"
+                [requiredField]="true"
+                [picklistDataUrl]="formConfigCustomerAccount"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                fieldLabel="{{ 'CUSTOMER' | translate }}">
+            </cbs-form-lookup-control>
+
+            <cbs-form-readonly-control
+                *ngIf="currency"
+                fieldLabel="{{ 'CURRENCY' | translate }}"
+                [value]="currency"
+                [disabled]="true">
+            </cbs-form-readonly-control>
+
+            <cbs-form-readonly-control
+                *ngIf="hasBalance"
+                fieldLabel="{{ 'BALANCE' | translate }}"
+                [value]="balance | cbsNumberFormat"
+                [disabled]="true">
+            </cbs-form-readonly-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'number'"
+                [fieldLabel]="'AMOUNT' | translate"
+                [hasError]="form.get('amount').errors && form.get('amount').touched"
+                [formControlName]="'amount'">
+            </cbs-form-input-control>
+
+            <cbs-form-textarea-control
+                [requiredField]="true"
+                [fieldLabel]="'DESCRIPTION' | translate"
+                [formControlName]="'description'">
+            </cbs-form-textarea-control>
+
+            <div *ngIf="currentInstance !== 'fundaccess'" class="slds-form-element">
+                <label class="slds-form-element__label cbs-compound-form__checkbox-label checkbox">
+                    {{ 'USE_EXISTING_PROFILE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <label class="slds-checkbox" for="isProfileExist">
+                        <input type="checkbox"
+                               [checked]="isProfileExist"
+                               [(ngModel)]="isProfileExist"
+                               (ngModelChange)="useExistingProfile($event)"
+                               name="isProfileExist"
+                               id="isProfileExist"
+                               formControlName="isProfileExist"/>
+                        <span class="slds-checkbox--faux"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div *ngIf="currentInstance === 'fundaccess'" class="slds-form-element" [class.slds-has-error]="
+            (form.get('initiatorId').errors && form.get('initiatorId').touched)
+            || (form.get('initiatorId').invalid && form.get('initiatorId').touched)">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ (type === 'DEPOSIT_TO_CURRENT_ACCOUNT' ? 'DEPOSITOR' : 'WITHDRAWER') | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <select id="loan-product-schedule-type" class="slds-select" formControlName="initiatorId"
+                            *ngIf="formConfigDepositors.length">
+                        <option *ngIf="!form.value.initiatorId" [ngValue]="null" selected disabled>Select
+                        </option>
+                        <option *ngFor="let depositor of formConfigDepositors"
+                                [value]="depositor.id">{{ depositor.name }}</option>
+                    </select>
+                    <input *ngIf="!formConfigDepositors.length" class="slds-input" type="text"
+                           value="No depositors available"
+                           disabled>
+                </div>
+            </div>
+
+            <div *ngIf="currentInstance !== 'fundaccess' && isProfileExist && type !== 'WITHDRAW_FROM_CURRENT_ACCOUNT'">
+                <cbs-form-lookup-control
+                    (onSelect)="setLookupProfile($event)"
+                    [formControlName]="'initiatorId'"
+                    [hasError]="form.get('initiatorId').errors && form.get('initiatorId').touched"
+                    [requiredField]="true"
+                    [picklistDataUrl]="formConfigProfile"
+                    searchPlaceholder="{{ 'SEARCH' | translate }}"
+                    selectPlaceholder="{{ 'SELECT' | translate }}"
+                    fieldLabel="{{ initiator | translate }}">
+                </cbs-form-lookup-control>
+            </div>
+
+            <div *ngIf="currentInstance !== 'fundaccess' && !isProfileExist">
+                <cbs-form-input-control
+                    [requiredField]="true"
+                    [inputType]="'text'"
+                    fieldLabel="{{ initiator | translate }}"
+                    [hasError]="form.get('initiator').errors && form.get('initiator').touched"
+                    [formControlName]="'initiator'">
+                </cbs-form-input-control>
+            </div>
+
+            <span *ngIf="withdrawers.length && currentInstance !== 'fundaccess' && isProfileExist && addWithdrawer">
+                <cbs-form-select-control
+                    [formControlName]="'initiatorId'"
+                    [selectData]="withdrawers"
+                    [requiredField]="true"
+                    [hasError]="form.get('initiatorId').errors && form.get('initiatorId').touched"
+                    fieldLabel="{{ 'WITHDRAWER' | translate }}"
+                    (onSelect)="setWithdrawerValue($event)"
+                ></cbs-form-select-control>
+            </span>
+
+            <div class="slds-grid slds-form-element__control">
+                <div class="cbs-profile__avatar" *ngIf="(profile | async)?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of (profile | async)?.attachments">
+                        <span class="slds-avatar slds-avatar--large"
+                              *ngIf="attachment?.pinned"
+                              (click)="openAttachment(attachment)">
+                            <span>
+                                <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                                     [attr.title]="attachment?.originalFilename"
+                                     *ngIf="testIfImage(attachment?.contentType)"/>
+                                <span class="cbs-profile__avatar__file" *ngIf="!testIfImage(attachment?.contentType)">
+                                    <cbs-doctype-icon
+                                        [fileType]="getFileExtension(attachment?.originalFilename)"
+                                        [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label cbs-compound-form__checkbox-label checkbox">
+                    {{ 'AUTO_PRINT' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <label class="slds-checkbox" for="auto-print">
+                        <input type="checkbox"
+                               name="autoPrint"
+                               id="auto-print"
+                               formControlName="autoPrint"/>
+                        <span class="slds-checkbox--faux"></span>
+                    </label>
+                </div>
+            </div>
+
+        </form>
+
+    </cbs-form-layout>
+</main>
+<cbs-loading-indicator [showLoader]="isLoading" [isFixed]="true"></cbs-loading-indicator>
+
+<ngl-modal [(open)]="opened" (openChange)="resetModal()">
+    <div body>
+        <img [src]="imageUrl" alt="">
+    </div>
+</ngl-modal>
+
+<cbs-confirm-popup
+    [opened]="showConfirmModal"
+    (onSubmitClick)="saveOperation()"
+    (openedChange)="handleConfirmModalVisibility(false)"
+    [leftButtonLabel]="'NO' | translate"
+    [rightButtonLabel]="'YES' | translate"
+    [popupLabel]="'CONFIRMATION' | translate"
+>
+    {{ 'PLEASE_REVIEW_AND_CONFIRM_DETAILS' | translate }}<br>
+    <div class="confirmation-review-data">
+        {{ 'DATE' | translate }}: <b>{{ date }}</b><br>
+        {{ 'CUSTOMER' | translate }}: <b>{{ selectedFormFieldLabels['profileId'] }}</b><br>
+        {{ 'AMOUNT' | translate }}: <b>{{ form.value.amount }}</b><br>
+        {{ 'DESCRIPTION' | translate }}: <b>{{ form.value.description }}</b><br>
+        <span *ngIf="isProfileExist">
+            {{ initiator | translate }}: <b>{{ selectedFormFieldLabels['initiatorId'] }}</b><br>
+        </span>
+        <span *ngIf="!isProfileExist">{{ initiator | translate }}: <b>{{ form.value.initiator }}</b><br></span>
+    </div>
+</cbs-confirm-popup>

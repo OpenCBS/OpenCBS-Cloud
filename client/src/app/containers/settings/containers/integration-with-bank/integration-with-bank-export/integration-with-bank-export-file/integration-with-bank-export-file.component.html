@@ -1,0 +1,84 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'EXPORT' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right" class="slds-accordion__summary-action">
+            <form novalidate class="slds-form--stacked">
+                <div class="cbs-controls-container slds-accordion__summary">
+
+                    <cbs-datepicker [value]="exportDate"
+                                    (valueChange)="setDate($event)"
+                    ></cbs-datepicker>
+
+                    <button class="slds-button slds-button--neutral btn"
+                            (click)="generate()"
+                            aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            {{ 'GENERATE' | translate }}
+                        </span>
+                    </button>
+
+                    <button class="slds-button slds-button--success"
+                            (click)="exportToBank()"
+                            [disabled]="!selectedLoans?.length">
+                        {{ 'EXPORT' | translate }}
+                    </button>
+
+                </div>
+            </form>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-export-wrap">
+        <div class="cbs-export__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-export__right">
+            <p-table #dt [value]="integrationWithBankExport?.integrationWithBankExport" [(selection)]="selectedLoans"
+                     dataKey="code" styleClass="p-datatable-customers" [rowHover]="true"
+                     [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'">
+                <ng-template pTemplate="header">
+                    <tr class="slds-text-heading--label">
+                        <th *ngIf="integrationWithBankExport?.integrationWithBankExport.length">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="profileName">{{ 'CLIENT_NAME' | translate }}</th>
+                        <th pSortableColumn="code">{{ 'CONTRACT_CODE' | translate }}</th>
+                        <th pSortableColumn="date">{{ 'DATE' | translate }}</th>
+                        <th pSortableColumn="principal">{{'INTEREST' | translate}}</th>
+                        <th pSortableColumn="principal">{{'PRINCIPAL' | translate}}</th>
+                        <th pSortableColumn="iban">{{'IBAN' | translate}}
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-loan>
+                    <tr class="p-selectable-row">
+                        <td><p-tableCheckbox [value]="loan"></p-tableCheckbox></td>
+                        <td>{{loan['profileName']}}</td>
+                        <td>{{loan['code']}}</td>
+                        <td>{{loan['date']}}</td>
+                        <td>{{loan['interest']}}</td>
+                        <td>{{loan['principal']}}</td>
+                        <td>{{loan['iban']}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">{{ 'NO_RECORDS_FOUND' | translate}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</main>
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="integrationWithBankExport?.loading"></cbs-loading-indicator>

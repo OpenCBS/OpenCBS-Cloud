@@ -1,0 +1,820 @@
+<form novalidate [formGroup]="form" class="slds-form--horizontal slds-m-top--medium" cbsFormFocus>
+    <div class="slds-text-title--caps slds-m-bottom_small">
+        <strong>{{ 'GENERAL_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <cbs-form-select-control
+        [formControlName]="'statusType'"
+        [selectData]="statusTypeData"
+        [requiredField]="false"
+        [hasError]="form.get('statusType').errors && form.get('statusType').touched"
+        fieldLabel="{{ 'ACTIVE_PRODUCT' | translate }}"
+    ></cbs-form-select-control>
+
+    <div class="slds-form-element" [class.slds-has-error]="
+            (form.get('name').errors && form.get('name').touched)
+            || (form.get('name').invalid && form.get('name').touched)">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'NAME' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <input type="text" id="loan-product-name" class="slds-input" formControlName="name"/>
+        </div>
+    </div>
+
+    <cbs-form-input-control
+        [requiredField]="true"
+        [fieldLabel]="'CODE' | translate"
+        [hasError]="form.get('code').errors && form.get('code').touched"
+        [formControlName]="'code'">
+    </cbs-form-input-control>
+
+    <div class="slds-form-element cbs-compound-form__row" formArrayName="availability">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'AVAILABILITY' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" formGroupName="0">
+                <label class="slds-checkbox" for="person-profile">
+                    <input type="checkbox" name="availability" id="person-profile" formControlName="person_profile"/>
+                    <span class="slds-checkbox--faux"></span>
+                    <span class="slds-form-element__label">{{ 'PROFILE_PERSON' | translate }}</span>
+                </label>
+            </div>
+            <div class="cbs-compound-form__1-of-2" formGroupName="1">
+                <label class="slds-checkbox" for="company-profile">
+                    <input type="checkbox" name="availability" id="company-profile" formControlName="company_profile"/>
+                    <span class="slds-checkbox--faux"></span>
+                    <span class="slds-form-element__label">
+                        {{ (currentInstance === 'rwanda' ? 'COMPANY_GROUP' : 'PROFILE_COMPANY') | translate }}
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('currencyId').errors && form.get('currencyId').touched"
+        [requiredField]="true"
+        [formControlName]="'currencyId'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'CURRENCY' | translate"
+        [picklistDataUrl]="currencyConfig">
+    </cbs-form-lookup-control>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'INITIAL_AMOUNT_RANGE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('initialAmountMin').errors && form.get('initialAmountMin').touched)
+            || (form.get('initialAmountMin').invalid && form.get('initialAmountMin').touched)">
+                <label class="cbs-compound-form__label" for="initialAmountMin">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input  type="number"
+                            id="initialAmountMin"
+                            class="slds-input"
+                            [onlyNumber]="true"
+                            formControlName="initialAmountMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('initialAmountMax').errors && form.get('initialAmountMax').touched)
+            || (form.get('initialAmountMax').invalid && form.get('initialAmountMax').touched)">
+                <label class="cbs-compound-form__label" for="initialAmountMax">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="initialAmountMax"
+                           [onlyNumber]="true"
+                           class="slds-input"
+                           formControlName="initialAmountMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'INTEREST_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('interestRateMin').errors && form.get('interestRateMin').touched)
+            || (form.get('interestRateMin').invalid && form.get('interestRateMin').touched)">
+                <label class="cbs-compound-form__label" for="interest-rate-minimum">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="interest-rate-minimum"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="interestRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('interestRateMax').errors && form.get('interestRateMax').touched)
+            || (form.get('interestRateMax').invalid && form.get('interestRateMax').touched)">
+                <label class="cbs-compound-form__label" for="interest-rate-maximum">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="interest-rate-maximum"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="interestRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-input-control
+        [inputType]="'number'"
+        [requiredField]="false"
+        [fieldLabel]="'MIN_BALANCE' | translate"
+        [hasError]="form.get('minBalance').errors && form.get('minBalance').touched"
+        [formControlName]="'minBalance'">
+    </cbs-form-input-control>
+
+    <cbs-form-select-control
+        [formControlName]="'interestAccrualFrequency'"
+        [selectData]="frequency"
+        [disabled]="true"
+        [requiredField]="true"
+        [hasError]="form.get('interestAccrualFrequency').errors && form.get('interestAccrualFrequency').touched"
+        fieldLabel="{{ 'INTEREST_ACCRUAL_FREQUENCY' | translate }}"
+    ></cbs-form-select-control>
+
+    <cbs-form-select-control
+        [formControlName]="'postingFrequency'"
+        [selectData]="frequency"
+        [disabled]="true"
+        [requiredField]="true"
+        [hasError]="form.get('postingFrequency').errors && form.get('postingFrequency').touched"
+        fieldLabel="{{ 'POSTING_FREQUENCY' | translate }}"
+    ></cbs-form-select-control>
+
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+            {{ 'CAPITALIZE_INTEREST' | translate }}
+        </label>
+        <div class="slds-form-element__control">
+            <label class="slds-checkbox" for="capitalize">
+                <input type="checkbox" name="capitalize" id="capitalize" formControlName="capitalized"/>
+                <span class="slds-checkbox--faux"></span>
+            </label>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('savingAccount').errors && form.get('savingAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'savingAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'SAVING_ACCOUNT' | translate"
+        [picklistDataUrl]="savingConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('interestAccount').errors && form.get('interestAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'interestAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'INTEREST_ACCOUNT' | translate"
+        [picklistDataUrl]="interestConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('interestExpenseAccount').errors && form.get('interestExpenseAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'interestExpenseAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'INTEREST_EXPENSE_ACCOUNT' | translate"
+        [picklistDataUrl]="interestExpenseConfig">
+    </cbs-form-lookup-control>
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'CASH_DEPOSIT_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'DEPOSITS_AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('depositAmountMin').errors && form.get('depositAmountMin').touched)
+            || (form.get('depositAmountMin').invalid && form.get('depositAmountMin').touched)">
+                <label class="cbs-compound-form__label" for="amount-min">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="amount-min"
+                           [onlyNumber]="true"
+                           class="slds-input"
+                           formControlName="depositAmountMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('depositAmountMax').errors && form.get('depositAmountMax').touched)
+            || (form.get('depositAmountMax').invalid && form.get('depositAmountMax').touched)">
+                <label class="cbs-compound-form__label" for="amount-max">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="amount-max"
+                           [onlyNumber]="true"
+                           class="slds-input"
+                           formControlName="depositAmountMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'DEPOSIT_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('depositFeeRateMin').errors && form.get('depositFeeRateMin').touched)
+            || (form.get('depositFeeRateMin').invalid && form.get('depositFeeRateMin').touched)">
+                <label class="cbs-compound-form__label" for="maturity-min">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="maturity-min"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="depositFeeRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('depositFeeRateMax').errors && form.get('depositFeeRateMax').touched)
+            || (form.get('depositFeeRateMax').invalid && form.get('depositFeeRateMax').touched)">
+                <label class="cbs-compound-form__label" for="maturity-max">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           id="maturity-max"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="depositFeeRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'DEPOSIT_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('depositFeeFlatMin').errors && form.get('depositFeeFlatMin').touched)
+            || (form.get('depositFeeFlatMin').invalid && form.get('depositFeeFlatMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="depositFeeFlatMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('depositFeeFlatMax').errors && form.get('depositFeeFlatMax').touched)
+            || (form.get('depositFeeFlatMax').invalid && form.get('depositFeeFlatMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="depositFeeFlatMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('depositFeeAccount').errors && form.get('depositFeeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'depositFeeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'DEPOSIT_FEE_ACCOUNT' | translate"
+        [picklistDataUrl]="depositFeeConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('depositFeeIncomeAccount').errors && form.get('depositFeeIncomeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'depositFeeIncomeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'DEPOSIT_FEE_INCOME_ACCOUNT' | translate"
+        [picklistDataUrl]="depositFeeIncomeConfig">
+    </cbs-form-lookup-control>
+
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'CASH_WITHDRAWAL_PARAMETERS' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'WITHDRAWAL_AMOUNT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('withdrawalAmountMin').errors && form.get('withdrawalAmountMin').touched)
+            || (form.get('withdrawalAmountMin').invalid && form.get('withdrawalAmountMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="withdrawalAmountMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('withdrawalAmountMax').errors && form.get('withdrawalAmountMax').touched)
+            || (form.get('withdrawalAmountMax').invalid && form.get('withdrawalAmountMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="withdrawalAmountMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'WITHDRAWAL_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('withdrawalFeeRateMin').errors && form.get('withdrawalFeeRateMin').touched)
+            || (form.get('withdrawalFeeRateMin').invalid && form.get('withdrawalFeeRateMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="withdrawalFeeRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('withdrawalFeeRateMax').errors && form.get('withdrawalFeeRateMax').touched)
+            || (form.get('withdrawalFeeRateMax').invalid && form.get('withdrawalFeeRateMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="withdrawalFeeRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'WITHDRAWAL_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('withdrawalFeeFlatMin').errors && form.get('withdrawalFeeFlatMin').touched)
+            || (form.get('withdrawalFeeFlatMin').invalid && form.get('withdrawalFeeFlatMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="withdrawalFeeFlatMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('withdrawalFeeFlatMax').errors && form.get('withdrawalFeeFlatMax').touched)
+            || (form.get('withdrawalFeeFlatMax').invalid && form.get('withdrawalFeeFlatMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="withdrawalFeeFlatMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('withdrawalFeeAccount').errors && form.get('withdrawalFeeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'withdrawalFeeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'WITHDRAWAL_FEE_ACCOUNT' | translate"
+        [picklistDataUrl]="withdrawalFeeConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('withdrawalFeeIncomeAccount').errors && form.get('withdrawalFeeIncomeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'withdrawalFeeIncomeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'WITHDRAWAL_FEE_INCOME_ACCOUNT' | translate"
+        [picklistDataUrl]="withdrawalFeeIncomeConfig">
+    </cbs-form-lookup-control>
+
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'MANAGEMENT_FEES' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'MANAGEMENT_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('managementFeeRateMin').errors && form.get('managementFeeRateMin').touched)
+            || (form.get('managementFeeRateMin').invalid && form.get('managementFeeRateMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="managementFeeRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('managementFeeRateMax').errors && form.get('managementFeeRateMax').touched)
+            || (form.get('managementFeeRateMax').invalid && form.get('managementFeeRateMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="managementFeeRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'MANAGEMENT_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('managementFeeFlatMin').errors && form.get('managementFeeFlatMin').touched)
+            || (form.get('managementFeeFlatMin').invalid && form.get('managementFeeFlatMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="managementFeeFlatMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('managementFeeFlatMax').errors && form.get('managementFeeFlatMax').touched)
+            || (form.get('managementFeeFlatMax').invalid && form.get('managementFeeFlatMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="managementFeeFlatMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-select-control
+        [formControlName]="'managementFeeFrequency'"
+        [selectData]="frequency"
+        [requiredField]="true"
+        [hasError]="form.get('managementFeeFrequency').errors && form.get('managementFeeFrequency').touched"
+        fieldLabel="{{ 'MANAGEMENT_FEE_FREQUENCY' | translate }}"
+    ></cbs-form-select-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('managementFeeAccount').errors && form.get('managementFeeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'managementFeeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'MANAGEMENT_FEE_ACCOUNT' | translate"
+        [picklistDataUrl]="managementFeeConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('managementFeeIncomeAccount').errors && form.get('managementFeeIncomeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'managementFeeIncomeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'MANAGEMENT_FEE_INCOME_ACCOUNT' | translate"
+        [picklistDataUrl]="managementFeeIncomeConfig">
+    </cbs-form-lookup-control>
+
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'ENTRY_FEES' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'ENTRY_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('entryFeeRateMin').errors && form.get('entryFeeRateMin').touched)
+            || (form.get('entryFeeRateMin').invalid && form.get('entryFeeRateMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="entryFeeRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('entryFeeRateMax').errors && form.get('entryFeeRateMax').touched)
+            || (form.get('entryFeeRateMax').invalid && form.get('entryFeeRateMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="entryFeeRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'ENTRY_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('entryFeeFlatMin').errors && form.get('entryFeeFlatMin').touched)
+            || (form.get('entryFeeFlatMin').invalid && form.get('entryFeeFlatMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="entryFeeFlatMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('entryFeeFlatMax').errors && form.get('entryFeeFlatMax').touched)
+            || (form.get('entryFeeFlatMax').invalid && form.get('entryFeeFlatMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="entryFeeFlatMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('entryFeeAccount').errors && form.get('entryFeeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'entryFeeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'ENTRY_FEE_ACCOUNT' | translate"
+        [picklistDataUrl]="entryFeeConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('entryFeeIncomeAccount').errors && form.get('entryFeeIncomeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'entryFeeIncomeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'ENTRY_FEE_INCOME_ACCOUNT' | translate"
+        [picklistDataUrl]="entryFeeIncomeConfig">
+    </cbs-form-lookup-control>
+
+
+    <div class="slds-text-title--caps slds-m-bottom_small slds-m-top--xx-large">
+        <strong>{{ 'CLOSE_FEES' | translate }}</strong>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'CLOSE_FEE_RATE' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('closeFeeRateMin').errors && form.get('closeFeeRateMin').touched)
+            || (form.get('closeFeeRateMin').invalid && form.get('closeFeeRateMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="closeFeeRateMin"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('closeFeeRateMax').errors && form.get('closeFeeRateMax').touched)
+            || (form.get('closeFeeRateMax').invalid && form.get('closeFeeRateMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="closeFeeRateMax"/>
+                    <span class="cbs-hint-icon">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slds-form-element cbs-compound-form__row">
+        <label class="slds-form-element__label">
+            <abbr class="slds-required" title="required">*</abbr>
+            {{ 'CLOSE_FEE_FLAT' | translate }}
+        </label>
+        <div class="cbs-compound-form__r">
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('closeFeeFlatMin').errors && form.get('closeFeeFlatMin').touched)
+            || (form.get('closeFeeFlatMin').invalid && form.get('closeFeeFlatMin').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MINVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="closeFeeFlatMin"/>
+                </div>
+            </div>
+            <div class="cbs-compound-form__1-of-2" [class.slds-has-error]="
+            (form.get('closeFeeFlatMax').errors && form.get('closeFeeFlatMax').touched)
+            || (form.get('closeFeeFlatMax').invalid && form.get('closeFeeFlatMax').touched)">
+                <label class="cbs-compound-form__label">
+                    <abbr class="slds-required" title="required">*</abbr>
+                    {{ 'MAXVALUE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <input type="number"
+                           class="slds-input"
+                           [onlyNumber]="true"
+                           formControlName="closeFeeFlatMax"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('closeFeeAccount').errors && form.get('closeFeeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'closeFeeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'CLOSE_FEE_ACCOUNT' | translate"
+        [picklistDataUrl]="closeFeeConfig">
+    </cbs-form-lookup-control>
+
+    <cbs-form-lookup-control
+        [hasError]="form.get('closeFeeIncomeAccount').errors && form.get('closeFeeIncomeAccount').touched"
+        [requiredField]="true"
+        [code]="true"
+        [formControlName]="'closeFeeIncomeAccount'"
+        searchPlaceholder="{{ 'SEARCH' | translate }}"
+        selectPlaceholder="{{ 'SELECT' | translate }}"
+        [fieldLabel]="'CLOSE_FEE_INCOME_ACCOUNT' | translate"
+        [picklistDataUrl]="closeFeeIncomeConfig">
+    </cbs-form-lookup-control>
+
+</form>

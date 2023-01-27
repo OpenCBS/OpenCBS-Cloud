@@ -1,0 +1,32 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                [isMainPage]="true"
+                headingTitle="{{ 'TRANSFERS' | translate }}"
+                [svgData]="svgData"
+            ></cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <div class="slds-container--fluid">
+        <div class="slds-grid slds-wrap slds-gutters" cbsMatchHeight="cbs-config-item">
+            <div
+                class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+                *ngFor="let item of list">
+                <cbs-card
+                    [cardIcon]="item?.icon"
+                    [cardTitle]="item.name | translate"
+                    [cardDesc]="item?.description"
+                    [cardLink]="item.link"
+                ></cbs-card>
+            </div>
+        </div>
+    </div>
+</main>

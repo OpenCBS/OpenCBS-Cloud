@@ -1,0 +1,125 @@
+:host ::ng-deep {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: auto;
+  padding: 0;
+
+  .slds-grid--vertical-align-center {
+    height: 100%;
+  }
+
+  .cbs-mac-user {
+    .ui-table-scrollable-header {
+      .slds-table {
+        width: 100%;
+      }
+    }
+  }
+
+  p-table {
+    height: 100%;
+    display: block;
+    overflow: hidden;
+
+    table {
+      border-bottom: 1px solid #d8dde6;
+    }
+
+    .ui-table-scrollable-header-box {
+      margin-right: 15px !important;
+    }
+
+    .ui-table-tbody,
+    .ui-table-scrollable-wrapper,
+    .ui-table-scrollable-view {
+      height: 100%;
+    }
+
+    .ui-table-scrollable-wrapper {
+      & > div {
+        height: 100%;
+      }
+    }
+
+    .ui-table-scrollable-header {
+      border-top: 1px solid #d8dde6;
+      .slds-table {
+        width: calc(100% - 15px);
+      }
+    }
+
+    .ui-table-tbody thead tr {
+      font-size: 12px;
+    }
+
+    .ui-table-scrollable-body {
+      overflow-y: scroll;
+
+      .slds-table {
+        tr {
+          &:last-child {
+            background: #f7f9fb;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }
+
+    .slds-table--cell-buffer tr > th:first-child,
+    .slds-table--cell-buffer tr > td:first-child {
+      padding-left: .5rem;
+    }
+
+    .slds-table {
+      table-layout: fixed;
+      tr {
+        th, td {
+          text-align: right;
+          min-width: 150px;
+
+          &.decimal {
+            text-align: right;
+            min-width: 150px;
+          }
+
+          &.integer {
+            min-width: 75px;
+            text-align: center;
+          }
+
+          &.date {
+            text-align: center;
+            min-width: 150px;
+          }
+        }
+
+        &.paid {
+          background-color: #4bca81;
+
+          &:hover {
+            td {
+              background-color: darken(#4bca81, 5%);
+            }
+          }
+        }
+        &.late {
+          background-color: #faffbd;
+
+          &:hover {
+            td {
+              background-color: darken(#faffbd, 5%);
+            }
+          }
+        }
+        &.bold {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  input {
+    width: 133px;
+  }
+}

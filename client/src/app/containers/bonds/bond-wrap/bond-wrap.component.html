@@ -1,0 +1,76 @@
+<cbs-header>
+    <cbs-page-header [isTwoColumn]="true">
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="
+            {{ bond?.id ? bond?.isin : '' }}" [svgData]="svgData"
+                               [badgeLabel]="bondStatus" [badgeTheme]="(bondStatus | statusBadge)">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+
+                <div class="slds-m-left--x-small" *ngIf="isEventsPage">
+                    <button class="slds-button slds-button--neutral" (click)="rollBack()">Rollback</button>
+                </div>
+
+                <ng-container *ngIf="bondStatus === 'IN_PROGRESS' || bondStatus === 'PENDING'">
+                    <a [routerLink]="'/bonds/'+ bond?.id + '/edit' "
+                       class="slds-button slds-button--brand"
+                       aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                        </svg>{{ 'EDIT' | translate }}</span>
+                    </a>
+
+                    <button (click)="openModal()" class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>{{ 'START' | translate }}
+                        </span>
+                    </button>
+                </ng-container>
+
+                <div *ngIf="isEventsPage" class="filter-events"
+                     style="text-align: left; padding-left: 10px; margin-top: -5px;">
+                    <span class="slds-checkbox">
+                        <input type="checkbox" id="checkbox-deleted" [(ngModel)]='showDeleted' (change)="showDeletedEvents($event)"/>
+                        <label class="slds-checkbox__label" for="checkbox-deleted">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">Show deleted</span>
+                        </label>
+                    </span>
+                    <br>
+                    <span class="slds-checkbox">
+                        <input type="checkbox" id="checkbox-system" [(ngModel)]='showSystem' (click)="showSystemEvents($event)"/>
+                        <label class="slds-checkbox__label" for="checkbox-system">
+                            <span class="slds-checkbox--faux"></span>
+                            <span class="slds-form-element__label">Show system</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </cbs-page-header>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="true" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="bondNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right">
+            <cbs-confirm-popup [confirmText]="'Are you sure you want to sell?'" [opened]="opened"
+                               (openedChange)="closeModal()"
+                               (onSubmitClick)="startBond()"
+                               [leftButtonLabel]="'CANCEL' | translate"
+                               [rightButtonLabel]="'CONFIRM' | translate"
+                               [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

@@ -1,0 +1,57 @@
+<div class="cf-section" [ngClass]="{'cf-section--highlight': newSectionMode}">
+    <div class="cf-section__head">
+        <div class="slds-form-element slds-hint-parent slds-has-divider--bottom" *ngIf="!isEditView">
+            <button class="slds-button slds-float--right slds-button--icon slds-button--icon-small"
+                    title="Edit this Field" (click)="activateEdit(sectionData?.caption)">
+                <svg class="slds-button__icon slds-button__icon--hint" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                </svg>
+                <span class="slds-assistive-text">Edit this Field</span>
+            </button>
+            <span class="slds-form-element__label">{{'SECTION_TITLE' | translate}}</span>
+            <div class="slds-form-element__control">
+                <span class="slds-form-element__static">{{ sectionData?.caption }}</span>
+            </div>
+        </div>
+        <form novalidate *ngIf="isEditView" #captionForm="ngForm" (ngSubmit)="submitForm(captionForm)">
+            <div class="slds-form-element slds-hint-parent"
+                 [class.slds-has-error]="caption.errors?.required && caption.touched">
+                <button type="submit"
+                        class="slds-button slds-float--right slds-button--icon slds-button--icon-small cf-section__save-btn"
+                        title="Save"
+                        [disabled]="captionForm.invalid || !formChanged"
+                        tabindex="2">
+                    <svg class="slds-button__icon slds-button__icon--hint" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>
+                    <span class="slds-assistive-text">{{'SAVE' | translate}}</span>
+                </button>
+                <button type="button"
+                        class="slds-button slds-float--right slds-button--icon slds-button--icon-small cf-section__cancel-btn"
+                        title="Cancel"
+                        (click)="closeEdit()"
+                        tabindex="3">
+                    <svg class="slds-button__icon slds-button__icon--hint" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Cancel</span>
+                </button>
+                <input type="text" name="order" #order="ngModel" [ngModel]="sectionData?.order" hidden>
+                <label class="slds-form-element__label" for="section-title">{{'SECTION_TITLE' | translate}}</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="section-title" class="slds-input"
+                           tabindex="1"
+                           [placeholder]="'TITLE' | translate"
+                           name="caption"
+                           #caption="ngModel"
+                           [ngModel]="sectionData?.caption"
+                           (ngModelChange)="checkValueChange($event)"
+                           required/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="cf-section__body">
+        <ng-content></ng-content>
+    </div>
+</div>

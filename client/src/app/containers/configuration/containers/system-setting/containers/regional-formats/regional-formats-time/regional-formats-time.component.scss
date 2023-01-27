@@ -1,0 +1,36 @@
+:host ::ng-deep {
+  .cbs-formats-wrap {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+    position: relative;
+  }
+
+  .slds-text-heading--large {
+    font-size: 1.5rem;
+  }
+
+  .slds-image__crop img {
+    max-width: 150%;
+  }
+
+  .slds-container--medium {
+    @media screen and (min-width: 1024px) {
+      max-width: 35rem;
+    }
+  }
+
+  .slds-form-element__control {
+    border: 1px solid #e4e4e4;
+    border-radius: 0.25rem;
+    padding: 0 1rem 0 0.75rem;
+    height: 2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .icon {
+    color: forestgreen;
+  }
+}

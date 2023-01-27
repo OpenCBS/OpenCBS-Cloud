@@ -1,0 +1,48 @@
+<div class="slds-form-element">
+    <label class="slds-form-element__label">
+        <abbr class="slds-required" title="required" *ngIf="!readonly">*</abbr>
+        {{ 'PAYEES' | translate }}
+    </label>
+    <div class="slds-form-element__control">
+        <div class="payees-block" [ngClass]="{'payees-block--collapsed': isCollapsed}">
+            <div class="slds-grid slds-grid--align-spread">
+                <div>
+                    <span class="slds-text-title_caps">{{ 'PAYEES' | translate }}</span>: {{ payeesCount }}
+                    <span class="slds-text-title_caps">| {{ 'PAYEES_TOTAL_AMOUNT' | translate }}</span>: <strong>{{
+                    getTotal() | cbsNumberFormat }}</strong>
+                </div>
+                <div>
+                    <button class="slds-button payee-add-button" (click)="onAddPayee.emit()" *ngIf="!readonly">
+                        <svg class="slds-button__icon slds-button__icon_left slds-button__icon--small">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>
+                        {{ 'ADD' | translate }}
+                    </button>
+                    <button class="slds-button slds-button--icon-border-filled slds-button--icon-x-small"
+                            *ngIf="!!payeesData.length"
+                            (click)="toggleCollapse()">
+                        <svg class="slds-button__icon payees-block__expand">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+                        </svg>
+                        <span class="slds-assistive-text">{{ 'EXPAND' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <ng-container *ngIf="!isCollapsed">
+                <div *ngFor="let payee of payeesData">
+                    <cbs-payee-block
+                        *ngIf="!payee.isDeleted"
+                        [payee]="payee"
+                        [readonly]="readonly"
+                        [showEditBtn]="showEditBtn"
+                        (onEdit)="onEditPayee.emit($event)"
+                        (onDelete)="onDeletePayee.emit($event)"
+                    ></cbs-payee-block>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

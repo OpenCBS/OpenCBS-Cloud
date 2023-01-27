@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  overflow-y: auto;
+  height: 100%;
+
+  .slds-text-title--caps {
+    width: 65%;
+    margin-left: auto;
+    text-align: center;
+  }
+}

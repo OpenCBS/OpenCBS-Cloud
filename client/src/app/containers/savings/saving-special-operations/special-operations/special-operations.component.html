@@ -1,0 +1,145 @@
+<div class="slds-container--fluid">
+    <div class="slds-grid slds-wrap slds-gutters" cbsMatchHeight="cbs-special-operation-item">
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+            *cbsVisibleByPermission="{ group: 'SAVINGS', permissions: ['SAVING_DEPOSIT'] }">
+            <a (click)="depositWithdrawModal('Deposit')" [ngClass]="locked || !status ? 'disabled' : ''"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="depositIcon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small slds-truncate">{{ 'TRANSFER_FROM_CURRENT_ACCOUNT' | translate  }}</span>
+            </a>
+        </div>
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+            *cbsVisibleByPermission="{ group: 'SAVINGS', permissions: ['SAVING_WITHDRAW'] }">
+            <a (click)="depositWithdrawModal('Withdraw')" [ngClass]="locked || !status ? 'disabled' : ''"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="withdrawIcon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small slds-truncate">{{ 'TRANSFER_TO_CURRENT_ACCOUNT' | translate }}</span>
+            </a>
+        </div>
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4"
+            *cbsVisibleByPermission="{ group: 'SAVINGS', permissions: ['ACTUALIZE_SAVING'] }">
+            <a (click)="openActualizeModal()" [ngClass]="locked || !status ? 'disabled' : ''"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="actualizeIcon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small slds-truncate">{{ 'ACTUALIZE_SAVING' | translate }}</span>
+            </a>
+        </div>
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">
+            <a (click)="openLockUnlockPopup()" [ngClass]="{'disabled': !status}"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="locked ? unlockIcon : lockIcon"
+                          [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small slds-truncate">{{ locked ? 'UNLOCK' : 'LOCK' | translate }}</span>
+            </a>
+        </div>
+        <div
+            class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">
+            <a (click)="closeSavingModal()" [ngClass]="{'disabled': !status}"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="closeIcon"
+                          [classStyle]="'slds-m-bottom--small slds-box--border'"></cbs-icon>
+                <span
+                    class="slds-text-heading--small slds-truncate">{{ 'CLOSE' | translate }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<ngl-modal [header]="title | translate" [(open)]="opened" (openChange)="closeModal()">
+    <div body>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">*</abbr>
+                {{ title === 'Deposit' ? ('DEPOSIT_AMOUNT' | translate) : ('WITHDRAW_AMOUNT' | translate) }}
+            </label>
+            <div class="slds-form-element__control">
+                <div class="slds-input-has-icon slds-input-has-icon--right">
+                    <input class="slds-input" type="number" [onlyNumber]="true" (keyup)="checkFieldOperationAmount()"
+                           [(ngModel)]="operationAmount">
+                    <div class="cbs-loan-details-form__range">
+                        Min:
+                        <span>{{title === 'Deposit'
+                            ? (savingProductDepositAmountMin | cbsNumberFormat)
+                            : (savingProductWithdrawalAmountMin | cbsNumberFormat)  }}</span>
+                        Max:
+                        <span>{{title === 'Deposit'
+                            ? (savingProductDepositAmountMax | cbsNumberFormat)
+                            : (savingProductWithdrawalAmountMax | cbsNumberFormat)  }}</span>
+                    </div>
+                </div>
+            </div>
+            <cbs-form-date-control
+                [(ngModel)]="operationDate"
+                [enableDropdownPicker]="false"
+                fieldLabel="{{ 'DATE' | translate }}"
+                [validateDate]="true"
+                [requiredField]="true">
+            </cbs-form-date-control>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="closeModal()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="fieldEmpty" class="slds-button slds-button--success"
+                (click)="submitDepositWithdrawSaving()">{{ title === 'Deposit' ? ('DEPOSIT' | translate) :
+            ('WITHDRAW' | translate) }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<ngl-modal [header]="'ACTUALIZE_SAVING' | translate" [(open)]="isOpenActualize">
+    <div body>
+        <cbs-form-date-control
+            [(ngModel)]="actualizeDate"
+            [enableDropdownPicker]="true"
+            fieldLabel="{{ 'DATE' | translate }}"
+            [validateDate]="true"
+            [requiredField]="true">
+        </cbs-form-date-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpenActualize = false">{{ 'CANCEL' | translate }}
+        </button>
+        <button class="slds-button slds-button--success" (click)="submitActualizeLoan()">{{ 'Start' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidePanel]="false">
+        <div cbs-loan-layout="right">
+            <cbs-confirm-popup
+                [confirmText]="locked ? 'Are you sure you want to unlock?' : 'Are you sure you want to lock?'"
+                [opened]="lock"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="submitLockUnlockSaving()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<ngl-modal [header]="'CLOSE_SAVING' | translate" [(open)]="closeSaving">
+    <div body>
+        <cbs-form-date-control
+            [(ngModel)]="closeDate"
+            [enableDropdownPicker]="true"
+            fieldLabel="{{ 'DATE' | translate }}"
+            [validateDate]="true"
+            [requiredField]="true">
+        </cbs-form-date-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="closeSaving = false">{{ 'CANCEL' | translate }}
+        </button>
+        <button class="slds-button slds-button--success" (click)="submitCloseSaving()">{{ 'OK' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

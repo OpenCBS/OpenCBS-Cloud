@@ -1,0 +1,42 @@
+:host {
+  display: block;
+  overflow-y: auto;
+  height: 100%;
+
+  & ::ng-deep {
+    .slds-modal {
+      cbs-form-readonly-control {
+        display: block;
+        margin-bottom: .5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .member-title {
+    margin-top: 1rem;
+  }
+
+  .form-control-range {
+    color: #bbb;
+    font-size: 10px;
+    text-align: right;
+    text-transform: uppercase;
+
+    span {
+      color: #54698d;
+      font-weight: bold;
+      margin-right: .85rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .span-limit {
+      color: #bbb;
+    }
+  }
+}

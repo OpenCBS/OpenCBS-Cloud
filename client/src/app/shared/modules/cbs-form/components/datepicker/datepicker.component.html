@@ -1,0 +1,18 @@
+<div class="slds-form-element__control cbs-datepicker">
+    <input
+        matInput
+        [value]="value"
+        [matDatepicker]="picker"
+        [placeholder]="dateFormat"
+        class="slds-input"
+        (dateInput)="emitValueChange($event)"
+        (dateChange)="emitOnBlur($event)"
+        [disabled]="disabled"
+        [onlyNumber]="true"
+    >
+    <span *ngIf="showAge && yearsFromNow" class="cbs-datepicker__age">
+        {{'AGE' | translate}}: {{ yearsFromNow }}
+    </span>
+    <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="disabled || !enableDropdownPicker"></mat-datepicker-toggle>
+    <mat-datepicker #picker [disabled]="disabled || !enableDropdownPicker"></mat-datepicker>
+</div>

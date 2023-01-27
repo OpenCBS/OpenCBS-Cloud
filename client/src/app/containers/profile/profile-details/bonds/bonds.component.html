@@ -1,0 +1,81 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ (profile |
+                            async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'BONDS' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <button (click)="goToCreateBond(profile)" class="slds-button slds-button--neutral">
+                    <span class="slds-text-not-selected">
+                        <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                        </svg>{{ 'CREATE_BOND' | translate }}
+                    </span>
+            </button>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <ng-container>
+                <p-dataTable
+                    emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                    [value]="(bonds | async)?.content"
+                    [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+                    [selectionMode]="'single'" (onRowSelect)="goToBondInfo($event)">
+                    <p-column field="isin" header="{{ 'ISIN' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['isin'] }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="number" header="{{ 'NUMBER' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['number'] | cbsNumberFormat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="interestRate" header="{{ 'INTEREST_RATE' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['interestRate'] + '%'}}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="createdAt" header="{{ 'START_DATE' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <span>{{ row['valueDate'] | cbsDateFormat }} {{ row['valueDate'] | cbsTimeFormat }}</span>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="status" header="{{ 'STATUS' | translate }}">
+                        <ng-template let-row="rowData" pTemplate="body">
+                            <ngl-badge [type]="(row['status'] | statusBadge)">{{ row['status'] }}</ngl-badge>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </ng-container>
+        </div>
+    </div>
+</main>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="!(bonds | async)?.loaded"></cbs-loading-indicator>

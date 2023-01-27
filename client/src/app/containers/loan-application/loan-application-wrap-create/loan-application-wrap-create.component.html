@@ -1,0 +1,101 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'LOAN_APPLICATIONS_ADD' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+
+        <div cbs-page-header-layout="center">
+            <div class="slds-progress">
+                <ol class="slds-progress__list">
+                    <li *ngIf="(formStatus | async)" class="slds-progress__item slds-is-completed">
+                        <button class="slds-button slds-progress__marker slds-button_icon slds-progress__marker_icon"
+                                style="cursor: default"
+                                title="Created">
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                            </svg>
+                            <span class="slds-assistive-text">Created</span>
+                        </button>
+                    </li>
+                    <li *ngIf="!(formStatus | async)" class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 1</span>
+                        </button>
+                    </li>
+                    <li class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 2</span>
+                        </button>
+                    </li>
+                    <li class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 3</span>
+                        </button>
+                    </li>
+                    <li class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 4 </span>
+                        </button>
+                    </li>
+                    <li class="slds-progress__item">
+                        <button class="slds-button slds-progress__marker" style="cursor: default">
+                            <span class="slds-assistive-text">Step 5 </span>
+                        </button>
+                    </li>
+                </ol>
+                <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0" aria-valuemax="100"
+                     aria-valuenow="50" role="progressbar">
+                    <span class="slds-progress-bar__value" style="width:0">
+                      <span class="slds-assistive-text"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button *ngIf="!showButtonPreview" class="slds-button slds-button--brand" aria-live="assertive"
+                    [disabled]="!(formStatus | async)"
+                    (click)="previewSchedule()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#preview"></use>
+                    </svg>
+                    {{ 'PREVIEW' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="goToViewLoanApps()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    {{ 'CANCEL' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" #submitButton aria-live="assertive"
+                    (click)="submitForm()"
+                    [disabled]="!(formStatus | async)">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>
+                    {{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="true" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="loanNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right">
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+<!-- ./cbs-main -->
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

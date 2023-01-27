@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  overflow-y: auto;
+  height: 100%;
+
+  & ::ng-deep {
+    .slds-modal {
+      cbs-form-readonly-control {
+        display: block;
+        margin-bottom: .5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .member-title {
+    margin-top: 1rem;
+  }
+}

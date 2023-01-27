@@ -1,0 +1,151 @@
+<main class="cbs-main">
+    <table>
+        <tbody>
+        <tr>
+            <td class="cbs-bold cbs-balance-config">
+                <div class="slds-truncate" title="Full Name">
+                    {{ 'CURRENT_BALANCE' | translate }}{{': '}}
+                    <ul class="slds-show_inline-block">
+                        <li class="slds-m-right--large slds-show_inline-block" *ngFor="let b of balance">{{b?.balance +
+                            ' ' + b?.account?.currency?.name}}
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td class="cbs-bold slds-text-align--right">
+                <div class="slds-truncate" title="Full Name">
+                    {{ 'CURRENCY' | translate }}{{': '}}
+                    <select #currency class="slds-select cbs-currency-list"
+
+                            (change)="getListByCurrency(currency.value)">
+                        <option *ngFor="let val of currencies" [value]="val.id">{{ val.name }}</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table *ngIf="(operations | async)?.loaded"
+           class="slds-table slds-table--bordered slds-table--cell-buffer cbs-operations">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="155px">
+                <div class="slds-truncate" title="Time">{{ 'TIME' | translate }}</div>
+            </th>
+            <th scope="col" width="17%">
+                <div class="slds-truncate" title="Customer">{{ 'CUSTOMER' | translate }}</div>
+            </th>
+            <th scope="col" width="17%">
+                <div class="slds-truncate" title="Account">{{ 'ACCOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="16%">
+                <div class="slds-truncate" title="Operation Type">{{ 'OPERATION_TYPE' | translate }}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Pay In">{{ 'PAY_IN' | translate}}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Pay out">{{ 'PAY_OUT' | translate}}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Currency">{{ 'CURRENCY' | translate}}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Teller">{{ 'TELLER' | translate}}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Comment">{{ 'COMMENT' | translate}}</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title=""></div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let operation of (operations | async)?.data?.content; let i = index;">
+            <td scope="row" class="slds-truncate">
+                <span>{{operation?.createdAt | cbsDateFormat }} {{operation?.createdAt | cbsTimeFormat }}</span>
+            </td>
+            <td scope="row" class="slds-truncate" title="{{operation?.profile?.name}}">
+                <ng-container *ngIf="operation?.profile?.name; else vaultName">
+                    {{operation?.profile?.name}}
+                </ng-container>
+                <ng-template #vaultName>{{operation?.vaultName}}</ng-template>
+            </td>
+            <td scope="row" title="{{operation?.accountName}}"
+                class="slds-truncate">
+                {{operation?.accountNumber}}
+            </td>
+            <td scope="row" class="slds-truncate">
+                <ngl-badge type="warning" *ngIf="operation.operationType === 'TRANSFER_FROM_VAULT'">
+                    {{'TRANSFER_FROM_VAULT'| translate}}
+                </ngl-badge>
+                <ngl-badge type="error" *ngIf="operation.operationType === 'WITHDRAW'">{{'WITHDRAW'| translate}}
+                </ngl-badge>
+                <ngl-badge type="success" *ngIf="operation.operationType === 'DEPOSIT'">{{'DEPOSIT'| translate}}
+                </ngl-badge>
+                <ngl-badge type="info" *ngIf="operation.operationType === 'TRANSFER_TO_VAULT'">{{'TRANSFER_TO_VAULT'|
+                    translate}}
+                </ngl-badge>
+            </td>
+            <td scope="row">
+                <span
+                    *ngIf="(operation.operationType === 'DEPOSIT' || operation.operationType === 'TRANSFER_FROM_VAULT');
+                    else nodata">{{operation?.amount | cbsNumberFormat}}</span>
+            </td>
+            <td scope="row">
+                <span
+                    *ngIf="(operation.operationType === 'WITHDRAW' || operation.operationType === 'TRANSFER_TO_VAULT');
+                    else nodata">{{operation?.amount | cbsNumberFormat}}</span>
+            </td>
+            <td scope="row">
+                {{operation?.currency?.name}}
+            </td>
+            <td scope="row" title="{{operation?.createdBy?.firstName + ' ' + operation?.createdBy?.lastName}}"
+                class="slds-truncate">
+                {{operation?.createdBy?.firstName + ' ' + operation?.createdBy?.lastName}}
+            </td>
+            <td scope="row" title="{{operation?.description}}" class="slds-truncate">
+                <ng-container *ngIf="operation?.description; else nodata">
+                    {{operation?.description}}
+                </ng-container>
+            </td>
+            <td [style]="{'min-width':'70px', 'width':'70px', 'max-width':'70px'}" field="download">
+                <button (click)="download(operation)"
+                        class="slds-button slds-button--icon slds-button--icon-more slds-m-left--small"
+                        aria-haspopup="true" title="Configuration">
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#download"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Configuration</span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="slds-grid slds-grid--align-center"
+         *ngIf="(operations | async)?.totalElements > (operations | async)?.size">
+        <ngl-pagination
+            class="cbs-pagination"
+            *ngIf="(operations | async)?.loaded"
+            [(page)]="queryObject.page"
+            [total]="(operations | async)?.totalElements"
+            limit="5"
+            [perPage]="(operations | async)?.size"
+            [previousText]="'PREVIOUS' | translate"
+            [nextText]="'NEXT' | translate"
+            boundaryNumbers="1"
+            (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+    </div>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(operations | async)?.loading"></cbs-loading-indicator>
+
+    <p *ngIf="(operations | async)?.loaded && !(operations | async)?.data?.content?.length"
+       class="slds-text-align--center slds-m-top_large">
+        {{ 'NO_DATA' | translate }}
+    </p>
+
+    <ng-template #nodata>-</ng-template>
+
+</main>

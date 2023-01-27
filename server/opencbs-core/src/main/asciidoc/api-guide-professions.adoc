@@ -1,0 +1,77 @@
+== PROFESSIONS
+
+The Professions resource is used to list, create, and update professions.
+
+=== Retrieve a profession
+
+A `GET` request will retrieve the details of a profession.
+
+==== Response fields
+
+include::{snippets}/profession-get-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/profession-get-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/profession-get-example/http-response.adoc[]
+
+=== Create a profession
+
+A `POST` request will create a new profession.
+
+==== Request fields
+
+include::{snippets}/profession-create-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/profession-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/profession-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/profession-create-example/http-response.adoc[]
+
+=== Create children for a profession
+
+A `POST` request will create a profession.
+
+include::{snippets}/profession-children-create-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/profession-children-create-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/profession-children-create-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/profession-children-create-example/http-response.adoc[]
+
+=== Update a profession
+
+A `PUT` request will update the details of a profession.
+
+==== Request fields
+
+include::{snippets}/profession-update-example/request-fields.adoc[]
+
+==== Response fields
+
+include::{snippets}/profession-update-example/response-fields.adoc[]
+
+==== Example request
+
+include::{snippets}/profession-update-example/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/profession-update-example/http-response.adoc[]

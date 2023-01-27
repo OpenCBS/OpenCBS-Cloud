@@ -1,0 +1,12 @@
+export enum LoanAppStatus {
+  APPROVED,
+  REJECTED,
+  IN_PROGRESS,
+  PENDING,
+  DISBURSED,
+  CLOSED,
+  ACTIVE,
+  OPEN,
+  SOLD
+}
+

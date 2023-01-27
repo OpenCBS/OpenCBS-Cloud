@@ -1,0 +1,138 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block
+                headingTitle="{{ userName | uppercase }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumb"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <div *ngIf="userType === 'live'">
+                <span *ngIf="isSystem === false" class="slds-box--x-small">
+                    <button
+                        *cbsVisibleByPermission="{ group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_USER'] }"
+                        [routerLink]="'/configuration/users/' + userId + '/edit'"
+                        [disabled]="readOnly"
+                        class="slds-button slds-button--brand" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                            </svg>
+                            {{ 'EDIT' | translate }}
+                        </span>
+                    </button>
+                </span>
+
+
+                <a *ngIf="showChangePassword"
+                   (click)="openChangePasswordModal()" class="slds-button slds-button--brand"
+                   aria-live="assertive">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#lock"></use>
+                    </svg>
+                    {{ 'CHANGE_PASSWORD' | translate }}</span>
+                </a>
+            </div>
+
+            <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-start">
+                <ng-container *ngIf="userType === 'maker-checker'">
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER', permissions: ['CHECKER_FOR_USER'] }"
+                        (click)="openApproveModal()"
+                        class="slds-button slds-button--success" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                            </svg>
+                            {{ 'APPROVE' | translate }}
+                        </span>
+                    </button>
+
+                    <button
+                        *cbsVisibleByPermission="{
+                            group: 'MAKER_CHECKER', permissions: ['MAKER_FOR_USER','CHECKER_FOR_USER'] }"
+                        (click)="openDeleteModal()" class="slds-button slds-button--brand" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#delete"></use>
+                            </svg>
+                            {{ 'REJECT' | translate }}
+                        </span>
+                    </button>
+
+                </ng-container>
+            </div>
+
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+<!-- ./cbs-main -->
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-loan-layout [sidebar]="this.userType === 'live'" [sidePanel]="false">
+        <cbs-icon-nav cbs-loan-layout="sidebar" [navConfig]="userNavConfig"></cbs-icon-nav>
+        <div cbs-loan-layout="right" style="width: calc(100% - 20rem)">
+
+            <cbs-confirm-popup
+                [confirmText]="'Are you sure you want to approve?'"
+                [opened]="approveRequest"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="approveUserRequest()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+
+            <cbs-confirm-popup
+                [confirmText]="'Are you sure you want to reject?'"
+                [opened]="deleteRequest"
+                (openedChange)="closeModal()"
+                (onSubmitClick)="deleteUserRequest()"
+                [leftButtonLabel]="'CANCEL' | translate"
+                [rightButtonLabel]="'CONFIRM' | translate"
+                [popupLabel]="'CONFIRMATION' | translate">
+            </cbs-confirm-popup>
+
+            <router-outlet></router-outlet>
+        </div>
+    </cbs-loan-layout>
+</main>
+
+<ngl-modal header="{{ 'CHANGE_PASSWORD' | translate }}" *ngIf="openModal" [(open)]="openModal">
+    <div body>
+        <form novalidate [formGroup]="changePasswordForm">
+            <cbs-form-input-control
+                [class.slds-has-error]="passwordNotMatch"
+                [requiredField]="true"
+                [fieldLabel]="'PASSWORD' | translate"
+                [hasError]="changePasswordForm.get('password').errors && changePasswordForm.get('password').touched"
+                [formControlName]="'password'"
+                [inputType]="'password'"
+                [showIconPreview]="true">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [class.slds-has-error]="passwordNotMatch"
+                [requiredField]="true"
+                [fieldLabel]="'CONFIRM_PASSWORD' | translate"
+                [hasError]="changePasswordForm.get('confirmPassword').errors && changePasswordForm.get('confirmPassword').touched"
+                [formControlName]="'confirmPassword'"
+                [inputType]="'password'"
+                [showIconPreview]="true">
+            </cbs-form-input-control>
+        </form>
+    </div>
+
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="changePasswordForm.invalid || passwordNotMatch" class="slds-button slds-button--success"
+                (click)="submit()">{{ 'SUBMIT' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

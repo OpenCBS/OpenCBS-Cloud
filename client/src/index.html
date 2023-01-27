@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>OpenCBS Cloud</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <base href="/">
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience and security.</p>
+<![endif]-->
+<cbs-app-root></cbs-app-root>
+
+<!-- Pre-Bootstrap Loader Screen -->
+<div id="pre-bootstrap-container">
+    <script type="text/javascript">
+        document.addEventListener("appready", handleAppReady);
+
+        function handleAppReady(event) {
+            var preBootstrapContainer = document.getElementById("pre-bootstrap-container");
+            var preBootstrap = document.getElementById("pre-bootstrap");
+            preBootstrap.className = "loaded";
+            setTimeout(
+                function removeLoadingScreen() {
+                    preBootstrapContainer
+                        .parentNode
+                        .removeChild(preBootstrapContainer);
+                }
+            );
+        }
+    </script>
+    <style type="text/css">
+        #pre-bootstrap {
+            background-color: #fff;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 1.0;
+            position: absolute;
+            transition: all linear 300ms;
+            -webkit-transition: all linear 300ms;
+            z-index: 999999;
+        }
+
+        #pre-bootstrap.loaded {
+            opacity: 0.0;
+        }
+
+        #pre-bootstrap .slds-spinner_container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 9050;
+            background-color: rgba(255, 255, 255, 0.75);
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.2s ease, visibility 0s;
+            transition-delay: 0s, 0.3s;
+        }
+
+        #pre-bootstrap .slds-spinner_container.is-hidden {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease, visibility 0s;
+            transition-delay: 0s, 0s;
+        }
+
+        #pre-bootstrap .slds-spinner_container.hide {
+            display: none;
+        }
+
+        #pre-bootstrap .slds-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        #pre-bootstrap .slds-spinner_block {
+            position: relative;
+            top: calc(50% - 50px);
+            left: 50%;
+            height: 50px;
+            width: 50px;
+            right: auto;
+            bottom: auto;
+            transform: translate(-50%, -50%);
+            border-radius: 6px;
+        }
+
+        #pre-bootstrap .sk-folding-cube {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            -webkit-transform: rotateZ(90deg);
+            transform: rotateZ(60deg);
+        }
+
+        #pre-bootstrap .cube {
+            width: 20px;
+            height: 20px;
+        }
+
+        #pre-bootstrap .top {
+            justify-content: flex-end;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #pre-bootstrap .top .cube {
+            background-color: #1f97ce;
+        }
+
+        #pre-bootstrap .middle .cube {
+            background-color: #04628f;
+        }
+
+        #pre-bootstrap .middle .cube4 {
+            margin-bottom: -1px;
+        }
+
+        #pre-bootstrap .bottom .cube {
+            background-color: #03415d;
+        }
+
+        #pre-bootstrap .margin-horizontal {
+            margin-right: 0.25rem;
+            margin-left: 0.25rem;
+        }
+
+        #pre-bootstrap .bottom-right-drop-angle {
+            border-bottom-right-radius: 8px;
+            -moz-border-radius-bottomright: 8px;
+            -webkit-border-bottom-right-radius: 8px;
+        }
+
+        #pre-bootstrap .top-left-drop-angle {
+            -moz-border-radius-topleft: 8px;
+            -webkit-border-top-left-radius: 8px;
+            border-top-left-radius: 8px;
+            margin-bottom: -1px;
+        }
+
+        #pre-bootstrap .bottom-left-drop-angle {
+            -moz-border-radius-bottomleft: 8px;
+            -webkit-border-bottom-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            margin-top: -1px;
+        }
+
+        #pre-bootstrap .top-right-drop-angle {
+            -moz-border-radius-topright: 8px;
+            -webkit-border-top-right-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-bottom: -1px;
+        }
+
+        .sk-folding-cube .cube {
+            -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+            animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+        }
+
+        .sk-folding-cube .cube1 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+        }
+
+        .sk-folding-cube .cube2 {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.1s;
+        }
+
+        .sk-folding-cube .cube3 {
+            -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s;
+        }
+
+        .sk-folding-cube .cube4 {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s;
+        }
+
+        .sk-folding-cube .cube5 {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.2s;
+        }
+
+        .sk-folding-cube .cube6 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+        }
+
+        .sk-folding-cube .cube7 {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.5s;
+        }
+
+        .sk-folding-cube .cube8 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.4s;
+        }
+
+        @-webkit-keyframes sk-cubeGridScaleDelay {
+            0%, 70%, 100% {
+                -webkit-transform: scale3D(1, 1, 1);
+                transform: scale3D(1, 1, 1);
+            }
+            35% {
+                -webkit-transform: scale3D(0, 0, 1);
+                transform: scale3D(0, 0, 1);
+            }
+        }
+
+        @keyframes sk-cubeGridScaleDelay {
+            0%, 70%, 100% {
+                -webkit-transform: scale3D(1, 1, 1);
+                transform: scale3D(1, 1, 1);
+            }
+            35% {
+                -webkit-transform: scale3D(0, 0, 1);
+                transform: scale3D(0, 0, 1);
+            }
+        }
+    </style>
+
+    <div id="pre-bootstrap">
+        <div class="slds-spinner_container">
+            <div class="slds-spinner_block">
+                <div class="sk-folding-cube">
+                    <div class="top margin-horizontal">
+                        <div class="cube1 cube top-left-drop-angle"></div>
+                        <div class="cube2 cube bottom-right-drop-angle"></div>
+                    </div>
+                    <div class="middle">
+                        <div class="cube3 cube top-right-drop-angle"></div>
+                        <div class="cube4 cube"></div>
+                        <div class="cube5 cube"></div>
+                        <div class="cube6 cube bottom-left-drop-angle"></div>
+                    </div>
+                    <div class="bottom margin-horizontal">
+                        <div class="cube7 cube top-left-drop-angle"></div>
+                        <div class="cube8 cube bottom-right-drop-angle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

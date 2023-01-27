@@ -1,0 +1,38 @@
+<ngl-modal [header]="headerTitle" [(open)]="isOpen">
+    <div body>
+        <div class="slds-form--stacked">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    {{ 'NAME' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <span class="slds-form-element__static">{{ name }}</span>
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    {{ 'DISBURSEMENT_DATE' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{{ disbursementDate }}</div>
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    {{ 'AMOUNT' | translate }}
+                </label>
+                <div class="slds-form-element__control">
+                    <div class="slds-form-element__static">{{ amount | cbsNumberFormat }}</div>
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    {{ 'DESCRIPTION' | translate }}
+                </label>
+                <div class="slds-form-element__control slds-form-element__control--textarea">
+                    <div class="slds-form-element__static">{{ description }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ngl-modal>

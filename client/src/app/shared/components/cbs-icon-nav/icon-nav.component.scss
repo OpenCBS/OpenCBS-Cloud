@@ -1,0 +1,149 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  ul {
+    height: 100%;
+    overflow-x: scroll;
+
+    .cbs-circle {
+      background: #f00;
+      left: 25px;
+      bottom: 25px;
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .cbs-circle:after {
+      content: '!';
+      font-size: 8px;
+      position: absolute;
+      bottom: 0px;
+      left: 4px;
+      color: wheat;
+    }
+  }
+
+  li {
+    display: block;
+    text-align: center;
+    position: relative;
+
+    &:hover {
+      .slds-popover {
+        display: block;
+      }
+    }
+
+    a {
+      display: block;
+      height: 41px;
+      padding: 10px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+
+      &:hover,
+      &:focus {
+        .slds-icon {
+          fill: rgba(84, 105, 141, 1);
+        }
+      }
+    }
+
+    &.has-bg-hover {
+      a {
+        &:hover,
+        &:focus {
+          background: #d8dde6;
+        }
+      }
+
+      &.active {
+        a {
+          background: #d8dde6;
+        }
+      }
+    }
+
+    &.active {
+      .slds-icon {
+        fill: rgba(84, 105, 141, 1);
+      }
+    }
+  }
+
+  .slds-icon {
+    transition: all 0.2s ease;
+
+    &.slds-icon--small {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: rgba(84, 105, 141, 0.7);
+    }
+
+    &.slds-icon--medium {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: rgba(84, 105, 141, 0.4);
+    }
+  }
+
+  .slds-popover {
+    display: none;
+    position: absolute;
+    border-radius: 4px;
+
+    &.slds-nubbin--left {
+      top: 50%;
+      left: calc(100% + 8px);
+      transform: translateY(-50%);
+      min-height: 1.5rem;
+    }
+    &.slds-nubbin--bottom {
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-height: 1.5rem;
+    }
+
+    &__body {
+      padding: 3px 8px;
+      word-break: initial;
+      hyphens: initial;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .slds-nubbin--bottom {
+    &:before {
+      width: .6rem;
+      height: .6rem;
+      top: calc(100% - 6px);
+      margin-left: -4px;
+    }
+
+    &:after {
+      content: none;
+    }
+  }
+
+  .slds-nubbin--left {
+    &:before {
+      width: .6rem;
+      height: .6rem;
+      left: -5px;
+      margin-top: -4px;
+    }
+
+    &:after {
+      content: none;
+    }
+  }
+}

@@ -1,0 +1,243 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ (profile |
+                            async)?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + '/current-accounts'">{{
+                            'CURRENT_ACCOUNTS' | translate }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'TRANSACTIONS' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ (profile | async)?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="(profile | async)?.status === 'LIVE'">Live</ngl-badge>
+                    <ngl-badge type="info" *ngIf="(profile | async)?.status === 'PENDING'">Pending</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-container--fluid slds-grid slds-grid--align-end">
+                <span #dropdown class="slds-p-top--x-small">
+                         <form novalidate [formGroup]="form" class="slds-form--stacked">
+                            <div class="cbs-controls-container">
+                                <cbs-form-date-control
+                                    class="slds-m-right--x-small"
+                                    formControlName="start"
+                                    [hasError]="form.get('start').errors && form.get('start').touched"
+                                    [requiredField]="true"></cbs-form-date-control>
+                                <span class="cbs-long-dash">&#8212;</span>
+                                <cbs-form-date-control
+                                    formControlName="end"
+                                    [hasError]="form.get('end').errors && form.get('end').touched"
+                                    [requiredField]="true"></cbs-form-date-control>
+                                <button class="slds-button slds-button--neutral filter"
+                                        (click)="filter()"
+                                        aria-live="assertive">
+                                    <span class="slds-text-not-selected">
+                                        {{ 'FILTER' | translate }}
+                                    </span>
+                                </button>
+
+                                <ng-container *ngIf="isImpactFinance()">
+                                    <button class="slds-button slds-button--success slds-m-left--x-small"
+                                            (click)="makeTransaction('deposit')" aria-live="assertive">
+                                        <span class="slds-text-not-selected">
+                                            {{ 'DEPOSIT' | translate }}
+                                        </span>
+                                    </button>
+                                    <button class="slds-button slds-button--brand slds-m-left--x-small"
+                                            (click)="makeTransaction('withdraw')" aria-live="assertive">
+                                        <span class="slds-text-not-selected">
+                                            {{ 'WITHDRAW' | translate }}
+                                        </span>
+                                    </button>
+                                </ng-container>
+                            </div>
+                        </form>
+                        <div class="slds-p-top_x-small">
+                            <button (click)="filterByPeriod(2)"
+                                    class="cbs-period-button slds-button period">
+                                {{ 'LAST_2_DAYS' | translate }}
+                            </button>
+                            <button (click)="filterByPeriod(7)"
+                                    class="cbs-period-button slds-button period">
+                                {{ 'CURRENT_WEEK' | translate }}
+                            </button>
+                            <button (click)="filterByPeriod('month')"
+                                    class="cbs-period-button slds-button period">
+                                {{ 'CURRENT_MONTH' | translate }}
+                            </button>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right">
+            <p-dataTable
+                emptyMessage="{{ 'NO_RECORDS_FOUND' | translate}}"
+                [value]="transactions?.transactions"
+                [tableStyleClass]="'slds-table slds-table--bordered slds-table--cell-buffer'"
+            >
+                <p-column field="id" header="#">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span>{{ row['id'] }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="date" header="{{ 'DATE' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span>{{ row['date'] | cbsDateFormat }} {{ row['date'] | cbsTimeFormat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="deposit" header="{{ 'DEPOSIT' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span *ngIf="row['deposit']; else nodata">{{ row['deposit'] | cbsNumberFormat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="withdraw" header="{{ 'WITHDRAW' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                                <span
+                                    *ngIf="row['withdraw']; else nodata">{{ row['withdraw'] | cbsNumberFormat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="balance" header="{{ 'BALANCE' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span>{{ row['balance'] | cbsNumberFormat }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="balance" header="{{ 'OTHER_ACCOUNT' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <div class="slds-truncate" [attr.title]="row['source']['name']">
+                            <span>{{ row['source']['number'] }}</span>
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="documentNumber" header="{{ 'DOCUMENT_NO' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <span>{{ row['documentNumber'] }}</span>
+                    </ng-template>
+                </p-column>
+                <p-column field="description" header="{{ 'DESCRIPTION' | translate }}">
+                    <ng-template let-row="rowData" pTemplate="body">
+                        <div class="slds-truncate" [attr.title]="row['description']">
+                            <span *ngIf="row['description']; else nodata">{{ row['description'] }}</span>
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+
+            <cbs-loading-indicator [isFixed]="true"
+                                   [showLoader]="transactions?.loading || isLoading"></cbs-loading-indicator>
+
+
+            <div class="slds-grid slds-grid--align-center"
+                 *ngIf="transactions?.totalElements > transactions?.size">
+                <ngl-pagination
+                    class="cbs-pagination"
+                    *ngIf="transactions?.loaded"
+                    [(page)]="queryObject.page"
+                    [total]="transactions?.totalElements"
+                    limit="5"
+                    [perPage]="transactions?.size"
+                    [previousText]="'PREVIOUS' | translate"
+                    [nextText]="'NEXT' | translate"
+                    boundaryNumbers="1"
+                    (pageChange)="goToPage($event)" #pagination></ngl-pagination>
+            </div>
+        </div>
+    </div>
+</main>
+
+<ng-template #nodata>
+    <span>-</span>
+</ng-template>
+
+<ngl-modal [header]="modalTitle | translate" [(open)]="isModalOpened">
+    <div body>
+        <div class="slds-form--stacked">
+            <form novalidate [formGroup]="transactionForm">
+                <ng-container *ngIf="transactionDebit">
+                    <cbs-form-select-control
+                        [formControlName]="'debitAccountId'"
+                        [selectData]="bankAccounts"
+                        [requiredField]="false"
+                        [hasError]="transactionForm.get('debitAccountId').errors && transactionForm.get('debitAccountId').touched"
+                        fieldLabel="{{ 'BANK_ACCOUNT' | translate }}"
+                        (onSelect)="setBankAccount($event)"
+                    ></cbs-form-select-control>
+                </ng-container>
+
+                <ng-container *ngIf="!transactionDebit">
+                    <cbs-form-select-control
+                        [formControlName]="'creditAccountId'"
+                        [selectData]="bankAccounts"
+                        [requiredField]="false"
+                        [hasError]="transactionForm.get('creditAccountId').errors && transactionForm.get('creditAccountId').touched"
+                        fieldLabel="{{ 'BANK_ACCOUNT' | translate }}"
+                        (onSelect)="setBankAccount($event)"
+                    ></cbs-form-select-control>
+                </ng-container>
+
+                <cbs-form-input-control
+                    [requiredField]="true"
+                    [fieldLabel]="'AMOUNT' | translate"
+                    [inputType]="'number'"
+                    [hasError]="transactionForm.get('amount').errors && transactionForm.get('amount').touched"
+                    [formControlName]="'amount'">
+                </cbs-form-input-control>
+
+                <cbs-form-textarea-control
+                    [requiredField]="true"
+                    [hasError]="transactionForm.get('description').errors && transactionForm.get('description').touched"
+                    formControlName="description"
+                    fieldLabel="{{ 'DESCRIPTION' | translate }}"
+                ></cbs-form-textarea-control>
+
+                <cbs-form-date-control
+                    [requiredField]="true"
+                    [fieldLabel]="'DATE' | translate"
+                    [hasError]="transactionForm.get('createdAt').errors && transactionForm.get('createdAt').touched"
+                    [formControlName]="'createdAt'"
+                ></cbs-form-date-control>
+
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label cbs-compound-form__checkbox-label">
+                        {{ 'AUTO_PRINT' | translate }}
+                    </label>
+                    <div class="slds-form-element__control">
+                        <label class="slds-checkbox" for="auto-print">
+                            <input type="checkbox" name="autoPrint" id="auto-print" formControlName="autoPrint"/>
+                            <span class="slds-checkbox--faux"></span>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button class="slds-button slds-button--success" [disabled]="transactionForm.invalid" (click)="submit()">
+            {{ 'SAVE' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>

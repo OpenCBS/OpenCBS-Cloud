@@ -1,0 +1,98 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block [isMainPage]="true" headingTitle="{{ 'OTHER_FEES' | translate }}"
+                               [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!--/cbs-page-header-layout = left-->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" (click)="openCreateModal()">
+                <span class="slds-text-not-selected">
+                <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                </svg>{{ 'CREATE' | translate }}
+                </span>
+            </button>
+        </div>
+        <!--/cbs-page-header-layout = right-->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer cbs-profiles">
+        <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col" width="50">
+                <div class="slds-truncate" title="#">#</div>
+            </th>
+            <th scope="col" width="150">
+                <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+            </th>
+            <th scope="col" width="200">
+                <div class="slds-truncate" title="Description">{{ 'DESCRIPTION' | translate }}</div>
+            </th>
+            <th scope="col" width="200">
+                <div class="slds-truncate" title="Charge-account">{{ 'CHARGE_ACCOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="200">
+                <div class="slds-truncate" title="Income-account">{{ 'INCOME_ACCOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="200">
+                <div class="slds-truncate" title="Expense-account">{{ 'EXPENSE_ACCOUNT' | translate }}</div>
+            </th>
+            <th scope="col" width="100"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let otherFee of (otherFeesList | async)?.otherFees?.content; let i = index;">
+            <th scope="row">
+                <div class="slds-truncate" title="Id {{ i + 1}}">{{ i + 1}}</div>
+            </th>
+            <th data-label="Name" scope="row">
+                <div class="slds-truncate" title="">
+                    <a href="javascript:void(0)">{{ otherFee?.name }}</a>
+                </div>
+            </th>
+            <th class="slds-tree-container" data-label="Description">
+                <div class="slds-truncate" title="{{ otherFee?.description }}">
+                    {{ otherFee?.description }}
+                </div>
+            </th>
+            <th data-label="Accounts" scope="row" class="slds-truncate"
+                title="{{otherFee['chargeAccount']['number'] + ' | ' + otherFee['chargeAccount']['name']}}">
+                {{otherFee['chargeAccount']['number'] + ' | ' + otherFee['chargeAccount']['name']}}
+            </th>
+            <th data-label="Accounts" scope="row" class="slds-truncate"
+                title="{{otherFee['incomeAccount']['number'] + ' | ' + otherFee['incomeAccount']['name']}}">
+                {{otherFee['incomeAccount']['number'] + ' | ' + otherFee['incomeAccount']['name']}}
+            </th>
+            <th data-label="Accounts" scope="row" class="slds-truncate"
+                title="{{otherFee['expenseAccount']['number'] + ' | ' + otherFee['expenseAccount']['name']}}">
+                {{otherFee['expenseAccount']['number'] + ' | ' + otherFee['expenseAccount']['name']}}
+            </th>
+            <th class="slds-text-align--right">
+                <button class="slds-button slds-button--neutral" (click)="openEditModal(otherFee)">
+                    <svg class="slds-button__icon slds-button__icon--left" aria-hidden="true">
+                        <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#edit"></use>
+                    </svg>
+                    {{ 'EDIT' | translate }}
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <cbs-loading-indicator [isFixed]="true" [showLoader]="(otherFeesList | async)?.loading"></cbs-loading-indicator>
+
+</main>
+<!-- ./cbs-main -->
+
+<cbs-other-fees-list-form-modal (submitForm)="submitOtherFeeList($event)"
+                                [headerTitle]="isNew ? ('OTHER_FEE_NEW_TITLE' | translate) :  ('EDIT' | translate)">
+</cbs-other-fees-list-form-modal>

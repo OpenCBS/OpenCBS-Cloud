@@ -1,0 +1,43 @@
+:host {
+  .cbs-user {
+    padding: 20px 15px;
+
+    &__heading {
+      display: block;
+      text-align: center;
+    }
+
+    .slds-container--medium {
+      max-width: 34rem;
+      width: 100%;
+    }
+    .slds-button {
+      margin-top: 1rem;
+    }
+
+    .slds-form-element > .slds-form-element__legend,
+    .slds-form-element > .slds-form-element__label {
+      @media screen and (min-width: 48em) {
+        top: 0.4rem;
+      }
+    }
+
+    .slds-container--medium {
+      width: 100%;
+      @media screen and (min-width: 994px) {
+        max-width: 50rem;
+      }
+
+      .cbs-pull-negative {
+        @media screen and (min-width: 994px) {
+          margin-left: -50%;
+        }
+      }
+    }
+
+    .slds-app-launcher__tile-figure_small, .slds-app-launcher__tile-figure--small {
+      border: 1px solid #eeeff3;
+      border-radius: .25rem;
+    }
+  }
+}

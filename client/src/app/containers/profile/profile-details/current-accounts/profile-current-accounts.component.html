@@ -1,0 +1,144 @@
+<cbs-header>
+    <div class="cbs-profile__header">
+        <div class="cbs-profile__headings">
+            <nav role="navigation" aria-label="Breadcrumbs" class="cbs-breadcrumbs">
+                <ol class="slds-breadcrumb slds-list--horizontal">
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a routerLink="/profiles">{{ 'PROFILES' | translate }}</a></li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a [routerLink]="'/profiles/' + profileType + '/' + profileId + 'info'">{{ profile?.name }}</a>
+                    </li>
+                    <li class="slds-breadcrumb__item slds-text-title--caps">
+                        <a href="javascript:void(0);">{{ 'CURRENT_ACCOUNTS' | translate }}</a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="slds-text-heading--large slds-m-right--medium">{{ profile?.name }}</div>
+                <div scope="row">
+                    <ngl-badge type="success" *ngIf="profile?.status === 'LIVE'">{{'LIVE' | translate}}</ngl-badge>
+                    <ngl-badge type="info" *ngIf="profile?.status === 'PENDING'">{{'PENDING' | translate}}</ngl-badge>
+                </div>
+            </div>
+        </div>
+
+        <div cbs-page-header-layout="right">
+            <div class="slds-grid slds-grid--vertical-align-center">
+                <div class="cbs-profile__avatar" *ngIf="profile?.attachments?.length">
+                    <div class="cbs-profile__avatar-item" *ngFor="let attachment of profile?.attachments">
+                <span class="slds-avatar slds-avatar--circle slds-avatar--large"
+                      *ngIf="attachment?.pinned"
+                      (click)="openAttachment(attachment)">
+                    <span>
+                        <img [src]="url + attachment?.id" [attr.alt]="attachment?.originalFilename"
+                             [attr.title]="attachment?.originalFilename" *ngIf="testIfImage(attachment?.contentType)"/>
+                        <span class="cbs-profile__avatar__file">
+                            <cbs-doctype-icon *ngIf="!testIfImage(attachment?.contentType)"
+                                              [fileType]="getFileExtension(attachment?.originalFilename)"
+                                              [fileName]="attachment?.originalFilename"></cbs-doctype-icon>
+                        </span>
+                    </span>
+                </span>
+                    </div>
+
+                </div>
+                <button (click)="isOpen = true" class="slds-button slds-button--neutral" aria-live="assertive">
+                        <span class="slds-text-not-selected">
+                            <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                            </svg>{{ 'ADD' | translate }}
+                        </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</cbs-header>
+
+<main class="cbs-main cbs-main--pt-lg">
+    <div class="cbs-profile-wrap">
+        <div class="cbs-profile__left">
+            <cbs-sidebar-nav [navElements]="navElements"></cbs-sidebar-nav>
+        </div>
+        <div class="cbs-profile__right" id="scrollable-section">
+            <div class="slds-grid slds-grid--align-center">
+
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer"
+                       *ngIf="!profile?.loading">
+                    <thead>
+                    <tr class="slds-text-title--caps">
+                        <th scope="col" width="3%">
+                            <div class="slds-truncate" title="#">#</div>
+                        </th>
+                        <th scope="col" width="30%">
+                            <div class="slds-truncate" title="Code">{{ 'CODE' | translate }}</div>
+                        </th>
+                        <th scope="col" width="30%">
+                            <div class="slds-truncate" title="Currency">{{ 'CURRENCY' | translate }}</div>
+                        </th>
+                        <th scope="col" width="30%">
+                            <div class="slds-truncate" title="Currency">{{ 'BRANCH' | translate }}</div>
+                        </th>
+
+                        <th scope="col" width="30%">
+                            <div class="slds-truncate" title="Balance">{{ 'BALANCE' | translate }}</div>
+                        </th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    <tr *ngFor="let account of (profileCurrentAccounts | async)?.currentAccounts; let i = index;"
+                        (click)="goToTransactions(account.id)">
+                        <td data-label="#" scope="row">
+                            {{i + 1}}
+                        </td>
+                        <td data-label="Code" scope="row">
+                            {{account.number}}
+                        </td>
+                        <td data-label="Currency" scope="row">
+                            {{ account?.currency?.name}}
+                        </td>
+                        <td data-label="Branch" scope="row">
+                            {{ account?.branch?.name | translate}}
+                        </td>
+
+                        <td data-label="Balance" scope="row">
+                            {{ account?.balance | cbsNumberFormat}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<cbs-loading-indicator [isFixed]="true"
+                       [showLoader]="profile?.loading || (profileCurrentAccounts | async)?.loading"></cbs-loading-indicator>
+<ngl-modal [header]="'ADD_ACCOUNT' | translate" [(open)]="isOpen">
+    <div body>
+
+        <form novalidate [formGroup]="form" class="slds-form--stacked">
+            <cbs-form-select-control
+                [formControlName]="'currency'"
+                [requiredField]="true"
+                [fieldLabel]="'CURRENCY' | translate"
+                [hasError]="form.get('currency').errors && form.get('currency').touched"
+                [selectData]="(currencies | async)?.currencies"
+                [selectValue]="'id'">
+            </cbs-form-select-control>
+        </form>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpen = false">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="form.invalid" class="slds-button slds-button--success" (click)="createAccount()">{{ 'SAVE' |
+            translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<ngl-modal [(open)]="opened" (openChange)="resetModal()">
+    <div body>
+        <img [src]="imageUrl" alt="">
+    </div>
+</ngl-modal>
+

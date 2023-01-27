@@ -1,0 +1,155 @@
+<cbs-header>
+    <cbs-page-header>
+        <div cbs-page-header-layout="left">
+            <cbs-heading-block headingTitle="{{ 'CREATE' | translate }}" [svgData]="svgData">
+                <cbs-breadcrumb [breadcrumbLinks]="breadcrumbLinks"></cbs-breadcrumb>
+            </cbs-heading-block>
+        </div>
+        <!-- /cbs-page-header-layout = left -->
+
+        <div cbs-page-header-layout="right">
+            <button class="slds-button slds-button--neutral" aria-live="assertive" *ngIf="rolesExist"
+                    (click)="goToUsers()">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>{{ 'CANCEL' | translate }}</span>
+            </button>
+            <button class="slds-button slds-button--success" aria-live="assertive" *ngIf="rolesExist"
+                    (click)="submit()" [disabled]="userCreateForm.invalid || passwordNotMatch">
+                <span class="slds-text-not-selected">
+                    <svg aria-hidden="true" class="slds-button__icon--stateful slds-button__icon--left">
+                    <use xlink:href="assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                    </svg>{{ 'SAVE' | translate }}</span>
+            </button>
+        </div>
+        <!-- /cbs-page-header-layout = right -->
+    </cbs-page-header>
+    <!-- cbs-page-header -->
+</cbs-header>
+<!-- cbs-header -->
+
+<main class="cbs-main cbs-main--pt-sm">
+    <cbs-form-layout>
+        <div class="slds-form-element__label slds-text-title--caps slds-m-bottom--medium" *ngIf="rolesExist">
+            <strong>{{ 'DETAILS' | translate }}</strong>
+        </div>
+        <form novalidate [formGroup]="userCreateForm">
+            <cbs-form-select-control
+                [formControlName]="'statusType'"
+                [selectData]="statusTypeData"
+                [requiredField]="true"
+                [hasError]="userCreateForm.get('statusType').errors && userCreateForm.get('statusType').touched"
+                fieldLabel="{{ 'ACTIVE_USER' | translate }}"
+            ></cbs-form-select-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'FIRSTNAME' | translate"
+                [hasError]="userCreateForm.get('firstName').errors && userCreateForm.get('firstName').touched"
+                [formControlName]="'firstName'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'LASTNAME' | translate"
+                [hasError]="userCreateForm.get('lastName').errors && userCreateForm.get('lastName').touched"
+                [formControlName]="'lastName'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [fieldLabel]="'USERNAME' | translate"
+                [hasError]="userCreateForm.get('username').errors && userCreateForm.get('username').touched"
+                [formControlName]="'username'">
+            </cbs-form-input-control>
+
+            <cbs-form-lookup-control
+                [requiredField]="true"
+                searchPlaceholder="{{ 'SEARCH' | translate }}"
+                selectPlaceholder="{{ 'SELECT' | translate }}"
+                [fieldLabel]="'BRANCH' | translate"
+                [formControlName]="'branchId'"
+                [picklistDataUrl]="formConfig">
+            </cbs-form-lookup-control>
+
+            <cbs-form-input-control
+                [class.slds-has-error]="passwordNotMatch"
+                [requiredField]="true"
+                [fieldLabel]="'PASSWORD' | translate"
+                [inputType]="'password'"
+                [hasError]="userCreateForm.get('password').errors && userCreateForm.get('password').touched"
+                [showIconPreview]="true"
+                [formControlName]="'password'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [class.slds-has-error]="passwordNotMatch"
+                [requiredField]="true"
+                [fieldLabel]="'CONFIRM_PASSWORD' | translate"
+                [inputType]="'password'"
+                [hasError]="userCreateForm.get('confirmPassword').errors && userCreateForm.get('confirmPassword').touched"
+                [showIconPreview]="true"
+                [formControlName]="'confirmPassword'">
+            </cbs-form-input-control>
+
+            <cbs-form-select-control
+                [formControlName]="'roleId'"
+                [selectData]="roles"
+                [requiredField]="true"
+                [selectValue]="'id'"
+                [hasError]="userCreateForm.get('roleId').errors && userCreateForm.get('roleId').touched"
+                fieldLabel="{{ 'ROLE' | translate }}"
+            ></cbs-form-select-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'EMAIL' | translate"
+                [hasError]="userCreateForm.get('email').errors && userCreateForm.get('email').touched"
+                [formControlName]="'email'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'PHONE_NUMBER' | translate"
+                [hasError]="userCreateForm.get('phoneNumber').errors && userCreateForm.get('phoneNumber').touched"
+                [formControlName]="'phoneNumber'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'ADDRESS' | translate"
+                [hasError]="userCreateForm.get('address').errors && userCreateForm.get('address').touched"
+                [formControlName]="'address'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'ID_NUMBER' | translate"
+                [hasError]="userCreateForm.get('idNumber').errors && userCreateForm.get('idNumber').touched"
+                [formControlName]="'idNumber'">
+            </cbs-form-input-control>
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'text'"
+                [fieldLabel]="'POSITION' | translate"
+                [hasError]="userCreateForm.get('position').errors && userCreateForm.get('position').touched"
+                [formControlName]="'position'">
+            </cbs-form-input-control>
+
+        </form>
+    </cbs-form-layout>
+
+    <cbs-response-popup [status]="{showSuccess: null, showError: !rolesExist && (rolesStore | async)?.loaded}">
+        <div cbs-response-error-content>
+            <cbs-tickorcross [isTick]="false"></cbs-tickorcross>
+            <p class="slds-text-heading--medium">{{ 'USER_NO_ROLES' | translate }}</p>
+        </div>
+    </cbs-response-popup>
+</main>
+<cbs-loading-indicator [showLoader]="userState?.loading"></cbs-loading-indicator>

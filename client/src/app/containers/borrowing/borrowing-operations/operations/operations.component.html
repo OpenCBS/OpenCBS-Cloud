@@ -1,0 +1,33 @@
+<div class="slds-container--fluid">
+    <div class="slds-grid slds-wrap slds-gutters" cbsMatchHeight="cbs-special-operation-item">
+        <div *ngFor="let item of arr"
+             class="slds-col slds-accordion__section slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-3 slds-large-size_1-of-4">
+            <a [ngClass]="{'disabled': item?.disabled}" (click)="navigate(item)"
+               class="cbs-special-operation-item slds-text-align--center">
+                <cbs-icon [iconConfig]="item?.icon" [classStyle]="'slds-m-bottom--small'"></cbs-icon>
+                <span class="slds-text-heading--small slds-truncate">{{ item.name | translate }}</span>
+                <span class="slds-text-color--weak">{{ item?.description }}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<ngl-modal [header]="'ACTUALIZE_BORROWING' | translate" [(open)]="isOpenActualize">
+    <div body>
+        <cbs-form-date-control
+            [(ngModel)]="borrowingDate"
+            [enableDropdownPicker]="false"
+            fieldLabel="{{ 'DATE' | translate }}"
+            [validateDate]="true"
+            [requiredField]="true">
+        </cbs-form-date-control>
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="isOpenActualize = false">{{ 'CANCEL' | translate }}
+        </button>
+        <button class="slds-button slds-button--success" (click)="submitActualizeBorrowing()">{{ 'Start' | translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="isLoading"></cbs-loading-indicator>

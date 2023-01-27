@@ -1,0 +1,107 @@
+<table class="slds-table slds-table--bordered slds-table--cell-buffer">
+    <thead>
+    <tr class="slds-text-title--caps">
+        <th scope="col" width="3%">
+            <div class="slds-truncate" title="#">#</div>
+        </th>
+        <th scope="col" width="20%">
+            <div class="slds-truncate" title="Name">{{ 'NAME' | translate }}</div>
+        </th>
+        <th scope="col" width="20%">
+            <div class="slds-truncate" title="Account Number">{{ 'ACCOUNT_NUMBER' | translate }}</div>
+        </th>
+        <th scope="col" width="30%">
+            <div class="slds-truncate" title="Description">{{ 'DESCRIPTION' | translate }}</div>
+        </th>
+        <th scope="col" width="20%">
+            <div class="slds-truncate" title="Balance">{{ 'BALANCE' | translate }}</div>
+        </th>
+        <th scope="col">
+            <div class="slds-truncate" title="Options">{{ 'OPTIONS' | translate }}</div>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let fee of (otherFees | async)?.data?.content; let i = index;">
+        <td data-label="#" scope="row">
+            {{i + 1}}
+        </td>
+        <td data-label="Currency" scope="row">
+            {{ fee?.name }}
+        </td>
+        <td data-label="Currency" scope="row">
+            {{ fee?.account?.number}}
+        </td>
+        <td data-label="Branch" scope="row">
+            {{ fee?.description }}
+        </td>
+        <td data-label="Currency" scope="row">
+            {{ fee?.balance}}
+        </td>
+        <td>
+            <button *cbsVisibleByPermission="{ group: 'LOANS', permissions: ['OTHER_FEE_CHARGE'] }"
+                    (click)="otherFeeOperations(fee, 'charge')"
+                    class="slds-button slds-button--neutral slds-not-selected"
+                    aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'CHARGE' | translate }}
+                    </span>
+            </button>
+            <button *cbsVisibleByPermission="{ group: 'LOANS', permissions: ['OTHER_FEE_REPAY'] }"
+                    [disabled]="fee.balance < 0 || !fee?.balance" (click)="otherFeeOperations(fee, 'repay')"
+                    class="slds-button slds-button--neutral slds-not-selected"
+                    aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'REPAY' | translate }}
+                    </span>
+            </button>
+            <button *cbsVisibleByPermission="{ group: 'LOANS', permissions: ['OTHER_FEE_WAIVE_OFF'] }"
+                    [disabled]="fee.balance < 0 || !fee?.balance" (click)="otherFeeOperations(fee, 'waive-off')"
+                    class="slds-button slds-button--neutral slds-not-selected"
+                    aria-live="assertive">
+                    <span class="slds-text-not-selected">
+                        {{ 'WAIVE_OFF' | translate }}
+                    </span>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<ngl-modal [header]="headerTitle | translate" [(open)]="isOpen">
+    <div body>
+        <form novalidate [formGroup]="form" class="slds-form--stacked">
+
+            <cbs-form-input-control
+                [requiredField]="true"
+                [inputType]="'number'"
+                [fieldLabel]="'AMOUNT' | translate"
+                [hasError]="form.get('amount').errors && form.get('amount').touched"
+                [formControlName]="'amount'">
+            </cbs-form-input-control>
+
+            <cbs-form-date-control
+                [enableDropdownPicker]="false"
+                formControlName="date"
+                fieldLabel="{{ 'DATE' | translate }}"
+                [validateDate]="true"
+                [hasError]="form.get('date').errors && form.get('date').touched"
+                [requiredField]="true"></cbs-form-date-control>
+
+            <cbs-form-textarea-control
+                [fieldLabel]="'COMMENT' | translate"
+                [formControlName]="'comment'">
+            </cbs-form-textarea-control>
+        </form>
+
+    </div>
+    <ng-template ngl-modal-footer>
+        <button class="slds-button slds-button--neutral" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+        <button [disabled]="form.invalid" class="slds-button slds-button--success" (click)="submit()">{{ 'SAVE' |
+            translate }}
+        </button>
+    </ng-template>
+</ngl-modal>
+
+<cbs-loading-indicator [isFixed]="true" [showLoader]="(otherFees | async)?.loading"></cbs-loading-indicator>
