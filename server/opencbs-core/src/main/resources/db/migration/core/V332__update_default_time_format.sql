@@ -1,0 +1,1 @@
+update system_settings set value = '1.2-4' where name = 'NUMBER_FORMAT';

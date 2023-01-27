@@ -1,0 +1,1 @@
+alter table guarantors alter amount DROP NOT NULL

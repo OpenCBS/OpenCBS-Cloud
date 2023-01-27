@@ -1,0 +1,1 @@
+alter table loan_products add column has_payees boolean not null;

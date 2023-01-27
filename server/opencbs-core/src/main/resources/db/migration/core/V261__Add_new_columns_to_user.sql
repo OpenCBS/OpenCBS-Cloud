@@ -1,0 +1,4 @@
+ALTER TABLE users
+  ADD COLUMN id_number VARCHAR(255),
+  ADD COLUMN address VARCHAR(255),
+  ADD COLUMN position VARCHAR(255);

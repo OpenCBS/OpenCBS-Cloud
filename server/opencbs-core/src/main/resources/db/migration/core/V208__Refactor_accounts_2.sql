@@ -1,0 +1,1 @@
+update accounts set is_debit = true where number = '50001';

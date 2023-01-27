@@ -1,0 +1,1 @@
+alter table exchange_rates alter column date type date;

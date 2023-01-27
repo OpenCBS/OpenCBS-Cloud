@@ -1,0 +1,1 @@
+insert into relationships (name) values ('Father'), ('Daughter'), ('Son'), ('Brother'), ('Sister'), ('Spouse'), ('Relative'), ('Friend'), ('Colleague');

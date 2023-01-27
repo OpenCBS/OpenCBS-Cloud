@@ -1,0 +1,1 @@
+INSERT INTO global_settings(name, type, value) VALUES ('start date', 'date' , '2017-01-01')

@@ -1,0 +1,1 @@
+alter table request alter column entity_id drop not null;

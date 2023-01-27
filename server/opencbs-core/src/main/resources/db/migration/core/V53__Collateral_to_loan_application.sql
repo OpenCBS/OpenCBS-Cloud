@@ -1,0 +1,14 @@
+alter table types_of_collateral rename to collaterals;
+alter table collaterals add column loan_application_id integer;
+alter table collaterals add column amount decimal(14, 4);
+alter table collaterals add constraint collaterals_loan_application_id_fkey foreign key(loan_application_id) references loan_applications (id) match full;
+alter table collaterals rename constraint types_of_collateral_pkey to collaterals_pkey;
+alter table collaterals rename constraint types_of_collateral_name_key to collaterals_name_key;
+alter table collaterals rename constraint types_of_collateral_created_by_id_fkey to collaterals_created_by_id_fkey;
+
+alter table types_of_collateral_custom_fields_sections rename to types_of_collateral;
+alter table types_of_collateral drop column types_of_collateral_id;
+alter table types_of_collateral rename constraint types_of_collateral_custom_fields_sections_pkey to types_of_collateral_pkey;
+alter table types_of_collateral_custom_fields rename constraint types_of_collateral_custom_fields_sections_id_fkey to types_of_collateral_id_fkey;
+
+alter table types_of_collateral_custom_fields_values rename to collaterals_custom_fields_values;

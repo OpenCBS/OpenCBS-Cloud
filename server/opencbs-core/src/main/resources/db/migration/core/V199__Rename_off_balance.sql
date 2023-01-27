@@ -1,0 +1,1 @@
+alter table accounts rename column off_balance to validate_off;

@@ -1,0 +1,1 @@
+alter table loans_installments add column rescheduled boolean default false;

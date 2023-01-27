@@ -1,0 +1,1 @@
+alter sequence collaterals_custom_fields_types_id_seq rename to types_of_collateral_id_seq;

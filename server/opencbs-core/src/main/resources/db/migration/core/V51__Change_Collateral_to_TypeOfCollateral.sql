@@ -1,0 +1,38 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+alter table collaterals_custom_fields_types
+  rename to types_of_collateral_custom_fields_sections;
+alter table types_of_collateral_custom_fields_sections
+  rename collateral_id to types_of_collateral_id;
+alter table types_of_collateral_custom_fields_sections
+  rename constraint collaterals_custom_fields_types_pkey to types_of_collateral_custom_fields_sections_pkey;
+alter table types_of_collateral_custom_fields_sections
+  rename constraint collaterals_caption_key to types_of_collateral_caption_key;
+
+alter table collaterals_custom_fields
+  rename to types_of_collateral_custom_fields;
+alter table types_of_collateral_custom_fields
+  rename constraint collaterals_custom_fields_pkey to types_of_collateral_custom_fields_pkey;
+alter table types_of_collateral_custom_fields
+  rename constraint collaterals_custom_fields_types_id_fkey to types_of_collateral_custom_fields_sections_id_fkey;
+
+alter table collaterals_custom_fields_values
+  rename to types_of_collateral_custom_fields_values;
+alter table types_of_collateral_custom_fields_values
+  rename constraint collaterals_custom_fields_values_pkey to types_of_collateral_custom_fields_values_pkey;
+alter table types_of_collateral_custom_fields_values
+  rename constraint collaterals_custom_fields_values_owner_id_fkey to types_of_collateral_custom_fields_values_owner_id_fkey;
+alter table types_of_collateral_custom_fields_values
+  rename constraint collaterals_custom_fields_values_field_id_fkey to types_of_collateral_custom_fields_values_field_id_fkey;
+
+alter table collaterals
+  rename to types_of_collateral;
+alter table types_of_collateral
+  rename constraint collaterals_pkey to types_of_collateral_pkey;
+alter table types_of_collateral
+  rename constraint collaterals_name_key to types_of_collateral_name_key;
+alter table types_of_collateral
+  rename constraint collaterals_created_by_id_fkey to types_of_collateral_created_by_id_fkey;
+
+
+
+
